@@ -1,0 +1,19 @@
+.raiz{
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: 0.015em;
+  color: var(--acento-claro);
+  background: rgba(242, 121, 12, 0.06);
+  border: 1px dashed var(--linha-acento);
+  border-radius: 4px;
+  padding: 0.45rem 0.7rem;
+  text-wrap: pretty;
+}
+
+.bloco{
+  display: block;
+  max-width: 46ch;
+}

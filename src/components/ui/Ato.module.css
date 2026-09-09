@@ -1,0 +1,47 @@
+.raiz{
+  position: relative;
+  z-index: 2;
+  padding-block: var(--ato-py);
+  background: var(--preto);
+}
+
+/* Respiro claro. Usado em 1 ou 2 momentos-chave da jornada, nunca como
+   alternância mecânica seção a seção.
+   As cores dos filhos não são reescritas aqui: quem inverte é o
+   [data-tom='claro'] no globals.css, trocando os papéis semânticos. */
+.claro{
+  background: var(--branco);
+  color: var(--texto);
+}
+
+.marcacao{
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: clamp(2.25rem, 5vw, 4rem);
+}
+
+.marcacaoOculta{
+  composes: marcacao;
+}
+
+.numero{
+  font-family: var(--font-display);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.18em;
+  color: var(--acento);
+}
+
+.traco{
+  width: clamp(28px, 5vw, 64px);
+  height: 1px;
+  background: var(--linha-acento);
+  flex: 0 0 auto;
+}
+
+.nome{
+  font-size: var(--fs-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--texto-suave);
+}

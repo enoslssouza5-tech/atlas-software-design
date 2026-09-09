@@ -1,0 +1,137 @@
+.raiz{
+  position: relative;
+  z-index: 2;
+  /* 300vh de curso pra o pin ter o que arrastar */
+  height: 300vh;
+/* Fundo transparente de propósito: o Canvas do crachá é fixo em z-index 1 e
+   esta seção vive em z-index 2. Pintar o preto aqui esconderia a cena 3D
+   justamente nos dois atos em que ela precisa reaparecer. O preto vem do
+   <body>, que é exatamente a mesma cor. */
+  background: transparent;
+}
+
+.palco{
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.interno{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.75rem, 4vh, 3rem);
+}
+
+.cabecalho{
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.9rem, 2vw, 1.4rem);
+}
+
+.marcacao{
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.numero{
+  font-family: var(--font-display);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.18em;
+  color: var(--acento);
+}
+
+.traco{
+  width: clamp(28px, 5vw, 64px);
+  height: 1px;
+  background: var(--linha-acento);
+}
+
+.nome{
+  font-size: var(--fs-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--texto-suave);
+}
+
+.titulo{
+  font-size: clamp(1.85rem, 4.4vw, 3.5rem);
+  letter-spacing: -0.035em;
+  max-width: 20ch;
+}
+
+.blocos{
+  display: grid;
+  gap: clamp(0.85rem, 1.6vw, 1.25rem);
+  grid-template-columns: 1fr;
+}
+
+.cartao{
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: clamp(1.1rem, 2vw, 1.6rem);
+  border: 1px solid var(--linha);
+  border-radius: 10px;
+  background: linear-gradient(168deg, rgba(28, 28, 31, 0.72), rgba(19, 19, 19, 0.42));
+  opacity: 0;
+}
+
+.indice{
+  font-family: var(--font-display);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.16em;
+  color: var(--acento);
+}
+
+.cartaoTitulo{
+  font-size: clamp(1.125rem, 1.9vw, 1.5rem);
+  letter-spacing: -0.02em;
+}
+
+.cartaoTexto{
+  font-size: clamp(0.875rem, 1.05vw, 0.9375rem);
+  line-height: 1.55;
+  color: var(--texto-suave);
+}
+
+.marcas{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0.2rem 0 0;
+  padding: 0;
+}
+
+.marcas li{
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--texto-fraco);
+  border: 1px solid var(--linha);
+  border-radius: 999px;
+  padding: 0.28rem 0.6rem;
+}
+
+.nota{ margin-top: 0.25rem; }
+
+@media (min-width: 768px){
+  .blocos{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1280px){
+  .blocos{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  /* espaço à direita reservado pra miniatura do crachá no Ato 3 */
+  .cabecalho{ padding-right: clamp(0rem, 18vw, 18rem); }
+}
+
+/* Sem pin em reduced motion: a seção precisa de altura natural, senão
+   sobrariam 200vh de nada. */
+@media (prefers-reduced-motion: reduce){
+  .raiz{ height: auto; padding-block: var(--ato-py); }
+  .palco{ height: auto; }
+  .cartao{ opacity: 1; }
+}

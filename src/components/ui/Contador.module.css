@@ -1,0 +1,36 @@
+.raiz{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid var(--linha-acento);
+}
+
+.numero{
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 6vw, 5rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: var(--texto);
+  font-variant-numeric: tabular-nums;
+}
+
+.placeholder{
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: var(--fs-micro);
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--acento-claro);
+  border: 1px dashed var(--linha-acento);
+  border-radius: 4px;
+  padding: 0.6rem 0.75rem;
+  max-width: 20ch;
+}
+
+.rotulo{
+  font-size: var(--fs-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--texto-suave);
+}

@@ -1,0 +1,151 @@
+.raiz{
+  position: relative;
+  z-index: 2;
+  background: var(--preto);
+  padding-block: var(--ato-py) 0;
+  overflow: hidden;
+}
+
+/* No modo pinado a seção precisa caber EXATAMENTE numa tela: o pin prende o
+   topo, e qualquer altura sobrando ficaria cortada embaixo sem chance de
+   ser rolada. */
+.raiz[data-modo='pin']{
+  height: 100svh;
+  padding-block: 0;
+  display: flex;
+  align-items: center;
+}
+
+.palco{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3.4vw, 2.5rem);
+}
+
+.cabecalho{
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.9rem, 2vw, 1.35rem);
+  opacity: 0;
+}
+
+.marcacao{
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.numero{
+  font-family: var(--font-display);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.18em;
+  color: var(--acento);
+}
+
+.traco{
+  width: clamp(28px, 5vw, 64px);
+  height: 1px;
+  background: var(--linha-acento);
+}
+
+.nome{
+  font-size: var(--fs-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--texto-suave);
+}
+
+.titulo{
+  font-size: var(--fs-titulo);
+  letter-spacing: -0.03em;
+  max-width: 18ch;
+}
+
+/* ---------- trilho ---------- */
+
+.trilho{
+  display: flex;
+  gap: clamp(1rem, 2.4vw, 1.75rem);
+  padding-inline: var(--gut);
+  will-change: transform;
+}
+
+/* Modo nativo (mobile e reduced motion): o dedo arrasta, com encaixe suave.
+   Nada de sequestrar o scroll vertical no toque. */
+.raiz[data-modo='nativo'] .trilho{
+  padding-bottom: var(--ato-py);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.raiz[data-modo='nativo'] .trilho::-webkit-scrollbar{ display: none; }
+
+.raiz[data-modo='nativo'] .cartao{ scroll-snap-align: center; }
+
+.cartao{
+  flex: 0 0 auto;
+  width: min(76vw, 26rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  padding: clamp(1.1rem, 2.2vw, 1.75rem);
+  border: 1px solid var(--linha);
+  border-radius: 12px;
+  background: linear-gradient(172deg, rgba(28, 28, 31, 0.62), rgba(10, 10, 10, 0.3));
+}
+
+.mockup{
+  will-change: transform;
+}
+
+.info{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nicho{
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: var(--fs-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--texto-suave);
+}
+
+.indice{
+  font-family: var(--font-display);
+  color: var(--acento);
+  letter-spacing: 0.1em;
+}
+
+.cartaoTitulo{
+  font-size: clamp(1.125rem, 1.8vw, 1.4375rem);
+  letter-spacing: -0.02em;
+  max-width: 24ch;
+}
+
+.escopo{
+  font-size: 0.9375rem;
+  color: var(--texto-suave);
+}
+
+.ficticio{
+  margin-top: 0.35rem;
+  align-self: flex-start;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--acento-claro);
+  border: 1px dashed var(--linha-acento);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+}
+
+@media (min-width: 1024px){
+  .cartao{ width: min(38vw, 27rem); }
+}

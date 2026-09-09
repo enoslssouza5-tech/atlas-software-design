@@ -1,0 +1,65 @@
+.grade{
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 5rem);
+}
+
+.titulo{
+  font-size: var(--fs-display);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  max-width: 16ch;
+}
+
+.coluna{
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 4vw, 3rem);
+}
+
+.lista{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.1rem, 2.4vw, 1.6rem);
+}
+
+.sintoma{
+  position: relative;
+  padding-left: clamp(2.25rem, 4vw, 3.25rem);
+  font-size: clamp(1.0625rem, 1.7vw, 1.3125rem);
+  line-height: 1.5;
+  color: var(--texto-suave);
+  max-width: 44ch;
+}
+
+/* filete laranja como único ornamento de linha da seção */
+.filete{
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: clamp(1.5rem, 2.6vw, 2.25rem);
+  height: 1px;
+  background: var(--acento);
+  transform-origin: left;
+}
+
+.remate{
+  max-width: 42ch;
+  font-size: var(--fs-subtitulo);
+  line-height: 1.55;
+  color: var(--texto);
+  border-left: 1px solid var(--linha-acento);
+  padding-left: clamp(1.1rem, 2.4vw, 1.75rem);
+}
+
+.remate em{
+  font-style: normal;
+  color: var(--acento-claro);
+}
+
+@media (min-width: 1024px){
+  .grade{ grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+  .titulo{ position: sticky; top: 22vh; }
+}

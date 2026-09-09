@@ -1,0 +1,120 @@
+.raiz{
+  position: relative;
+  z-index: 2;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+/* Fundo transparente de propósito: o Canvas do crachá é fixo em z-index 1 e
+   esta seção vive em z-index 2. Pintar o preto aqui esconderia a cena 3D
+   justamente nos dois atos em que ela precisa reaparecer. O preto vem do
+   <body>, que é exatamente a mesma cor. */
+  padding-block: var(--ato-py);
+  background: transparent;
+  overflow: hidden;
+}
+
+.brilho{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* segue o crachá: centro no mobile, terço esquerdo no desktop */
+  width: min(1000px, 120vw);
+  aspect-ratio: 1;
+  background: radial-gradient(
+    circle,
+    rgba(242, 121, 12, 0.14),
+    rgba(242, 121, 12, 0.04) 38%,
+    transparent 64%
+  );
+  pointer-events: none;
+}
+
+@media (min-width: 1024px){
+  .brilho{ left: 27%; width: min(760px, 60vw); }
+}
+
+.interno{
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.5rem, 3.4vw, 2.5rem);
+  text-align: center;
+}
+
+/* Em tela larga o texto ocupa a metade direita e deixa a esquerda livre pro
+   crachá — espelho exato da abertura, onde o crachá estava à direita. */
+@media (min-width: 1024px){
+  .interno{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    align-items: center;
+    text-align: left;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  .interno > *{ grid-column: 2; }
+
+  .marcacao{ justify-content: flex-start; }
+  .titulo{ max-width: 15ch; }
+  .acao{ align-items: flex-start; }
+  .acao > div{ align-items: flex-start; }
+  .micro{ text-align: left; }
+}
+
+.marcacao{
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.numero{
+  font-family: var(--font-display);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.18em;
+  color: var(--acento);
+}
+
+.traco{
+  width: clamp(28px, 5vw, 64px);
+  height: 1px;
+  background: var(--linha-acento);
+}
+
+.nome{
+  font-size: var(--fs-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--texto-suave);
+}
+
+.substituto{ margin-block: clamp(1rem, 3vh, 2rem); }
+
+.titulo{
+  font-size: var(--fs-display);
+  letter-spacing: -0.04em;
+  max-width: 14ch;
+}
+
+.acao{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.acao > div{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.micro{
+  font-size: var(--fs-micro);
+  letter-spacing: 0.04em;
+  color: var(--texto-suave);
+  max-width: 34ch;
+}

@@ -1,0 +1,77 @@
+.raiz{
+  position: relative;
+  z-index: 2;
+  background: var(--preto-2);
+  border-top: 1px solid var(--linha);
+  padding-block: clamp(3rem, 7vw, 5rem) clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.interno{
+  display: grid;
+  gap: clamp(2rem, 4vw, 3rem);
+  padding-bottom: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+.marca{
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.icone{
+  width: 26px;
+  height: 26px;
+  color: var(--acento);
+  flex: 0 0 auto;
+}
+
+.assinatura{
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  letter-spacing: -0.015em;
+  color: var(--texto);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.linhaSecundaria{
+  font-family: var(--font-body);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.04em;
+  color: var(--texto-suave);
+}
+
+.coluna{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.tituloColuna{
+  font-family: var(--font-body);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--texto-suave);
+  margin: 0;
+}
+
+.rodapinho{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem var(--gut);
+  justify-content: space-between;
+  padding-top: clamp(1.25rem, 2.6vw, 1.75rem);
+  border-top: 1px solid var(--linha);
+  font-size: var(--fs-micro);
+  color: var(--texto-fraco);
+}
+
+.credito{ letter-spacing: 0.08em; }
+
+@media (min-width: 768px){
+  .interno{ grid-template-columns: 1.2fr 1fr 1fr; }
+}

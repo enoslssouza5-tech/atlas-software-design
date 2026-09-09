@@ -1,0 +1,65 @@
+.raiz{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  /* alvo de toque mínimo 44x44 */
+  min-height: 44px;
+  padding: 0.85em 1.65em;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: var(--fs-corpo);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    color 0.22s var(--ease-cine),
+    border-color 0.22s var(--ease-cine);
+}
+
+/* preenchimento de hover: sobe de baixo, não pisca */
+.raiz::before{
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--acento);
+  transform: translateY(101%);
+  transition: transform 0.22s var(--ease-cine);
+}
+
+.primario{
+  color: var(--texto);
+  border: 1px solid var(--acento);
+}
+
+.primario:hover{ color: var(--preto); }
+.primario:hover::before{ transform: translateY(0); }
+
+.fantasma{
+  color: var(--texto-suave);
+  border: 1px solid var(--linha);
+}
+
+.fantasma:hover{
+  color: var(--texto);
+  border-color: var(--linha-acento);
+}
+
+.fantasma::before{ background: rgba(247, 245, 239, 0.05); }
+.fantasma:hover::before{ transform: translateY(0); }
+
+.texto{ position: relative; }
+
+.seta{
+  display: inline-flex;
+  transition: transform 0.22s var(--ease-cine);
+}
+
+.raiz:hover .seta{ transform: translateX(3px); }
+
+@media (prefers-reduced-motion: reduce){
+  .raiz, .raiz::before, .seta{ transition: none !important; }
+  .primario:hover::before, .fantasma:hover::before{ transform: translateY(0); }
+}

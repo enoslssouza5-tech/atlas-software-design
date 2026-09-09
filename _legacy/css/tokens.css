@@ -1,0 +1,43 @@
+/* Design tokens — cores, espaçamento, easing. Fonte única de verdade. */
+:root{
+  --bg:#080807;
+  --bg-2:#0e0e0d;
+  --bg-3:#12110f;
+  --accent:#ff5e1a;
+  --accent-2:#ffb347;
+  --grad-accent:linear-gradient(120deg, var(--accent), var(--accent-2));
+  --text:#f2eee6;
+  --muted:#a49a8f;
+  --surface:#141414;
+  --border:#232323;
+  --accent-text:var(--accent);
+  --shadow:0 24px 60px rgba(0,0,0,.55);
+  --line:rgba(255,255,255,0.08);
+  --line-soft:rgba(255,255,255,0.06);
+  --cinema-shadow:rgba(0,0,0,0.72);
+  --rim:rgba(255,179,71,0.22);
+  --steel:#a6a6a6;
+
+  /* corpo em fonte de sistema; títulos em grotesk geométrica de destaque */
+  --font-sans:Inter,-apple-system,'Segoe UI',sans-serif;
+  --font-body:Inter,-apple-system,'Segoe UI',sans-serif;
+  --font-display:'Space Grotesk',-apple-system,'Segoe UI',sans-serif;
+
+  --gutter:6vw;
+  --radius-lg:2rem;
+  --radius-md:14px;
+
+  /* easing — física simulada, sem transições lineares/ease padrão */
+  --ease-out-expo:cubic-bezier(0.16,1,0.3,1);
+  --ease-out-soft:cubic-bezier(0.22,0.61,0.36,1);
+  --ease-spring:cubic-bezier(0.34,1.56,0.64,1);
+
+  --z-grain:9998;
+  --z-cursor:9999;
+  --z-preloader:9997;
+  --z-nav:50;
+}
+
+@media (prefers-reduced-motion: reduce){
+  :root{ --ease-out-expo:linear; --ease-out-soft:linear; --ease-spring:linear; }
+}

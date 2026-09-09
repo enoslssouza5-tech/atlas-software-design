@@ -1,0 +1,119 @@
+.raiz{
+  position: relative;
+  z-index: 2;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding-block: clamp(7rem, 16vh, 10rem) clamp(5rem, 12vh, 8rem);
+  overflow: hidden;
+}
+
+/* véu de abertura: some em 0.84s revelando a cena já montada */
+.veu{
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: var(--preto);
+  pointer-events: none;
+}
+
+/* halo quente atrás do crachá — o laranja como luz, nunca como área sólida */
+.brilho{
+  position: absolute;
+  top: 42%;
+  right: 6%;
+  width: min(760px, 88vw);
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+  background: radial-gradient(
+    circle,
+    rgba(242, 121, 12, 0.13),
+    rgba(242, 121, 12, 0.04) 42%,
+    transparent 66%
+  );
+  pointer-events: none;
+}
+
+.grade{
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 4rem);
+  align-items: center;
+}
+
+.texto{
+  max-width: 38rem;
+}
+
+.selo{
+  margin-bottom: clamp(1rem, 2vw, 1.5rem);
+}
+
+.headline{
+  font-size: var(--fs-hero);
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+  margin-bottom: clamp(1.25rem, 2.2vw, 1.75rem);
+}
+
+.sub{
+  max-width: 44ch;
+  font-size: clamp(1rem, 1.35vw, 1.1875rem);
+  line-height: 1.5;
+  color: var(--texto-suave);
+  margin-bottom: clamp(1.5rem, 2.8vw, 2rem);
+}
+
+.acoes{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.substituto{
+  display: flex;
+  justify-content: center;
+}
+
+.indicador{
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1.5rem, 4vh, 2.75rem);
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.5rem;
+}
+
+.roda{
+  width: 1px;
+  height: 34px;
+  background: linear-gradient(180deg, var(--acento), transparent);
+}
+
+.rotuloIndicador{
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--texto-fraco);
+}
+
+@media (min-width: 1024px){
+  .grade{
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  }
+  .texto{ max-width: none; }
+}
+
+/* Abaixo de 1024px a cena 3D fica atrás do texto, então a coluna do
+   crachá estático some pra não duplicar o elemento. */
+@media (max-width: 1023px){
+  .headline{ font-size: clamp(2.25rem, 7.6vw, 3.5rem); }
+  .brilho{ top: 62%; right: -18%; opacity: 0.72; }
+}

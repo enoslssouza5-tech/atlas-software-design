@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlas — Protótipo Completo</title>
+<style>
+  :root{
+    --bg:#0a0a0a; --bg-2:#111111; --bg-3:#0d0d0d;
+    --accent:#ff5e1a; --accent-2:#ffb347;
+    --text:#f2f2f2; --muted:#9a9a9a;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,'Segoe UI',Inter,sans-serif;
+    overflow-x:hidden; cursor:none;
+  }
+  a, button{ cursor:none; }
+  ::selection{ background:var(--accent); color:#fff; }
+
+  /* ---------- GRAIN OVERLAY ---------- */
+  #grain{
+    position:fixed; inset:0; width:100%; height:100%;
+    pointer-events:none; z-index:9998; opacity:.05; mix-blend-mode:overlay;
+  }
+
+  /* ---------- CUSTOM CURSOR ---------- */
+  #cursor{
+    position:fixed; top:0; left:0; width:22px; height:22px;
+    border:1px solid rgba(255,255,255,0.7); border-radius:50%;
+    pointer-events:none; z-index:9999; transform:translate(-50%,-50%);
+    transition: width .25s, height .25s, background .25s, border-color .25s;
+    mix-blend-mode:difference;
+  }
+  #cursor.hover{ width:52px; height:52px; background:rgba(255,255,255,0.15); }
+
+  /* ---------- PRELOADER ---------- */
+  #preloader{
+    position:fixed; inset:0; background:var(--bg); z-index:9997;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    transition: opacity .9s cubic-bezier(.65,0,.35,1), visibility .9s, transform .9s cubic-bezier(.65,0,.35,1);
+  }
+  #preloader.done{ opacity:0; visibility:hidden; pointer-events:none; transform:scale(1.06); }
+  .pl-icons{ display:flex; gap:14px; margin-bottom:28px; }
+  .pl-icons span{
+    width:38px; height:38px; border-radius:50%; background:#161619;
+    border:1px solid rgba(255,255,255,0.08);
+    display:flex; align-items:center; justify-content:center; font-size:15px;
+    opacity:0; transform:translateY(10px);
+    animation: pl-in .6s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  .pl-icons span:nth-child(1){ animation-delay:.2s; }
+  .pl-icons span:nth-child(2){ animation-delay:.5s; }
+  .pl-icons span:nth-child(3){ animation-delay:.8s; }
+  @keyframes pl-in{ to{ opacity:1; transform:translateY(0); } }
+  .pl-text{
+    font-size:20px; font-weight:600; opacity:0; letter-spacing:.01em;
+    animation: pl-in .7s cubic-bezier(.16,1,.3,1) forwards; animation-delay:1.05s;
+    text-align:center; padding:0 20px;
+  }
+  .pl-sub{
+    font-size:12px; color:var(--muted); margin-top:6px; opacity:0;
+    animation: pl-in .7s cubic-bezier(.16,1,.3,1) forwards; animation-delay:1.3s;
+  }
+  .pl-percent{
+    margin-top:26px; font-size:13px; color:var(--muted); letter-spacing:.15em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- MAIN ---------- */
+  #main{ opacity:0; }
+  #main.show{ opacity:1; transition:opacity .9s ease; }
+
+  nav{
+    position:fixed; top:0; left:0; width:100%; z-index:50;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:22px 6vw; backdrop-filter:blur(6px);
+    background:linear-gradient(to bottom, rgba(10,10,12,0.7), transparent);
+  }
+  nav .logo{ font-weight:700; letter-spacing:.02em; }
+  nav .links{ display:flex; gap:28px; font-size:13px; color:var(--muted); }
+  nav .links a{ color:var(--muted); text-decoration:none; }
+
+  section{ position:relative; padding:0 6vw; }
+
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .8s ease, transform .8s ease; }
+  .reveal.visible{ opacity:1; transform:translateY(0); }
+
+  .eyebrow{
+    font-size:11px; letter-spacing:.25em; text-transform:uppercase; color:var(--muted);
+    margin-bottom:14px;
+  }
+
+  /* ---------- HERO ---------- */
+  #hero{
+    min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding-top:100px; padding-bottom:60px;
+    background:radial-gradient(ellipse at 50% 15%, rgba(91,108,255,0.12), transparent 60%);
+  }
+  #hero .headline{ font-size:clamp(36px,6vw,72px); font-weight:800; line-height:1.05; margin:0; }
+  #hero .headline .grad{ background:linear-gradient(120deg,var(--accent),var(--accent-2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  #hero p.desc{ max-width:480px; margin:18px auto 0; color:var(--muted); font-size:15px; line-height:1.6; }
+  #hero .tag{
+    display:inline-block; margin-bottom:22px; font-size:11px; letter-spacing:.1em;
+    border:1px solid rgba(255,255,255,0.15); border-radius:99px; padding:6px 14px; color:var(--accent-2);
+  }
+
+  .hero-badges{ display:flex; gap:32px; justify-content:center; margin-bottom:12px; }
+  .hero-badge{ position:relative; width:220px; height:320px; }
+  .rope-canvas{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+  .badge-card{
+    position:absolute; width:170px; height:236px;
+    background:linear-gradient(160deg,#1c1c22,#0d0d10);
+    border:1px solid rgba(255,255,255,0.08); border-radius:14px;
+    box-shadow:0 30px 60px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.06);
+    padding:16px; display:flex; flex-direction:column; align-items:center; text-align:center;
+    user-select:none; transform-style:preserve-3d;
+  }
+  .badge-card .photo{
+    width:66px; height:66px; border-radius:50%; margin-top:6px; margin-bottom:12px;
+    background:linear-gradient(140deg,var(--accent),var(--accent-2));
+    display:flex; align-items:center; justify-content:center; font-weight:700; color:#0a0a0a;
+  }
+  .badge-card .name{ font-size:14px; font-weight:600; }
+  .badge-card .role{ font-size:10px; color:var(--muted); margin-top:4px; letter-spacing:.05em; }
+  .badge-card .barcode{
+    margin-top:auto; width:100%; height:20px; opacity:.5; border-radius:2px;
+    background:repeating-linear-gradient(90deg,#444 0 2px,transparent 2px 5px);
+  }
+  @media(max-width:600px){
+    .hero-badges{ gap:8px; }
+    .hero-badge{ width:180px; }
+    .badge-card{ width:150px; }
+  }
+
+
+
+  /* ---------- ABOUT ---------- */
+  #about{ padding-top:120px; padding-bottom:80px; max-width:760px; }
+  #about h2{ font-size:clamp(26px,4vw,40px); line-height:1.3; font-weight:600; }
+  #about h2 .muted{ color:var(--muted); }
+
+  /* ---------- STACK (bolinhas) ---------- */
+  #stack-section{ height:70vh; min-height:480px; margin-top:60px; background:var(--bg-2); border-top:1px solid rgba(255,255,255,.06); }
+  #matter-canvas{ position:absolute; top:0; left:0; width:100%; height:100%; }
+  #stack-section .eyebrow{ position:absolute; top:24px; left:50%; transform:translateX(-50%); z-index:2; }
+
+  /* ---------- PROJECTS (pin + scroll horizontal) ---------- */
+  #projects-outer{ position:relative; } /* altura definida via JS */
+  #projects-sticky{ position:sticky; top:0; height:100vh; overflow:hidden; display:flex; align-items:center; }
+  #projects{ width:100%; padding-top:0; }
+  #projects h2{ font-size:clamp(26px,4vw,40px); margin-bottom:36px; }
+  .proj-track{
+    display:flex; gap:44px; will-change:transform;
+  }
+  .proj-card{ flex:0 0 auto; width:340px; text-align:center; user-select:none; }
+  .scroll-hint{
+    position:absolute; bottom:26px; left:6vw; font-size:11px; color:var(--muted);
+    letter-spacing:.1em; text-transform:uppercase;
+  }
+  .proj-devices{ position:relative; height:200px; display:flex; align-items:flex-end; justify-content:center; }
+  .laptop{ width:260px; height:160px; background:#1a1a1e; border-radius:10px 10px 0 0; border:1px solid rgba(255,255,255,.08); padding:8px; }
+  .laptop .screen{ width:100%; height:100%; border-radius:4px; }
+  .laptop-base{ width:290px; height:10px; background:#222; border-radius:0 0 6px 6px; margin:0 auto; }
+  .phone{
+    position:absolute; right:14px; bottom:6px; width:64px; height:130px;
+    background:#1a1a1e; border-radius:14px; border:1px solid rgba(255,255,255,.1); padding:6px;
+    box-shadow:0 20px 34px rgba(0,0,0,.5);
+  }
+  .phone .screen{ width:100%; height:100%; border-radius:9px; }
+  .proj-title{ margin-top:18px; font-weight:600; font-size:15px; }
+  .proj-desc{ font-size:12px; color:var(--muted); margin-top:2px; }
+  .proj-dots{ display:flex; gap:6px; justify-content:center; margin-top:10px; }
+  .proj-dots span{ width:8px; height:8px; border-radius:50%; }
+
+  /* ---------- PROCESSO ---------- */
+  #processo{ padding-top:120px; padding-bottom:100px; max-width:600px; }
+  #processo h2{ font-size:clamp(26px,4vw,40px); margin-bottom:60px; }
+  .process-line-wrap{ position:relative; padding:6px 0; }
+  .process-line-bg{
+    position:absolute; top:30px; bottom:30px; left:29px; width:2px; background:rgba(255,255,255,0.08);
+  }
+  .process-line-fill{
+    position:absolute; top:30px; left:29px; width:2px; height:0%;
+    background:linear-gradient(180deg,var(--accent),var(--accent-2));
+    transition:height .1s linear;
+  }
+  .process-steps{ position:relative; z-index:2; display:flex; flex-direction:column; gap:56px; }
+  .step{ display:flex; flex-direction:row; align-items:center; gap:26px; }
+  .step .num{
+    flex:0 0 auto; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    border:1px solid rgba(255,255,255,0.15); background:var(--bg); font-weight:700; font-size:14px;
+    color:var(--muted); transition:all .4s ease;
+  }
+  .step.active .num{ border-color:var(--accent-2); color:#0a0a0c; background:linear-gradient(135deg,var(--accent),var(--accent-2)); }
+  .step .label{ display:flex; flex-direction:column; gap:4px; font-size:14px; color:var(--muted); text-align:left; line-height:1.5; transition:color .4s ease; }
+  .step .label strong{ font-size:15px; color:var(--text); font-weight:600; }
+  .step.active .label{ color:var(--text); }
+
+  /* ---------- CTA ---------- */
+  #cta{ padding:140px 6vw; text-align:center; }
+  #cta h2{ font-size:clamp(32px,6vw,64px); font-weight:800; margin-bottom:34px; }
+  .magnetic-btn{
+    display:inline-block; padding:18px 40px; border-radius:99px;
+    background:var(--text); color:var(--bg); font-weight:600; font-size:15px;
+    text-decoration:none; transition:background .3s;
+  }
+
+  footer{
+    padding:40px 6vw; display:flex; justify-content:space-between; align-items:center;
+    border-top:1px solid rgba(255,255,255,.06); color:var(--muted); font-size:12px;
+  }
+  footer .links{ display:flex; gap:18px; }
+  footer a{ color:var(--muted); text-decoration:none; }
+</style>
+</head>
+<body>
+
+<canvas id="grain"></canvas>
+<div id="cursor"></div>
+
+<div id="preloader">
+  <div class="pl-icons"><span title="Websites">&lt;/&gt;</span><span title="Sistemas">⌘</span><span title="Automações">⚡</span></div>
+  <div class="pl-text">Bem-vindo à Atlas</div>
+  <div class="pl-sub">websites · sistemas · automações</div>
+  <div class="pl-percent" id="pl-percent">0%</div>
+</div>
+
+<div id="main">
+  <nav>
+    <div class="logo">ATLAS</div>
+    <div class="links">
+      <a href="#about">Sobre</a>
+      <a href="#projects">Projetos</a>
+      <a href="#processo">Processo</a>
+      <a href="#stack-section">Stack</a>
+      <a href="#cta">Contato</a>
+    </div>
+  </nav>
+
+  <section id="hero">
+    <div class="hero-badges">
+      <div class="hero-badge">
+        <canvas class="rope-canvas" id="rope-canvas-1"></canvas>
+        <div class="badge-card" id="badge-card-1">
+          <div class="photo">E</div>
+          <div class="name">Enos Lira</div>
+          <div class="role">SÓCIO ADMINISTRADOR</div>
+          <div class="barcode"></div>
+        </div>
+      </div>
+      <div class="hero-badge">
+        <canvas class="rope-canvas" id="rope-canvas-2"></canvas>
+        <div class="badge-card" id="badge-card-2">
+          <div class="photo">S</div>
+          <div class="name">Sócio</div>
+          <div class="role">DIRETOR COMERCIAL</div>
+          <div class="barcode"></div>
+        </div>
+      </div>
+    </div>
+    <div class="tag reveal">+ disponível para novos projetos</div>
+    <h1 class="headline reveal">Websites, sistemas e automações<br><span class="grad">sob medida pra sua marca</span></h1>
+    <p class="desc reveal">A Atlas transforma ideias em experiências digitais completas — unindo design, performance e automação pra marcas que não querem passar despercebidas.</p>
+  </section>
+
+  <section id="about">
+    <div class="eyebrow reveal">Sobre</div>
+    <h2 class="reveal">Não fazemos só sites. Construímos a <span class="muted">infraestrutura digital</span> que sua marca precisa pra vender, atender e crescer no automático.</h2>
+  </section>
+
+  <div id="projects-outer">
+    <div id="projects-sticky">
+      <section id="projects">
+        <div class="eyebrow reveal">Projetos</div>
+        <h2 class="reveal">Trabalhos recentes</h2>
+        <div class="proj-track" id="proj-track"></div>
+        <div class="scroll-hint">role pra continuar</div>
+      </section>
+    </div>
+  </div>
+
+  <section id="processo">
+    <div class="eyebrow reveal">Como trabalhamos</div>
+    <h2 class="reveal">Processo</h2>
+    <div class="process-line-wrap" id="process-wrap">
+      <div class="process-line-bg"></div>
+      <div class="process-line-fill" id="process-fill"></div>
+      <div class="process-steps">
+        <div class="step"><span class="num">01</span><span class="label"><strong>Diagnóstico</strong>Entendemos seu negócio, público e objetivo antes de qualquer linha de código.</span></div>
+        <div class="step"><span class="num">02</span><span class="label"><strong>Proposta &amp; Escopo</strong>Você recebe um plano claro, com prazo e investimento definidos.</span></div>
+        <div class="step"><span class="num">03</span><span class="label"><strong>Design</strong>Layout e identidade visual aprovados por você antes de construirmos.</span></div>
+        <div class="step"><span class="num">04</span><span class="label"><strong>Desenvolvimento</strong>Construção do site ou sistema, com atualizações periódicas do progresso.</span></div>
+        <div class="step"><span class="num">05</span><span class="label"><strong>Lançamento &amp; Suporte</strong>Publicação no ar e acompanhamento após a entrega.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stack-section">
+    <div class="eyebrow">Stack &amp; Ferramentas</div>
+    <canvas id="matter-canvas"></canvas>
+  </section>
+
+  <section id="cta">
+    <div class="eyebrow reveal" style="text-align:center;">Vamos conversar?</div>
+    <h2 class="reveal">Bora tirar sua ideia<br>do papel.</h2>
+    <a href="#" class="magnetic-btn reveal" id="cta-btn">Chamar no WhatsApp</a>
+  </section>
+
+  <footer>
+    <div>© 2026 Atlas Software &amp; Design</div>
+    <div class="links"><a href="#">Instagram</a><a href="#">WhatsApp</a><a href="#">E-mail</a></div>
+  </footer>
+</div>
+
+<script>
+/* ================= GRAIN ================= */
+(function(){
+  const canvas = document.getElementById('grain');
+  const ctx = canvas.getContext('2d');
+  function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+  function draw(){
+    const w = canvas.width, h = canvas.height;
+    const imgData = ctx.createImageData(w, h);
+    const buf = imgData.data;
+    for(let i=0;i<buf.length;i+=4){
+      const v = Math.random()*255;
+      buf[i]=v; buf[i+1]=v; buf[i+2]=v; buf[i+3]=255;
+    }
+    ctx.putImageData(imgData,0,0);
+  }
+  setInterval(draw, 90);
+})();
+
+/* ================= CUSTOM CURSOR ================= */
+(function(){
+  const cursor = document.getElementById('cursor');
+  let mx=innerWidth/2, my=innerHeight/2, cx=mx, cy=my;
+  window.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; });
+  function loop(){
+    cx += (mx-cx)*0.18; cy += (my-cy)*0.18;
+    cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%,-50%)`;
+    requestAnimationFrame(loop);
+  }
+  loop();
+  document.querySelectorAll('a, button, .proj-card, .badge-card').forEach(el=>{
+    el.addEventListener('mouseenter', ()=>cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', ()=>cursor.classList.remove('hover'));
+  });
+})();
+
+/* ================= PRELOADER ================= */
+(function(){
+  const pre = document.getElementById('preloader');
+  const pct = document.getElementById('pl-percent');
+  const main = document.getElementById('main');
+  const MIN_DURATION = 2600; // preloader nunca é instantâneo, mesmo com assets leves
+  const start = performance.now();
+  let displayed = 0;
+
+  function tick(){
+    const elapsed = performance.now() - start;
+    // easing: rápido no meio, desacelera perto de 100 (sensação de "assentar")
+    const raw = Math.min(elapsed / MIN_DURATION, 1);
+    const eased = 1 - Math.pow(1 - raw, 3);
+    const target = eased * 100;
+    displayed += (target - displayed) * 0.25;
+    if(target >= 99.5) displayed = 100;
+    pct.textContent = Math.floor(displayed) + '%';
+
+    if(elapsed < MIN_DURATION || displayed < 99.9){
+      requestAnimationFrame(tick);
+    } else {
+      setTimeout(()=>{
+        pre.classList.add('done');
+        main.classList.add('show');
+      }, 450); // pequena pausa em 100% antes de sair, evita corte abrupto
+    }
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* ================= SCROLL REVEAL ================= */
+(function(){
+  const items = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold:0.2 });
+  items.forEach(el=>io.observe(el));
+})();
+
+/* ================= MAGNETIC BUTTON ================= */
+(function(){
+  const btn = document.getElementById('cta-btn');
+  btn.addEventListener('mousemove', (e)=>{
+    const r = btn.getBoundingClientRect();
+    const x = e.clientX - r.left - r.width/2;
+    const y = e.clientY - r.top - r.height/2;
+    btn.style.transform = `translate(${x*0.35}px, ${y*0.35}px)`;
+  });
+  btn.addEventListener('mouseleave', ()=>{ btn.style.transform = 'translate(0,0)'; });
+})();
+
+/* ================= LISTA DE PROJETOS =================
+   Pra adicionar um projeto novo, só inclui um objeto aqui — o card
+   é gerado automaticamente, sem precisar duplicar HTML. */
+const PROJETOS = [
+  { titulo:'RentalFort', desc:'Catálogo de locação de equipamentos', cores:['#f0db4f','#61dafb','#88ce02'], gradiente:'linear-gradient(135deg,#5b6cff,#1a1a2e)' },
+  { titulo:'Nakaya', desc:'Restaurante japonês premium', cores:['#e34c26','#2965f1','#a259ff'], gradiente:'linear-gradient(135deg,#00e0c6,#0d1b2a)' },
+  { titulo:'Lira & Souza', desc:'Advocacia criminal — geração de leads', cores:['#f34f29','#3c873a','#f0db4f'], gradiente:'linear-gradient(135deg,#a259ff,#241b3d)' },
+  { titulo:'Cafeteria Rigno', desc:'Site institucional premium', cores:['#88ce02','#f0db4f','#5b6cff'], gradiente:'linear-gradient(135deg,#00e0c6,#1a1a2e)' }
+];
+
+(function(){
+  const track = document.getElementById('proj-track');
+  track.innerHTML = PROJETOS.map(p => `
+    <div class="proj-card">
+      <div class="proj-devices">
+        <div class="laptop"><div class="screen" style="background:${p.gradiente};"></div></div>
+        <div class="phone"><div class="screen" style="background:${p.gradiente};"></div></div>
+      </div>
+      <div class="laptop-base"></div>
+      <div class="proj-title">${p.titulo}</div>
+      <div class="proj-desc">${p.desc}</div>
+      <div class="proj-dots">${p.cores.map(c => `<span style="background:${c}"></span>`).join('')}</div>
+    </div>
+  `).join('');
+})();
+
+/* ================= PROJETOS — pin + scroll horizontal =================
+   A seção fica "grudada" (sticky) enquanto o scroll vertical empurra o
+   carrossel na horizontal. Só quando o último projeto aparece é que a
+   página volta a descer normalmente. Funciona com mouse, trackpad e touch,
+   porque usa o scroll nativo da página (não intercepta o wheel). */
+(function(){
+  const outer = document.getElementById('projects-outer');
+  const track = document.getElementById('proj-track');
+  let scrollDistance = 0;
+
+  function measure(){
+    const trackWidth = track.scrollWidth;
+    const viewport = window.innerWidth;
+    scrollDistance = Math.max(trackWidth - viewport + window.innerWidth*0.12, 0);
+    outer.style.height = (window.innerHeight + scrollDistance) + 'px';
+  }
+  measure();
+  window.addEventListener('resize', measure);
+
+  function onScroll(){
+    const rect = outer.getBoundingClientRect();
+    const progress = Math.min(Math.max(-rect.top / scrollDistance, 0), 1);
+    track.style.transform = `translateX(-${progress*scrollDistance}px)`;
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+})();
+
+/* ================= PROCESSO — linha numerada progressiva ================= */
+(function(){
+  const wrap = document.getElementById('process-wrap');
+  const fill = document.getElementById('process-fill');
+  const steps = document.querySelectorAll('#processo .step');
+
+  function onScroll(){
+    const rect = wrap.getBoundingClientRect();
+    const vh = window.innerHeight;
+    let progress = (vh*0.7 - rect.top) / (rect.height*0.9);
+    progress = Math.min(Math.max(progress, 0), 1);
+    fill.style.height = (progress*100) + '%';
+    steps.forEach((step, i) => {
+      const threshold = i / (steps.length - 1);
+      step.classList.toggle('active', progress >= threshold - 0.02);
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+})();
+
+/* ================= CRACHÁ — corda verlet (vanilla), reutilizável p/ N crachás ================= */
+function initBadgeRope(wrapperEl, canvas, card){
+  const ctx = canvas.getContext('2d');
+
+  let W, H;
+  function resize(){
+    W = canvas.clientWidth || 220; H = wrapperEl.clientHeight;
+    canvas.width = W; canvas.height = H;
+  }
+  resize(); window.addEventListener('resize', resize);
+
+  const NUM_POINTS=14, SEGMENT_LEN=15, GRAVITY=0.9, FRICTION=0.985, ITER=8;
+  const LANYARD_WIDTH = 9; // fita larga, não fio fino
+  const startTime = performance.now();
+  let anchor = { x:()=>W/2, y:()=>30 };
+  let points=[];
+  function initRope(){
+    points=[];
+    for(let i=0;i<NUM_POINTS;i++){
+      points.push({ x:anchor.x(), y:anchor.y()+i*SEGMENT_LEN, oldx:anchor.x(), oldy:anchor.y()+i*SEGMENT_LEN, pinned:i===0 });
+    }
+  }
+  initRope();
+
+  let dragging=false, mouse={x:0,y:0,px:0,py:0};
+  function getBadgePoint(){ return points[points.length-1]; }
+  function localMouse(e){
+    const rect = canvas.getBoundingClientRect();
+    const t = e.touches? e.touches[0]: e;
+    return { x:t.clientX-rect.left, y:t.clientY-rect.top };
+  }
+  function pointerDown(e){
+    const m = localMouse(e); const b = getBadgePoint();
+    const d = Math.hypot(m.x-b.x, m.y-(b.y+80));
+    if(d<130){ dragging=true; mouse.x=m.x; mouse.y=m.y-80; mouse.px=mouse.x; mouse.py=mouse.y; }
+  }
+  function pointerMove(e){
+    if(!dragging) return;
+    const m = localMouse(e);
+    mouse.px=mouse.x; mouse.py=mouse.y;
+    mouse.x=m.x; mouse.y=m.y-80;
+  }
+  function pointerUp(){ dragging=false; }
+  canvas.addEventListener('mousedown', pointerDown);
+  canvas.addEventListener('mousemove', pointerMove);
+  window.addEventListener('mouseup', pointerUp);
+  canvas.addEventListener('touchstart', pointerDown, {passive:true});
+  canvas.addEventListener('touchmove', pointerMove, {passive:true});
+  window.addEventListener('touchend', pointerUp);
+  card.addEventListener('mousedown', pointerDown);
+  card.addEventListener('touchstart', pointerDown, {passive:true});
+
+  function updatePoints(){
+    // leve "vento" contínuo, pra nunca ficar 100% estático/reto
+    const t = (performance.now() - startTime) * 0.001;
+    const wind = Math.sin(t * 0.55) * 0.06 + Math.sin(t * 1.3 + 1) * 0.03;
+    for(let i=0;i<points.length;i++){
+      const p=points[i];
+      if(p.pinned){ p.x=anchor.x(); p.y=anchor.y(); continue; }
+      const isBadge = (i===points.length-1);
+      if(isBadge && dragging){
+        p.oldx = p.x-(mouse.x-mouse.px); p.oldy = p.y-(mouse.y-mouse.py);
+        p.x=mouse.x; p.y=mouse.y; continue;
+      }
+      const vx=(p.x-p.oldx)*FRICTION + wind*(i/points.length), vy=(p.y-p.oldy)*FRICTION;
+      p.oldx=p.x; p.oldy=p.y; p.x+=vx; p.y+=vy+GRAVITY;
+    }
+  }
+  function applyConstraints(){
+    for(let iter=0; iter<ITER; iter++){
+      for(let i=0;i<points.length-1;i++){
+        const a=points[i], b=points[i+1];
+        const dx=b.x-a.x, dy=b.y-a.y;
+        const dist=Math.hypot(dx,dy)||0.0001;
+        const diff=(SEGMENT_LEN-dist)/dist;
+        const offx=dx*diff*0.5, offy=dy*diff*0.5;
+        if(!a.pinned){ a.x-=offx; a.y-=offy; }
+        if(!b.pinned){ b.x+=offx; b.y+=offy; }
+      }
+      for(const p of points){
+        if(p.x<10) p.x=10; if(p.x>W-10) p.x=W-10; if(p.y>H-40) p.y=H-40;
+      }
+    }
+  }
+  function drawRope(){
+    ctx.clearRect(0,0,W,H);
+
+    // ---- fita do crachá (lanyard largo, não fio) ----
+    const left = [], right = [];
+    for(let i=0;i<points.length;i++){
+      const p = points[i];
+      const next = points[Math.min(i+1, points.length-1)];
+      const prev = points[Math.max(i-1, 0)];
+      const dx = next.x - prev.x, dy = next.y - prev.y;
+      const len = Math.hypot(dx,dy) || 0.0001;
+      const nx = -dy/len, ny = dx/len; // normal perpendicular ao segmento
+      left.push({ x:p.x + nx*LANYARD_WIDTH/2, y:p.y + ny*LANYARD_WIDTH/2 });
+      right.push({ x:p.x - nx*LANYARD_WIDTH/2, y:p.y - ny*LANYARD_WIDTH/2 });
+    }
+    ctx.beginPath();
+    ctx.moveTo(left[0].x, left[0].y);
+    for(let i=1;i<left.length;i++) ctx.lineTo(left[i].x, left[i].y);
+    for(let i=right.length-1;i>=0;i--) ctx.lineTo(right[i].x, right[i].y);
+    ctx.closePath();
+    const lanyardGrad = ctx.createLinearGradient(0, anchor.y(), 0, points[points.length-1].y);
+    lanyardGrad.addColorStop(0, '#1c1c1c');
+    lanyardGrad.addColorStop(1, '#0d0d0d');
+    ctx.fillStyle = lanyardGrad;
+    ctx.fill();
+    // friso de destaque no centro da fita, cor da marca
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for(let i=1;i<points.length;i++) ctx.lineTo(points[i].x, points[i].y);
+    ctx.strokeStyle = 'rgba(255,94,26,0.55)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // clipe metálico no topo (fixação)
+    ctx.beginPath(); ctx.arc(anchor.x(),anchor.y(),7,0,Math.PI*2);
+    const clipGrad = ctx.createLinearGradient(anchor.x()-7,0,anchor.x()+7,0);
+    clipGrad.addColorStop(0,'#8a8a8a'); clipGrad.addColorStop(0.5,'#e8e8e8'); clipGrad.addColorStop(1,'#8a8a8a');
+    ctx.fillStyle = clipGrad; ctx.fill();
+
+    // clipe metálico onde a fita encontra o crachá
+    const b = points[points.length-1];
+    ctx.beginPath(); ctx.roundRect ? ctx.roundRect(b.x-12, b.y-6, 24, 12, 4) : ctx.rect(b.x-12,b.y-6,24,12);
+    ctx.fillStyle = clipGrad; ctx.fill();
+  }
+  function positionCard(){
+    const b=getBadgePoint(); const prev=points[points.length-2];
+    const angle=Math.atan2(b.y-prev.y, b.x-prev.x)-Math.PI/2;
+    const cardX = b.x - 85;
+    const cardY = b.y + 4;
+    const swing=(b.x-prev.x)*2;
+    card.style.transform = `translate(${cardX}px, ${cardY}px) perspective(700px) rotateZ(${angle}rad) rotateY(${Math.max(-18,Math.min(18,swing))}deg)`;
+  }
+  function loop(){ updatePoints(); applyConstraints(); drawRope(); positionCard(); requestAnimationFrame(loop); }
+  loop();
+}
+
+document.querySelectorAll('.hero-badge').forEach(wrapper => {
+  const canvas = wrapper.querySelector('.rope-canvas');
+  const card = wrapper.querySelector('.badge-card');
+  initBadgeRope(wrapper, canvas, card);
+});
+
+/* ================= BOLINHAS — física própria, dentro de um pote redondo
+   (tipo globo de sorteio / mega-sena) ================= */
+(function(){
+  const section = document.getElementById('stack-section');
+  const canvas = document.getElementById('matter-canvas');
+  const ctx = canvas.getContext('2d');
+  let W,H,cx,cy,R;
+  function resize(){
+    W=section.clientWidth; H=section.clientHeight; canvas.width=W; canvas.height=H;
+    cx = W/2; cy = H/2 + 10;
+    R = Math.min(W, H) * 0.42;
+  }
+  resize(); window.addEventListener('resize', resize);
+
+  const GRAVITY=0.45, REST=0.6, AIR=0.995, ITER=3;
+  const tools=[
+    {label:'GSAP',color:'#88ce02'},{label:'JS',color:'#f0db4f'},{label:'CSS3',color:'#2965f1'},
+    {label:'React',color:'#61dafb'},{label:'Git',color:'#f34f29'},{label:'Figma',color:'#a259ff'},
+    {label:'HTML',color:'#e34c26'},{label:'Node',color:'#3c873a'}
+  ];
+  let balls=[];
+  function build(){
+    balls = tools.map((t,i)=>{
+      const angle = Math.random()*Math.PI*2;
+      const dist = Math.random()*R*0.4;
+      return { x:cx+Math.cos(angle)*dist, y:cy+Math.sin(angle)*dist - 60 - i*30,
+        vx:(Math.random()-0.5)*2, vy:0, r:36, color:t.color, label:t.label, dragging:false };
+    });
+  }
+  build();
+
+  let mouse={x:0,y:0,px:0,py:0}, dragTarget=null;
+  function localMouse(e){ const r=canvas.getBoundingClientRect(); const t=e.touches?e.touches[0]:e; return {x:t.clientX-r.left, y:t.clientY-r.top}; }
+  function down(e){
+    const m=localMouse(e); let closest=null, cd=Infinity;
+    for(const b of balls){ const d=Math.hypot(m.x-b.x,m.y-b.y); if(d<b.r*1.4 && d<cd){ closest=b; cd=d; } }
+    if(closest){ dragTarget=closest; dragTarget.dragging=true; mouse.x=m.x; mouse.y=m.y; mouse.px=m.x; mouse.py=m.y; }
+  }
+  function move(e){ const m=localMouse(e); mouse.px=mouse.x; mouse.py=mouse.y; mouse.x=m.x; mouse.y=m.y; }
+  function up(){ if(dragTarget){ dragTarget.vx=(mouse.x-mouse.px)*0.8; dragTarget.vy=(mouse.y-mouse.py)*0.8; dragTarget.dragging=false; dragTarget=null; } }
+  canvas.addEventListener('mousedown', down);
+  window.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', up);
+  canvas.addEventListener('touchstart', down, {passive:true});
+  window.addEventListener('touchmove', move, {passive:true});
+  window.addEventListener('touchend', up);
+
+  function integrate(){
+    for(const b of balls){
+      if(b.dragging){ b.x=mouse.x; b.y=mouse.y; b.vx=0; b.vy=0; continue; }
+      b.vy+=GRAVITY; b.vx*=AIR; b.vy*=AIR; b.x+=b.vx; b.y+=b.vy;
+
+      // colisão com a parede circular do pote
+      const dx=b.x-cx, dy=b.y-cy, dist=Math.hypot(dx,dy)||0.0001;
+      if(dist + b.r > R){
+        const nx=dx/dist, ny=dy/dist;
+        b.x = cx + nx*(R-b.r); b.y = cy + ny*(R-b.r);
+        const vDotN = b.vx*nx + b.vy*ny;
+        if(vDotN > 0){ b.vx -= (1+REST)*vDotN*nx; b.vy -= (1+REST)*vDotN*ny; }
+      }
+    }
+  }
+  function resolve(){
+    for(let it=0; it<ITER; it++){
+      for(let i=0;i<balls.length;i++) for(let j=i+1;j<balls.length;j++){
+        const a=balls[i], b=balls[j];
+        const dx=b.x-a.x, dy=b.y-a.y, dist=Math.hypot(dx,dy)||0.0001, minD=a.r+b.r;
+        if(dist<minD){
+          const nx=dx/dist, ny=dy/dist, overlap=minD-dist;
+          if(!a.dragging){ a.x-=nx*overlap/2; a.y-=ny*overlap/2; }
+          if(!b.dragging){ b.x+=nx*overlap/2; b.y+=ny*overlap/2; }
+          const dvx=b.vx-a.vx, dvy=b.vy-a.vy, rel=dvx*nx+dvy*ny;
+          if(rel<0){ const imp=-(1+REST)*rel/2;
+            if(!a.dragging){ a.vx-=imp*nx; a.vy-=imp*ny; }
+            if(!b.dragging){ b.vx+=imp*nx; b.vy+=imp*ny; }
+          }
+        }
+      }
+    }
+  }
+  function drawPote(){
+    // vidro do pote
+    ctx.save();
+    ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2);
+    const glass = ctx.createRadialGradient(cx-R*0.3,cy-R*0.3,R*0.1, cx,cy,R);
+    glass.addColorStop(0,'rgba(255,255,255,0.06)');
+    glass.addColorStop(1,'rgba(255,255,255,0.015)');
+    ctx.fillStyle = glass; ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+    ctx.stroke();
+    // brilho superior (destaque de vidro)
+    ctx.beginPath();
+    ctx.arc(cx, cy, R-6, Math.PI*1.15, Math.PI*1.55);
+    ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+    ctx.restore();
+    // base do pote
+    ctx.save();
+    ctx.beginPath();
+    ctx.ellipse(cx, cy+R+6, R*0.55, 10, 0, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(255,255,255,0.05)';
+    ctx.fill();
+    ctx.restore();
+  }
+  const DARK_ICON = new Set(['JS','React']); // fundo claro, ícone escuro; resto usa ícone branco
+  function drawIcon(label, x, y, r){
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.fillStyle = DARK_ICON.has(label) ? '#0a0a0a' : '#ffffff';
+    ctx.strokeStyle = ctx.fillStyle;
+    ctx.lineWidth = r*0.08;
+    switch(label){
+      case 'JS':
+        ctx.font = `bold ${r*0.62}px -apple-system, sans-serif`;
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText('JS', 0, r*0.04);
+        break;
+      case 'React':
+        for(let i=0;i<3;i++){
+          ctx.save(); ctx.rotate(i*Math.PI/3);
+          ctx.beginPath(); ctx.ellipse(0,0, r*0.62, r*0.24, 0, 0, Math.PI*2); ctx.stroke();
+          ctx.restore();
+        }
+        ctx.beginPath(); ctx.arc(0,0, r*0.13, 0, Math.PI*2); ctx.fill();
+        break;
+      case 'Git':
+        ctx.beginPath(); ctx.moveTo(0,-r*0.5); ctx.lineTo(0,r*0.5); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0,-r*0.1); ctx.lineTo(r*0.32,-r*0.35); ctx.stroke();
+        [[0,-r*0.5],[0,r*0.5],[r*0.32,-r*0.35]].forEach(p=>{
+          ctx.beginPath(); ctx.arc(p[0],p[1], r*0.12, 0, Math.PI*2); ctx.fill();
+        });
+        break;
+      case 'Figma':
+        ctx.beginPath(); ctx.arc(r*0.02,-r*0.28, r*0.2, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(-r*0.2, r*0.05, r*0.2, Math.PI*0.5, Math.PI*1.5); ctx.fill();
+        ctx.beginPath();
+        if(ctx.roundRect){ ctx.roundRect(-r*0.02, -r*0.15, r*0.4, r*0.4, r*0.08); } else { ctx.rect(-r*0.02,-r*0.15,r*0.4,r*0.4); }
+        ctx.fill();
+        break;
+      case 'HTML':
+        ctx.beginPath();
+        ctx.moveTo(-r*0.34,-r*0.42); ctx.lineTo(r*0.34,-r*0.42); ctx.lineTo(r*0.24,r*0.42); ctx.lineTo(0,r*0.52); ctx.lineTo(-r*0.24,r*0.42); ctx.closePath();
+        ctx.stroke();
+        ctx.font = `bold ${r*0.4}px sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText('5', 0, r*0.02);
+        break;
+      case 'CSS3':
+        ctx.beginPath();
+        ctx.moveTo(-r*0.34,-r*0.42); ctx.lineTo(r*0.34,-r*0.42); ctx.lineTo(r*0.24,r*0.42); ctx.lineTo(0,r*0.52); ctx.lineTo(-r*0.24,r*0.42); ctx.closePath();
+        ctx.stroke();
+        ctx.font = `bold ${r*0.4}px sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText('3', 0, r*0.02);
+        break;
+      case 'Node':
+        ctx.beginPath();
+        for(let i=0;i<6;i++){
+          const a = Math.PI/3*i - Math.PI/6;
+          const px = Math.cos(a)*r*0.5, py = Math.sin(a)*r*0.5;
+          i===0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
+        }
+        ctx.closePath(); ctx.stroke();
+        ctx.font = `bold ${r*0.45}px sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText('n', 0, r*0.06);
+        break;
+      case 'GSAP':
+        ctx.beginPath(); ctx.arc(0,0,r*0.4, Math.PI*0.15, Math.PI*1.7); ctx.stroke();
+        ctx.save(); ctx.rotate(Math.PI*1.7); ctx.translate(r*0.4,0);
+        ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-r*0.14,-r*0.1); ctx.lineTo(-r*0.14,r*0.1); ctx.closePath(); ctx.fill();
+        ctx.restore();
+        break;
+      default:
+        ctx.font = `bold ${r*0.4}px sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText(label.slice(0,2), 0, r*0.04);
+    }
+    ctx.restore();
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    drawPote();
+    for(const b of balls){
+      ctx.save();
+      ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fillStyle=b.color; ctx.fill();
+      const g=ctx.createRadialGradient(b.x-b.r*0.35,b.y-b.r*0.35,b.r*0.1,b.x,b.y,b.r);
+      g.addColorStop(0,'rgba(255,255,255,0.6)'); g.addColorStop(0.4,'rgba(255,255,255,0.05)'); g.addColorStop(1,'rgba(0,0,0,0.3)');
+      ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
+      drawIcon(b.label, b.x, b.y, b.r);
+      ctx.restore();
+    }
+  }
+  function loop(){ integrate(); resolve(); draw(); requestAnimationFrame(loop); }
+  loop();
+})();
+</script>
+</body>
+</html>

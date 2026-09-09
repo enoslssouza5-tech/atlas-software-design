@@ -1,0 +1,29 @@
+.raiz{
+  display: block;
+}
+
+.mascara{
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  /* respiro pra descendentes (g, p, q) não serem cortados pela máscara */
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.interna{
+  display: inline-block;
+  will-change: clip-path, transform;
+}
+
+:global(html.anime-failed) .interna,
+:global(html.anime-failed) .mascara{
+  clip-path: none !important;
+  transform: none !important;
+  overflow: visible;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .interna{ clip-path: none !important; transform: none !important; }
+  .mascara{ overflow: visible; }
+}

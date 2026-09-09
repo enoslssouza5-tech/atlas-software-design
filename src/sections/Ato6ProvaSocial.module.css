@@ -1,0 +1,75 @@
+.envoltorio{
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  background: var(--preto-2);
+}
+
+/* camada de parallax: gradientes, sem imagem. Um asset pesado aqui não
+   acrescentaria nada além de download. */
+.fundo{
+  position: absolute;
+  inset: -18% 0;
+  background:
+    radial-gradient(60% 44% at 14% 22%, rgba(242, 121, 12, 0.09), transparent 62%),
+    radial-gradient(52% 40% at 86% 74%, rgba(127, 147, 201, 0.07), transparent 64%),
+    repeating-linear-gradient(
+      180deg,
+      transparent 0 118px,
+      rgba(247, 245, 239, 0.022) 118px 119px
+    );
+  pointer-events: none;
+  will-change: transform;
+}
+
+.titulo{
+  font-size: var(--fs-titulo);
+  letter-spacing: -0.03em;
+  max-width: 20ch;
+  margin-bottom: 1.1rem;
+}
+
+.explicacao{
+  max-width: 48ch;
+  color: var(--texto-suave);
+  margin-bottom: clamp(2.5rem, 6vw, 4rem);
+}
+
+.metricas{
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  margin-bottom: clamp(3rem, 7vw, 5rem);
+}
+
+.depoimento{
+  margin: 0;
+  padding: clamp(1.5rem, 3.4vw, 2.5rem);
+  border: 1px solid var(--linha);
+  border-radius: 12px;
+  background: rgba(10, 10, 10, 0.4);
+  max-width: 58rem;
+}
+
+.aspas{
+  margin: 0 0 1.5rem;
+}
+
+.assinatura{
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-size: var(--fs-micro);
+  color: var(--texto-suave);
+}
+
+.avatar{
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px dashed var(--linha-acento);
+  flex: 0 0 auto;
+}
+
+@media (min-width: 640px){
+  .metricas{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

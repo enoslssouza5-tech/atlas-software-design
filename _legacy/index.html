@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlas Software & Design — Websites, sistemas e automações sob medida</title>
+<meta name="description" content="A Atlas transforma ideias em experiências digitais completas: websites, sistemas e automações sob medida pra marcas que não querem passar despercebidas. Atendimento em todo o Brasil.">
+<link rel="canonical" href="https://atlassoftwaredesign.com.br/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Atlas Software & Design">
+<meta property="og:title" content="Atlas Software & Design — Websites, sistemas e automações sob medida">
+<meta property="og:description" content="Design, performance e automação numa infraestrutura digital completa pra sua marca vender, atender e crescer no automático.">
+<meta property="og:url" content="https://atlassoftwaredesign.com.br/">
+<meta property="og:locale" content="pt_BR">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Atlas Software & Design">
+<meta name="twitter:description" content="Websites, sistemas e automações sob medida pra sua marca.">
+
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#0a0a0a">
+<script>document.documentElement.classList.add('js');</script>
+<script>
+  window.__animeReady = false;
+  setTimeout(function(){ if(!window.__animeReady) document.documentElement.classList.add('anime-failed'); }, 3000);
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/sections.css">
+<link rel="stylesheet" href="css/responsive.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Atlas Software & Design",
+  "url": "https://atlassoftwaredesign.com.br/",
+  "logo": "https://atlassoftwaredesign.com.br/favicon.svg",
+  "description": "Websites, sistemas e automações sob medida — atendimento em todo o Brasil.",
+  "areaServed": "BR",
+  "sameAs": ["https://www.instagram.com/atlas_software_design/"],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "telephone": "+55-77-99829-6908",
+    "areaServed": "BR",
+    "availableLanguage": "Portuguese"
+  }
+}
+</script>
+</head>
+<body>
+
+<canvas id="grain" aria-hidden="true"></canvas>
+<div id="cursor" aria-hidden="true"></div>
+<div id="scroll-progress" aria-hidden="true"></div>
+
+<div id="preloader" role="status" aria-live="polite">
+  <div class="pl-icons" aria-hidden="true"><span title="Websites">&lt;/&gt;</span><span title="Sistemas">⚙</span><span title="Automações">⚡</span></div>
+  <div class="pl-text">Bem-vindo à Atlas</div>
+  <div class="pl-sub">websites · sistemas · automações</div>
+  <div class="pl-percent" id="pl-percent">0%</div>
+</div>
+
+<div id="main">
+  <nav class="navbar">
+    <a href="#hero" class="logo" aria-label="Atlas Software & Design — início">
+      <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="atlasRingNav" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#ff5e1a"/>
+            <stop offset="1" stop-color="#ffb347"/>
+          </linearGradient>
+        </defs>
+        <circle cx="16" cy="16" r="14.5" fill="#0a0a0a" stroke="url(#atlasRingNav)" stroke-width="1.6"/>
+        <path d="M11 22 L16 9 L21 22" fill="none" stroke="url(#atlasRingNav)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12.6 18 L19.4 18" stroke="url(#atlasRingNav)" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M19 15 C 23 15.5, 23.5 20, 20 22.5" fill="none" stroke="url(#atlasRingNav)" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      <span>ATLAS</span>
+    </a>
+    <div class="links">
+      <a href="#about">Sobre</a>
+      <a href="#projects">Projetos</a>
+      <a href="#processo">Processo</a>
+      <a href="#stack-section">Stack</a>
+      <a href="#cta">Contato</a>
+    </div>
+  </nav>
+
+  <section id="hero" class="theme-dark">
+    <canvas id="hero-three" aria-hidden="true"></canvas>
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="hero-content">
+      <div class="hero-badges-layer">
+        <div class="hero-badges fallback-badges" id="hero-badges">
+          <div class="hero-badge fallback-badge">
+            <div class="badge-card">
+              <div class="photo">E</div>
+              <div class="name">Enos Lira</div>
+              <div class="role">SÓCIO ADMINISTRADOR</div>
+              <div class="barcode"></div>
+            </div>
+          </div>
+          <div class="hero-badge fallback-badge">
+            <div class="badge-card">
+              <div class="photo">L</div>
+              <div class="name">Lucas Britto</div>
+              <div class="role">DIRETOR COMERCIAL</div>
+              <div class="barcode"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tag reveal">+ disponível para novos projetos</div>
+      <h1 class="headline hero-title reveal"><span class="word">Websites,</span> <span class="word">sistemas</span> <span class="word">e</span> <span class="word">automações</span><br><span class="grad"><span class="word">sob</span> <span class="word">medida</span> <span class="word">pra</span> <span class="word">sua</span> <span class="word">marca</span></span></h1>
+      <p class="desc reveal">A Atlas transforma ideias em experiências digitais completas — unindo design, performance e automação pra marcas que não querem passar despercebidas.</p>
+    </div>
+  </section>
+
+  <section id="about" class="theme-light depth-section">
+    <div class="depth-orbit depth-orbit-a" aria-hidden="true"></div>
+    <div class="depth-orbit depth-orbit-b" aria-hidden="true"></div>
+    <div class="eyebrow reveal">Sobre</div>
+    <h2 class="reveal">Não fazemos só sites. Construímos a <span class="muted">infraestrutura digital</span> que sua marca precisa pra vender, atender e crescer no automático.</h2>
+  </section>
+
+  <div id="projects-outer">
+    <div id="projects-sticky">
+      <section id="projects" class="theme-dark">
+        <div class="eyebrow reveal">Projetos</div>
+        <h2 class="reveal">Trabalhos recentes</h2>
+        <div class="proj-track" id="proj-track"></div>
+      </section>
+      <div class="scroll-hint">role pra continuar</div>
+    </div>
+  </div>
+
+  <section id="processo" class="theme-light depth-section">
+    <div class="depth-orbit depth-orbit-a" aria-hidden="true"></div>
+    <div class="depth-orbit depth-orbit-b" aria-hidden="true"></div>
+    <div class="eyebrow reveal">Como trabalhamos</div>
+    <h2 class="reveal">Processo</h2>
+    <div class="process-line-wrap" id="process-wrap">
+      <div class="process-line-bg"></div>
+      <div class="process-line-fill" id="process-fill"></div>
+      <div class="process-steps">
+        <div class="step"><span class="ghost-num" aria-hidden="true">01</span><span class="num">01</span><span class="label"><em>escuta ativa</em><strong>Diagnóstico</strong>Entendemos seu negócio, público e objetivo antes de qualquer linha de código.</span></div>
+        <div class="step"><span class="ghost-num" aria-hidden="true">02</span><span class="num">02</span><span class="label"><em>escopo claro</em><strong>Proposta &amp; Escopo</strong>Você recebe um plano claro, com prazo e investimento definidos.</span></div>
+        <div class="step"><span class="ghost-num" aria-hidden="true">03</span><span class="num">03</span><span class="label"><em>identidade visual</em><strong>Design</strong>Layout e identidade visual aprovados por você antes de construirmos.</span></div>
+        <div class="step"><span class="ghost-num" aria-hidden="true">04</span><span class="num">04</span><span class="label"><em>código sob medida</em><strong>Desenvolvimento</strong>Construção do site ou sistema, com atualizações periódicas do progresso.</span></div>
+        <div class="step"><span class="ghost-num" aria-hidden="true">05</span><span class="num">05</span><span class="label"><em>presença no ar</em><strong>Lançamento &amp; Suporte</strong>Publicação no ar e acompanhamento após a entrega.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stack-section" class="theme-dark depth-section">
+    <div class="depth-orbit depth-orbit-a" aria-hidden="true"></div>
+    <div class="depth-orbit depth-orbit-b" aria-hidden="true"></div>
+    <div class="eyebrow">Stack &amp; Ferramentas</div>
+    <canvas id="ball-pit-canvas" aria-hidden="true"></canvas>
+  </section>
+
+  <section id="cta" class="theme-light">
+    <canvas id="contact-three" aria-hidden="true"></canvas>
+    <div class="eyebrow reveal" style="text-align:center;">Vamos conversar?</div>
+    <h2 class="reveal">Bora tirar sua ideia<br>do papel.</h2>
+    <a href="https://wa.me/5577998296908?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20Atlas%20e%20quero%20tirar%20minha%20ideia%20do%20papel."
+       class="magnetic-btn reveal" id="cta-btn" target="_blank" rel="noopener">
+      <span>Chamar no WhatsApp</span>
+      <span class="btn-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+      </span>
+    </a>
+  </section>
+
+  <footer class="theme-dark">
+    <div>© 2026 Atlas Software &amp; Design</div>
+    <div class="links">
+      <a href="https://www.instagram.com/atlas_software_design/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://wa.me/5577998296908" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  </footer>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
