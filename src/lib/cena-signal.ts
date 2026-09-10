@@ -13,11 +13,9 @@ export type AlvoCena = {
   y: number;
   escala: number;
   opacidade: number;
-  /** rotação base em Y, em radianos */
-  giro: number;
 };
 
-const OCULTO: AlvoCena = { x: 0, y: 0, escala: 0.6, opacidade: 0, giro: 0 };
+const OCULTO: AlvoCena = { x: 0, y: 0, escala: 0.6, opacidade: 0 };
 
 /**
  * Em telas largas o crachá divide a tela com o texto. Em telas estreitas não
@@ -27,8 +25,8 @@ const OCULTO: AlvoCena = { x: 0, y: 0, escala: 0.6, opacidade: 0, giro: 0 };
  */
 export const CENAS = {
   /** Ato 1: crachá em destaque, à direita do texto */
-  hero: { x: 1.05, y: -0.1, escala: 1, opacidade: 1, giro: -0.18 } as AlvoCena,
-  heroMobile: { x: 0.26, y: -0.95, escala: 0.5, opacidade: 0.9, giro: -0.12 } as AlvoCena,
+  hero: { x: 1.05, y: -0.1, escala: 1, opacidade: 1 } as AlvoCena,
+  heroMobile: { x: 0.26, y: -0.95, escala: 0.5, opacidade: 0.9 } as AlvoCena,
 
   /**
    * Ato 3: miniatura no canto inferior direito, assinatura visual recorrente.
@@ -38,15 +36,15 @@ export const CENAS = {
    * jogava o crachá pra fora da tela sem erro nenhum, ele simplesmente não
    * aparecia.
    */
-  miniatura: { x: 2.62, y: -1.45, escala: 0.32, opacidade: 0.85, giro: 0.42 } as AlvoCena,
-  miniaturaMobile: { x: 0.58, y: -1.34, escala: 0.22, opacidade: 0.8, giro: 0.4 } as AlvoCena,
+  miniatura: { x: 2.62, y: -1.45, escala: 0.32, opacidade: 0.85 } as AlvoCena,
+  miniaturaMobile: { x: 0.58, y: -1.34, escala: 0.22, opacidade: 0.8 } as AlvoCena,
 
   /**
    * Ato 9: clímax. Espelho do Ato 1: lá o crachá estava à direita do texto,
    * aqui ele está à esquerda. A página fecha com a mesma imagem invertida.
    */
-  convite: { x: -1.55, y: -0.05, escala: 1.05, opacidade: 1, giro: 0.24 } as AlvoCena,
-  conviteMobile: { x: 0.06, y: -1, escala: 0.55, opacidade: 0.85, giro: 0.12 } as AlvoCena,
+  convite: { x: -1.55, y: -0.05, escala: 1.05, opacidade: 1 } as AlvoCena,
+  conviteMobile: { x: 0.06, y: -1, escala: 0.55, opacidade: 0.85 } as AlvoCena,
 
   oculto: OCULTO,
 } as const;
@@ -59,6 +57,13 @@ export const sinal = {
   alvo: OCULTO as AlvoCena,
   /** true enquanto qualquer ato reivindica o crachá */
   ativo: false,
+  /**
+   * Giro de meia volta do crachá, em radianos, de 0 (face da frente) a
+   * PI (face de trás). Escrito só pelo ScrollTrigger local do Ato 1, preso
+   * aos limites da própria seção: fora desse intervalo o valor trava, nunca
+   * continua girando nem volta a girar.
+   */
+  giroHero: 0,
 };
 
 type Ouvinte = (ativo: boolean) => void;

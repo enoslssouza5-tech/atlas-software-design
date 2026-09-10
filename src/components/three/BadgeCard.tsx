@@ -6,48 +6,109 @@ import { RoundedBox } from '@react-three/drei';
 
 export const CARTAO = { largura: 1.36, altura: 2.02, espessura: 0.062 };
 
+type Socio = { nome: string; setor: string };
+
 /**
- * Monograma "A" extrudado, sobreposto à face do crachá.
- *
- * Chevron com entalhe (silhueta do A sem furo) + travessão, os dois como
- * THREE.Shape. Extrudar geometria fina custa menos que carregar um normal
- * map e mantém a promessa do CLAUDE.md: nada de arquivo externo.
+ * As duas faces do crachá. `setor` fica em placeholder visível enquanto o
+ * cargo real de cada sócio não chega, igual a qualquer outro dado não
+ * confirmado no site: nunca inventar, sempre marcar o que falta.
  */
-function useGeometriaA(segmentos: number) {
+const SOCIOS: { frente: Socio; verso: Socio } = {
+  frente: { nome: 'Enos', setor: '[SETOR · confirmar cargo do Enos]' },
+  verso: { nome: 'Lucas', setor: '[SETOR · confirmar cargo do Lucas]' },
+};
+
+const PAINEL = { largura: CARTAO.largura - 0.16, altura: 1.5 };
+const TEXTURA = { largura: 480, altura: 600 };
+
+function quebrarLinha(ctx: CanvasRenderingContext2D, texto: string, larguraMax: number) {
+  const palavras = texto.split(' ');
+  const linhas: string[] = [];
+  let atual = '';
+  palavras.forEach((palavra) => {
+    const teste = atual ? `${atual} ${palavra}` : palavra;
+    if (atual && ctx.measureText(teste).width > larguraMax) {
+      linhas.push(atual);
+      atual = palavra;
+    } else {
+      atual = teste;
+    }
+  });
+  if (atual) linhas.push(atual);
+  return linhas;
+}
+
+/**
+ * Desenha a identidade de um sócio num canvas 2D: marca A, avatar (inicial
+ * do nome, enquanto não existe foto real pra virar textura), nome e setor.
+ */
+function desenharFace(ctx: CanvasRenderingContext2D, socio: Socio) {
+  const { largura, altura } = TEXTURA;
+
+  ctx.fillStyle = '#1C1C1F';
+  ctx.fillRect(0, 0, largura, altura);
+
+  // marca A, canto superior esquerdo, mesma cor de acento do site inteiro
+  ctx.fillStyle = '#F2790C';
+  ctx.beginPath();
+  ctx.moveTo(largura * 0.1, altura * 0.145);
+  ctx.lineTo(largura * 0.155, altura * 0.145);
+  ctx.lineTo(largura * 0.1275, altura * 0.06);
+  ctx.closePath();
+  ctx.fill();
+
+  // avatar: círculo com a inicial do nome, placeholder até existir foto real
+  const cx = largura / 2;
+  const cy = altura * 0.36;
+  const raio = largura * 0.24;
+
+  ctx.fillStyle = '#2A2A30';
+  ctx.beginPath();
+  ctx.arc(cx, cy, raio, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.lineWidth = largura * 0.012;
+  ctx.strokeStyle = '#F2790C';
+  ctx.stroke();
+
+  ctx.fillStyle = '#F2790C';
+  ctx.font = `700 ${Math.round(raio * 1.15)}px system-ui, -apple-system, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(socio.nome.charAt(0).toUpperCase(), cx, cy + raio * 0.04);
+
+  // nome, dado real
+  ctx.fillStyle = '#F7F5EF';
+  ctx.font = `600 ${Math.round(largura * 0.085)}px system-ui, -apple-system, sans-serif`;
+  ctx.fillText(socio.nome, cx, altura * 0.665);
+
+  // setor, placeholder enquanto o cargo real não é confirmado
+  ctx.fillStyle = '#8A8A92';
+  ctx.font = `500 ${Math.round(largura * 0.034)}px system-ui, -apple-system, sans-serif`;
+  const linhas = quebrarLinha(ctx, socio.setor, largura * 0.84);
+  linhas.forEach((linha, i) => {
+    ctx.fillText(linha, cx, altura * 0.75 + i * largura * 0.048);
+  });
+}
+
+function useTexturaFace(socio: Socio) {
   return useMemo(() => {
-    const chevron = new THREE.Shape();
-    chevron.moveTo(0, 0.5);
-    chevron.lineTo(0.42, -0.5);
-    chevron.lineTo(0.2, -0.5);
-    chevron.lineTo(0, 0.16);
-    chevron.lineTo(-0.2, -0.5);
-    chevron.lineTo(-0.42, -0.5);
-    chevron.closePath();
-
-    const travessao = new THREE.Shape();
-    travessao.moveTo(-0.235, -0.145);
-    travessao.lineTo(0.235, -0.145);
-    travessao.lineTo(0.235, -0.048);
-    travessao.lineTo(-0.235, -0.048);
-    travessao.closePath();
-
-    const opcoes: THREE.ExtrudeGeometryOptions = {
-      depth: 0.018,
-      bevelEnabled: segmentos > 1,
-      bevelThickness: 0.006,
-      bevelSize: 0.006,
-      bevelSegments: segmentos,
-      curveSegments: segmentos,
-    };
-
-    const geo = new THREE.ExtrudeGeometry([chevron, travessao], opcoes);
-    geo.center();
-    return geo;
-  }, [segmentos]);
+    if (typeof document === 'undefined') return null;
+    const canvas = document.createElement('canvas');
+    canvas.width = TEXTURA.largura;
+    canvas.height = TEXTURA.altura;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+    desenharFace(ctx, socio);
+    const textura = new THREE.CanvasTexture(canvas);
+    textura.colorSpace = THREE.SRGBColorSpace;
+    textura.needsUpdate = true;
+    return textura;
+  }, [socio]);
 }
 
 export function BadgeCard({ mobile }: { mobile: boolean }) {
-  const geoA = useGeometriaA(mobile ? 1 : 3);
+  const texturaFrente = useTexturaFace(SOCIOS.frente);
+  const texturaVerso = useTexturaFace(SOCIOS.verso);
 
   return (
     <group>
@@ -68,31 +129,28 @@ export function BadgeCard({ mobile }: { mobile: boolean }) {
         />
       </RoundedBox>
 
-      {/* face útil, levemente mais clara, pra o "A" não flutuar no vazio */}
-      <mesh position={[0, 0.12, CARTAO.espessura / 2 + 0.001]}>
-        <planeGeometry args={[CARTAO.largura - 0.16, CARTAO.altura * 0.52]} />
-        <meshPhysicalMaterial color="#1C1C1F" metalness={0.3} roughness={0.5} />
-      </mesh>
-
-      {/* monograma em relevo, única cor de destaque da cena */}
-      <mesh geometry={geoA} position={[0, 0.34, CARTAO.espessura / 2 + 0.004]} scale={0.56}>
-        <meshPhysicalMaterial
-          color="#F2790C"
-          metalness={0.48}
-          roughness={0.24}
-          clearcoat={0.8}
-          emissive="#B85600"
-          emissiveIntensity={0.22}
+      {/* face da frente: foto e dados do Enos */}
+      <mesh position={[0, -0.03, CARTAO.espessura / 2 + 0.001]}>
+        <planeGeometry args={[PAINEL.largura, PAINEL.altura]} />
+        <meshStandardMaterial
+          map={texturaFrente ?? undefined}
+          metalness={0.05}
+          roughness={0.75}
+          toneMapped={false}
         />
       </mesh>
 
-      {/* filetes de dado, placeholder de nome/cargo, sem texto inventado */}
-      {[0, 1, 2].map((i) => (
-        <mesh key={i} position={[-0.18 + i * 0.02, -0.42 - i * 0.13, CARTAO.espessura / 2 + 0.002]}>
-          <planeGeometry args={[0.62 - i * 0.16, 0.026]} />
-          <meshBasicMaterial color={i === 0 ? '#8A8A92' : '#3a3a42'} />
-        </mesh>
-      ))}
+      {/* face de trás: foto e dados do Lucas, girada 180 graus em Y pra não
+          sair espelhada quando o crachá completa a meia volta */}
+      <mesh position={[0, -0.03, -CARTAO.espessura / 2 - 0.001]} rotation={[0, Math.PI, 0]}>
+        <planeGeometry args={[PAINEL.largura, PAINEL.altura]} />
+        <meshStandardMaterial
+          map={texturaVerso ?? undefined}
+          metalness={0.05}
+          roughness={0.75}
+          toneMapped={false}
+        />
+      </mesh>
 
       {/* recorte do clipe, no topo */}
       <mesh position={[0, CARTAO.altura / 2 - 0.14, 0]}>

@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { SplitWords } from '@/components/ui/SplitWords';
 import { Reveal } from '@/components/ui/Reveal';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Placeholder } from '@/components/ui/Placeholder';
 import { CENAS, definirAlvo } from '@/lib/cena-signal';
 import { useDeviceTier } from '@/lib/use-device-tier';
@@ -23,30 +24,14 @@ import s from './Ato3Solucao.module.css';
 
 const FRENTES = [
   { n: '01', texto: 'Websites institucionais, landing pages e catálogos.' },
-  {
-    n: '02',
-    texto:
-      'Sistemas sob medida, área de cliente, painel interno, cadastro, construídos em cima do processo que sua empresa já usa.',
-  },
+  { n: '02', texto: 'Sistemas sob medida, painel interno e cadastro pro seu processo.' },
   {
     n: '03',
-    texto:
-      'Automações, a tarefa manual que consome a manhã de alguém vira rotina automática entre sistemas, WhatsApp e planilha.',
+    texto: 'Automações, tarefa manual vira rotina entre sistema, WhatsApp e planilha.',
   },
-  {
-    n: '04',
-    texto:
-      'Gestão de tráfego pago, campanha de Google e Meta Ads pensada pra levar contato real pro seu funil, com prospecção e captação de cliente.',
-  },
-  {
-    n: '05',
-    texto:
-      'Manutenção contínua de website e sistemas, a nossa equipe continua por perto depois do deploy, sempre pronta pra ajustar o que for preciso.',
-  },
-  {
-    n: '06',
-    texto: 'Suporte, sua equipe fala direto com quem construiu e com quem opera o anúncio.',
-  },
+  { n: '04', texto: 'Tráfego pago, Google e Meta Ads com captação real de cliente.' },
+  { n: '05', texto: 'Manutenção contínua, sempre por perto depois do site no ar.' },
+  { n: '06', texto: 'Suporte direto com quem constrói e com quem cuida do anúncio.' },
 ];
 
 export function Ato3Solucao() {
@@ -124,11 +109,8 @@ export function Ato3Solucao() {
                 A solução
               </span>
             </div>
-            <SplitWords
-              texto="Seis frentes e uma promessa de continuidade."
-              como="h2"
-              className={s.titulo}
-            />
+            <Eyebrow>Onde as pontas se juntam</Eyebrow>
+            <SplitWords texto="Seis frentes, uma equipe só." como="h2" className={s.titulo} />
           </header>
 
           <div className={s.blocos}>
@@ -142,14 +124,15 @@ export function Ato3Solucao() {
 
           <p className={s.nota}>
             <Placeholder>
-              [ESCOPO · confirmar com a Atlas o que entra em cada frente e o que fica de fora]
+              [O QUE ESTÁ INCLUSO · confirmar com a Atlas o que entra em cada frente e o
+              que fica de fora]
             </Placeholder>
           </p>
 
           <Reveal className={s.mecanismo} distancia={DIST.curto} duracao={DUR.longa}>
             <p>
-              A mesma equipe que constrói o site é a que opera o anúncio, mantém o sistema
-              e dá suporte depois. Ninguém perde informação de um fornecedor pro outro.
+              A mesma equipe constrói, cuida do anúncio e dá suporte depois. Nada se perde
+              entre fornecedores.
             </p>
           </Reveal>
         </div>

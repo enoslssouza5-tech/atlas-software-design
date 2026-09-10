@@ -3,6 +3,7 @@
 import { Ato } from '@/components/ui/Ato';
 import { SplitWords } from '@/components/ui/SplitWords';
 import { Reveal } from '@/components/ui/Reveal';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 import { PoteStack } from '@/components/canvas2d/PoteStack';
 import s from './Ato7Stack.module.css';
 
@@ -21,6 +22,7 @@ export function Ato7Stack() {
     <Ato id="ato-stack" numero="07" rotulo="Ferramentas">
       <div className={s.grade}>
         <div className={s.texto}>
+          <Eyebrow>Pode mexer</Eyebrow>
           <SplitWords
             texto="As ferramentas que a Atlas usa. Pode mexer."
             como="h2"
@@ -29,14 +31,9 @@ export function Ato7Stack() {
 
           <Reveal className={s.corpo} duracao={0.82}>
             <p>
-              Nenhuma delas está aqui por moda. Cada uma resolve um problema específico
-              nos três tipos de projeto que a Atlas entrega, e todas continuam mantidas
-              por quem escreveu o código.
+              Nenhuma ferramenta está aqui por moda. Cada uma resolve um problema real, e
+              quem escreveu o código continua mantendo. Arraste uma bolinha e solte.
             </p>
-          </Reveal>
-
-          <Reveal className={s.dica} atraso={0.14}>
-            <p>Arraste uma bolinha e solte. Elas se empurram de volta.</p>
           </Reveal>
         </div>
 

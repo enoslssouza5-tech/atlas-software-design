@@ -5,6 +5,7 @@ import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { SplitWords } from '@/components/ui/SplitWords';
 import { MockupDuplo } from '@/components/ui/MockupDuplo';
 import { Placeholder } from '@/components/ui/Placeholder';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 import { useDeviceTier } from '@/lib/use-device-tier';
 import { DUR, EASE } from '@/lib/motion-tokens';
 import s from './Ato5Projetos.module.css';
@@ -176,6 +177,7 @@ export function Ato5Projetos() {
               Projetos
             </span>
           </div>
+          <Eyebrow>Nossos projetos</Eyebrow>
           <SplitWords
             texto="Sete demonstrações, sete setores."
             como="h2"

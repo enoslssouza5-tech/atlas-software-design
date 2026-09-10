@@ -1,0 +1,39 @@
+.raiz{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100svh;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.imagem{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Gradiente escuro por cima da foto: mais forte nas bordas, mais fino no
+   meio, onde ficam o crachá e a headline. Sem isso os painéis holográficos
+   e as luzes da própria imagem competem com o crachá em vez de sustentá-lo. */
+.overlay{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 10, 0.85) 0%,
+    rgba(10, 10, 10, 0.55) 40%,
+    rgba(10, 10, 10, 0.55) 60%,
+    rgba(10, 10, 10, 0.85) 100%
+  );
+}
+
+/* Tela estreita: a foto perde largura, então o enquadramento migra pro A,
+   o elemento mais reconhecível, em vez de cortar justo nele. */
+@media (max-width: 767px){
+  .imagem{ object-position: 30% 30%; }
+}

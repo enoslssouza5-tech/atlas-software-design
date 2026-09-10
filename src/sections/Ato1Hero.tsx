@@ -9,12 +9,12 @@ import { Botao } from '@/components/ui/Botao';
 import { BadgeFallback } from '@/components/three/BadgeFallback';
 import { useCracha3d } from '@/components/three/Cracha';
 import { useDeviceTier } from '@/lib/use-device-tier';
-import { CENAS, definirAlvo } from '@/lib/cena-signal';
+import { CENAS, definirAlvo, sinal } from '@/lib/cena-signal';
 import { DIST, DUR, EASE, SILENCIO } from '@/lib/motion-tokens';
 import s from './Ato1Hero.module.css';
 
 const HEADLINE =
-  'Sua empresa não perde cliente por falta de anúncio, perde quando ele cai em quatro fornecedores que não se falam.';
+  'Você não perde cliente por falta de anúncio. Perde quando ele cai entre fornecedores que não se falam.';
 
 /**
  * ATO 1: ABERTURA
@@ -48,6 +48,24 @@ export function Ato1Hero() {
         onLeaveBack: () => definirAlvo(CENAS.oculto),
       });
 
+      // Meia volta do crachá, presa ao scroll só enquanto o Hero passa pela
+      // tela. `end` termina ANTES do gatilho de ativação acima soltar o
+      // crachá (`bottom 22%`): a volta tem que completar enquanto a face de
+      // trás ainda está totalmente visível, não depois que o crachá já
+      // sumiu. Scrub sem suavização por baixo garante progresso 1 para 1:
+      // passado o `end`, o ScrollTrigger para de chamar onUpdate e o valor
+      // trava onde parou, sem continuar nem voltar a girar depois que o
+      // Hero sai de vista.
+      const stGiro = ScrollTrigger.create({
+        trigger: raiz,
+        start: 'top top',
+        end: 'bottom 30%',
+        scrub: true,
+        onUpdate: (self) => {
+          sinal.giroHero = self.progress * Math.PI;
+        },
+      });
+
       if (!liberado) {
         // A lista aqui precisa bater exatamente com o que a timeline de
         // entrada anima lá embaixo. `.acoes` (o contêiner) nunca é alvo da
@@ -57,7 +75,10 @@ export function Ato1Hero() {
         gsap.set([`.${s.sub}`, `.${s.acoes} > *`, `.${s.indicador}`, `.${s.microcopy}`], {
           opacity: 0,
         });
-        return () => st.kill();
+        return () => {
+          st.kill();
+          stGiro.kill();
+        };
       }
 
       const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -109,7 +130,10 @@ export function Ato1Hero() {
         });
       }
 
-      return () => st.kill();
+      return () => {
+        st.kill();
+        stGiro.kill();
+      };
     },
     { scope: ref, dependencies: [liberado, alvoCena] },
   );
@@ -130,9 +154,8 @@ export function Ato1Hero() {
           />
 
           <p className={s.sub}>
-            Websites, sistemas sob medida, automações e tráfego pago que prospecta e
-            capta cliente de verdade. Escopo escrito, código seu, a mesma equipe te
-            respondendo depois do deploy.
+            Site, sistema, automação e tráfego pago, sob a mesma equipe. Combinado por
+            escrito, código seu, suporte contínuo.
           </p>
 
           <div className={s.acoes}>

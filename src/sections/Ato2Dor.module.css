@@ -3,6 +3,10 @@
   gap: clamp(2.5rem, 6vw, 5rem);
 }
 
+.aberturaBloco{
+  min-width: 0;
+}
+
 /* Bloco de abertura do ato: parágrafo, não headline curto, então o
    tratamento tipográfico é de corpo grande, não da escala --fs-display. */
 .abertura{
@@ -60,5 +64,5 @@
 
 @media (min-width: 1024px){
   .grade{ grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
-  .abertura{ position: sticky; top: 22vh; }
+  .aberturaBloco{ position: sticky; top: 22vh; }
 }

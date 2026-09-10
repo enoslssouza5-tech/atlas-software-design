@@ -3,6 +3,7 @@
 import { Ato } from '@/components/ui/Ato';
 import { SplitWords } from '@/components/ui/SplitWords';
 import { Reveal } from '@/components/ui/Reveal';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Acordeao, type ItemFaq } from '@/components/ui/Acordeao';
 import s from './Ato8Oferta.module.css';
 
@@ -15,13 +16,6 @@ import s from './Ato8Oferta.module.css';
  * Todo número, prazo e afirmação aqui vem do briefing aprovado pelo cliente.
  * Nada foi inventado por esta camada de copy.
  */
-
-const OFERTA_ITENS = [
-  'Diagnóstico do que sua empresa já tem hoje, site, sistema, anúncio.',
-  'Escopo escrito com o que entra, o que não entra, e prazo.',
-  'Construção acompanhada pela nossa equipe em ambiente de teste antes de ir pro ar.',
-  'Entrega documentada, com suporte contínuo da nossa equipe depois do deploy.',
-];
 
 const OBJECOES = [
   {
@@ -53,7 +47,7 @@ const OBJECOES = [
 const FAQ: ItemFaq[] = [
   {
     pergunta: 'Quanto tempo leva pra ter o site no ar?',
-    resposta: '15 a 30 dias, conforme o escopo fechado com você.',
+    resposta: '15 a 30 dias, conforme o combinado com você.',
   },
   {
     pergunta: 'Quanto custa?',
@@ -83,29 +77,14 @@ const FAQ: ItemFaq[] = [
   },
   {
     pergunta: 'Atendem empresa de fora da região?',
-    resposta: 'Sim, o processo é remoto do escopo à entrega.',
+    resposta: 'Sim, o processo é remoto, do que foi combinado até a entrega.',
   },
 ];
-
-function IconeCheck() {
-  return (
-    <svg viewBox="0 0 20 20" aria-hidden="true" className={s.iconeCheck}>
-      <circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" strokeWidth="1.15" />
-      <path
-        d="M6.2 10.3 8.6 12.7 13.6 7.3"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.15"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 export function Ato8Oferta() {
   return (
     <Ato id="ato-oferta" numero="08" rotulo="Como funciona" claro>
+      <Eyebrow>Dúvidas?</Eyebrow>
       <SplitWords
         texto="Sem reunião de descoberta que vira orçamento surpresa."
         como="h2"
@@ -114,16 +93,14 @@ export function Ato8Oferta() {
 
       <Reveal className={s.oferta} duracao={0.82}>
         <div>
-          <ul className={s.ofertaLista}>
-            {OFERTA_ITENS.map((item) => (
-              <li key={item} className={s.ofertaItem}>
-                <IconeCheck />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
+          <p>
+            Tudo começa com uma conversa simples sobre o seu problema. Depois disso, você
+            recebe por escrito o que vai ser feito, o prazo e o valor, e só começa quando
+            aprovar. Você acompanha a construção antes de qualquer coisa ir pro ar, e o
+            suporte continua depois da entrega.
+          </p>
           <p className={s.prazo}>
-            Prazo de entrega de site, 15 a 30 dias, conforme escopo. Demais frentes e
+            Prazo de entrega de site, 15 a 30 dias, conforme o combinado. Demais frentes e
             valores, sob conversa direta com a Atlas.
           </p>
         </div>
@@ -145,8 +122,8 @@ export function Ato8Oferta() {
         <div className={s.confiancaItem}>
           <span className={s.confiancaRotulo}>Garantia</span>
           <p>
-            Revisão sem custo se o resultado entregue não bater com o escopo assinado por
-            escrito com o cliente.
+            Revisão sem custo se o que foi entregue não bater com o que ficou combinado
+            por escrito.
           </p>
         </div>
         <div className={s.confiancaItem}>
@@ -156,7 +133,7 @@ export function Ato8Oferta() {
       </div>
 
       <div className={s.faq}>
-        <h3 className={s.subtitulo}>Outras dúvidas</h3>
+        <h3 className={s.subtitulo}>Antes de você perguntar</h3>
         <Acordeao itens={FAQ} idBase="faq-atlas" />
       </div>
     </Ato>

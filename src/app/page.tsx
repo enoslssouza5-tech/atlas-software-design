@@ -2,6 +2,7 @@ import { Preloader } from '@/components/preloader/Preloader';
 import { Nav } from '@/components/hud/Nav';
 import { Rodape } from '@/components/hud/Rodape';
 import { Cracha } from '@/components/three/Cracha';
+import { HeroFundo } from '@/components/hero/HeroFundo';
 import { Ato1Hero } from '@/sections/Ato1Hero';
 import { Ato2Dor } from '@/sections/Ato2Dor';
 import { Ato3Solucao } from '@/sections/Ato3Solucao';
@@ -22,6 +23,7 @@ export default function Home() {
   return (
     <>
       <Preloader />
+      <HeroFundo />
       <Cracha />
       <Nav />
 

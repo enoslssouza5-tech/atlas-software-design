@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { SplitWords } from '@/components/ui/SplitWords';
 import { Reveal } from '@/components/ui/Reveal';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Botao } from '@/components/ui/Botao';
 import { BadgeFallback } from '@/components/three/BadgeFallback';
 import { useCracha3d } from '@/components/three/Cracha';
@@ -71,8 +72,9 @@ export function Ato9Convite() {
           </div>
         )}
 
+        <Eyebrow>Sua vez de decidir</Eyebrow>
         <SplitWords
-          texto="Sua empresa não perde cliente por falta de anúncio, perde quando ele cai em quatro fornecedores que não se falam."
+          texto="Você não perde cliente por falta de anúncio. Perde quando ele cai entre fornecedores que não se falam."
           como="h2"
           className={s.titulo}
         />
@@ -103,7 +105,8 @@ export function Ato9Convite() {
           <p>
             O site bonito, o anúncio rodando e o sistema recebendo lead só valem alguma
             coisa se as três pontas conversam entre si. É exatamente isso que a Atlas
-            entrega, sob o mesmo teto, com escopo escrito antes de qualquer cobrança.
+            entrega, sob o mesmo teto, com o que foi combinado por escrito antes de
+            qualquer cobrança.
           </p>
         </Reveal>
       </div>

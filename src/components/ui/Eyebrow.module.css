@@ -1,0 +1,7 @@
+.raiz{
+  font-size: var(--fs-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--texto-suave);
+  margin-bottom: 0.9rem;
+}

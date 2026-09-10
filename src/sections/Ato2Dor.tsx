@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { Ato } from '@/components/ui/Ato';
 import { Reveal } from '@/components/ui/Reveal';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 import { DIST, DUR, EASE, STAGGER } from '@/lib/motion-tokens';
 import s from './Ato2Dor.module.css';
 
@@ -16,10 +17,10 @@ import s from './Ato2Dor.module.css';
  */
 
 const SINTOMAS = [
-  'O anúncio traz clique, mas ninguém sabe dizer quantos desses cliques viraram cliente de verdade.',
-  'O sistema roda separado do site, então um cadastro feito num lugar não aparece no outro, e alguém da sua equipe copia isso à mão todo dia.',
-  'Cada fornecedor, quem fez o site, quem cuida do anúncio, quem mantém o sistema, empurra a culpa pro outro quando algo trava.',
-  'Pedido de ajuste simples vira semana de espera porque o fornecedor atual está sobrecarregado com outros clientes.',
+  'O clique do anúncio não vira cliente contável.',
+  'Cadastro feito num sistema não aparece no site, e alguém copia isso à mão.',
+  'Cada fornecedor empurra a culpa pro outro quando algo trava.',
+  'Ajuste simples vira semana de espera.',
 ];
 
 export function Ato2Dor() {
@@ -58,15 +59,15 @@ export function Ato2Dor() {
     <div ref={ref}>
       <Ato id="ato-dor" numero="02" rotulo="A dor">
         <div className={s.grade}>
-          <Reveal como="h2" className={s.abertura} distancia={DIST.medio} duracao={DUR.longa}>
-            Quatro áreas resolvem presença digital de verdade, site, sistema, automação e
-            anúncio pago. O problema raramente é falta de uma dessas peças. É elas não
-            conversarem entre si porque cada uma veio de um fornecedor diferente, sem
-            ninguém garantindo que o lead do anúncio chega organizado no sistema, ou que o
-            site aguenta o tráfego que o anúncio traz. A Atlas monta essas quatro peças com
-            a mesma equipe, do escopo à manutenção. Você não precisa ser o elo que junta
-            tudo isso na mão.
-          </Reveal>
+          <div className={s.aberturaBloco}>
+            <Eyebrow>Ninguém te falou isso antes de vender o projeto</Eyebrow>
+            <Reveal como="h2" className={s.abertura} distancia={DIST.medio} duracao={DUR.longa}>
+              O problema raramente é falta de site, sistema, automação ou anúncio. É essas
+              peças não conversarem entre si, cada uma vinda de um fornecedor diferente. A
+              Atlas monta as quatro com a mesma equipe, sem você virar o elo que junta tudo
+              na mão.
+            </Reveal>
+          </div>
 
           <div className={s.coluna}>
             <ul className={s.lista}>
@@ -80,8 +81,8 @@ export function Ato2Dor() {
 
             <Reveal className={s.remate} distancia={DIST.curto} duracao={DUR.longa}>
               <p>
-                Nenhum desses problemas é falta de esforço da sua equipe. É falta de
-                alguém cuidando das quatro pontas juntas.
+                Não é falta de esforço da sua equipe. É falta de alguém cuidando das
+                quatro pontas juntas.
               </p>
             </Reveal>
           </div>

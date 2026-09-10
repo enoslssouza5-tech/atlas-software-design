@@ -50,14 +50,16 @@ export function BadgeScene({ mobile, reduzido }: Props) {
     g.visible = e.opacidade > 0.01;
 
     // Em reduced motion a cena existe, está iluminada e posicionada,
-    // só não se mexe. Continua visível, nunca some.
+    // só não se mexe por conta própria. O giro em si não é animação livre,
+    // é reflexo direto do scroll (igual x/y/escala acima), então continua
+    // acompanhando a meia volta, só sem o balanço do mouse nem do pêndulo.
     if (reduzido) {
-      g.rotation.set(0, alvo.giro, 0);
+      g.rotation.set(0, sinal.giroHero, 0);
       if (p) p.rotation.z = 0;
       return;
     }
 
-    const alvoY = alvo.giro + sinal.mouseX * GIRO_MAX;
+    const alvoY = sinal.giroHero + sinal.mouseX * GIRO_MAX;
     const alvoX = -sinal.mouseY * GIRO_MAX * 0.6;
     e.giroY += (alvoY - e.giroY) * suavizar;
     e.giroX += (alvoX - e.giroX) * suavizar;
