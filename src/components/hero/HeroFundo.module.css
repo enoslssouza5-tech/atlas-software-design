@@ -32,8 +32,3 @@
   );
 }
 
-/* Tela estreita: a foto perde largura, então o enquadramento migra pro A,
-   o elemento mais reconhecível, em vez de cortar justo nele. */
-@media (max-width: 767px){
-  .imagem{ object-position: 30% 30%; }
-}

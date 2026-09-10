@@ -9,10 +9,16 @@ import s from './HeroFundo.module.css';
  * dele, nunca como filha da seção. `position: absolute` porque o fundo rola
  * junto com o Hero; quem é fixo na tela é só o crachá.
  */
+/* Abaixo de 768px a foto é outra, enquadrada em pé pro celular, não um
+   recorte da mesma foto de paisagem do desktop. */
+const QUEBRA_MOBILE = '(max-width: 767px)';
+
 export function HeroFundo() {
   return (
     <div className={s.raiz} aria-hidden="true">
       <picture>
+        <source media={QUEBRA_MOBILE} srcSet="/hero-background-mobile.webp" type="image/webp" />
+        <source media={QUEBRA_MOBILE} srcSet="/hero-background-mobile.jpg" />
         <source srcSet="/hero-background.webp" type="image/webp" />
         <img src="/hero-background.jpg" alt="" className={s.imagem} />
       </picture>

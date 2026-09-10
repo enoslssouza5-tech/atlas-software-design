@@ -6,8 +6,6 @@ import { SplitWords } from '@/components/ui/SplitWords';
 import { Reveal } from '@/components/ui/Reveal';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Placeholder } from '@/components/ui/Placeholder';
-import { CENAS, definirAlvo } from '@/lib/cena-signal';
-import { useDeviceTier } from '@/lib/use-device-tier';
 import { DIST, DUR, EASE } from '@/lib/motion-tokens';
 import s from './Ato3Solucao.module.css';
 
@@ -18,8 +16,6 @@ import s from './Ato3Solucao.module.css';
  * 100vh e o scrub 1.2 dá o arrasto de câmera: o usuário empurra a cena, e ela
  * responde com um leve atraso, como um travelling pesado.
  *
- * O crachá reaparece de miniatura no canto, assinatura visual recorrente,
- * o mesmo objeto do Ato 1 visto de longe.
  */
 
 const FRENTES = [
@@ -37,8 +33,6 @@ const FRENTES = [
 export function Ato3Solucao() {
   const ref = useRef<HTMLElement>(null);
   const palco = useRef<HTMLDivElement>(null);
-  const tier = useDeviceTier();
-  const alvoCena = tier.mobile ? CENAS.miniaturaMobile : CENAS.miniatura;
 
   useGSAP(
     () => {
@@ -70,11 +64,6 @@ export function Ato3Solucao() {
           // recalcula antes de todo o resto.
           refreshPriority: 2,
           scrub: 1.2,
-          onToggle: (self) => {
-            if (self.isActive) definirAlvo(alvoCena);
-          },
-          onLeave: () => definirAlvo(CENAS.oculto),
-          onLeaveBack: () => definirAlvo(CENAS.oculto),
         },
       });
 
@@ -94,7 +83,7 @@ export function Ato3Solucao() {
       // montando duas vezes, cada remontagem empilhava mais um espaçador, e a
       // página crescia sozinha e todos os gatilhos abaixo saíam do lugar.
     },
-    { scope: ref, dependencies: [alvoCena] },
+    { scope: ref },
   );
 
   return (

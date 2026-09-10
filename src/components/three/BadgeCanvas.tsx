@@ -10,9 +10,10 @@ import s from './BadgeCanvas.module.css';
 /**
  * O único Canvas do projeto.
  *
- * Fica fixo atrás do conteúdo e atravessa a página inteira: é o mesmo crachá
- * que abre o Ato 1, reaparece de miniatura no Ato 3 e volta ao centro no
- * Ato 9. Um Canvas por ato multiplicaria contextos WebGL sem necessidade.
+ * Fica fixo atrás do conteúdo, mas só aparece durante o Ato 1: o crachá é
+ * estático ali, centralizado, e a única coisa que acompanha o scroll é o
+ * giro de meia volta entre a face da frente e a de trás. Ele não viaja pro
+ * resto da página.
  */
 export function BadgeCanvas() {
   const tier = useDeviceTier();

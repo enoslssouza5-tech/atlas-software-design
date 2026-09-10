@@ -111,11 +111,6 @@
   .blocos{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
-@media (min-width: 1280px){
-  /* espaço à direita reservado pra miniatura do crachá no Ato 3 */
-  .cabecalho{ padding-right: clamp(0rem, 18vw, 18rem); }
-}
-
 /* Sem pin em reduced motion: a seção precisa de altura natural, senão
    sobrariam 200vh de nada. */
 @media (prefers-reduced-motion: reduce){
