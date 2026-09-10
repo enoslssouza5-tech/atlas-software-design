@@ -10,7 +10,7 @@ type Props = {
   texto: string;
   como?: TagPermitida;
   className?: string;
-  /** atraso antes da primeira palavra — o silêncio do Ato 1 mora aqui */
+  /** atraso antes da primeira palavra, o silêncio do Ato 1 mora aqui */
   atraso?: number;
   /** dispara no scroll (padrão) ou imediatamente, quando quem manda é uma timeline de fora */
   gatilho?: 'scroll' | 'imediato' | 'nenhum';

@@ -8,7 +8,7 @@ type Props = {
   id: string;
   /** numeral do ato, exibido como marcação de roteiro */
   numero: string;
-  /** nome do ato — some visualmente quando `rotuloOculto`, nunca do DOM */
+  /** nome do ato, some visualmente quando `rotuloOculto`, nunca do DOM */
   rotulo: string;
   children: ReactNode;
   /** fundo claro: usado em 1 ou 2 momentos da jornada, nunca alternado */

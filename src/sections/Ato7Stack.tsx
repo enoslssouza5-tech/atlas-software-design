@@ -7,13 +7,13 @@ import { PoteStack } from '@/components/canvas2d/PoteStack';
 import s from './Ato7Stack.module.css';
 
 /**
- * ATO 7 — STACK
+ * ATO 7: STACK
  *
  * Depois de sete atos de scroll dirigido, a página devolve o controle:
  * aqui o usuário pega, arrasta e joga as bolinhas. É a única interação
  * livre da jornada, e vem de propósito logo antes da oferta.
  *
- * O pote roda em Canvas 2D puro, isolado de tudo — sem GSAP, sem three,
+ * O pote roda em Canvas 2D puro, isolado de tudo, sem GSAP, sem three,
  * sem lib de física.
  */
 export function Ato7Stack() {
@@ -30,7 +30,7 @@ export function Ato7Stack() {
           <Reveal className={s.corpo} duracao={0.82}>
             <p>
               Nenhuma delas está aqui por moda. Cada uma resolve um problema específico
-              nos três tipos de projeto que a Atlas entrega — e todas continuam mantidas
+              nos três tipos de projeto que a Atlas entrega, e todas continuam mantidas
               por quem escreveu o código.
             </p>
           </Reveal>

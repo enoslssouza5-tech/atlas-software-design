@@ -9,7 +9,7 @@ export type Ferramenta = {
 };
 
 /**
- * Stack da Atlas — lista fechada no CLAUDE.md.
+ * Stack da Atlas: lista fechada no CLAUDE.md.
  *
  * A ordem importa: as 8 primeiras são as que diferenciam o trabalho e são
  * exatamente as que sobrevivem no corte do mobile. Nenhuma ferramenta entra

@@ -16,19 +16,19 @@ export const EASE = {
 } as const;
 
 export const DUR = {
-  /** entradas — nunca abaixo de 0.6s, nunca redondas */
+  /** entradas, nunca abaixo de 0.6s, nunca redondas */
   curta: 0.64,
   media: 0.82,
   longa: 1.14,
   epica: 1.46,
   /** contadores do Ato 6 */
   contador: 1.68,
-  /** micro-interação de hover — única faixa abaixo de 0.25s */
+  /** micro-interação de hover, única faixa abaixo de 0.25s */
   hover: 0.22,
 } as const;
 
 export const DIST = {
-  /** translateY de entrada — mínimo 28px, máximo 60px */
+  /** translateY de entrada, mínimo 28px, máximo 60px */
   curto: 28,
   medio: 42,
   longo: 60,

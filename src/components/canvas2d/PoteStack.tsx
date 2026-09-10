@@ -12,7 +12,7 @@ import s from './PoteStack.module.css';
  *
  * O componente não desenha nada: ele monta a engine, entrega o brilho do
  * vidro vindo do ScrollTrigger e garante o cleanup. Toda a física vive fora
- * do React de propósito — 60 renders por segundo pra mover bolinha seria o
+ * do React de propósito: 60 renders por segundo pra mover bolinha seria o
  * jeito mais caro possível de fazer isso.
  */
 export function PoteStack() {

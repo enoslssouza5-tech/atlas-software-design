@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react';
 
 export type DeviceTier = {
-  /** viewport estreito — cena 3D reduzida, menos bolinhas */
+  /** viewport estreito, cena 3D reduzida, menos bolinhas */
   mobile: boolean;
-  /** usuário pediu menos movimento — nada anima, tudo continua visível */
+  /** usuário pediu menos movimento, nada anima, tudo continua visível */
   reduzido: boolean;
-  /** WebGL disponível — se falso, a cena 3D vira imagem estática */
+  /** WebGL disponível, se falso, a cena 3D vira imagem estática */
   webgl: boolean;
-  /** conexão econômica ou lenta — mesma consequência do webgl falso */
+  /** conexão econômica ou lenta, mesma consequência do webgl falso */
   economico: boolean;
   /** já resolvido no cliente; antes disso não decidimos nada */
   pronto: boolean;

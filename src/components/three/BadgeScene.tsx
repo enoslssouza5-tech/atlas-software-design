@@ -49,7 +49,7 @@ export function BadgeScene({ mobile, reduzido }: Props) {
     g.scale.setScalar(e.escala);
     g.visible = e.opacidade > 0.01;
 
-    // Em reduced motion a cena existe, está iluminada e posicionada —
+    // Em reduced motion a cena existe, está iluminada e posicionada,
     // só não se mexe. Continua visível, nunca some.
     if (reduzido) {
       g.rotation.set(0, alvo.giro, 0);

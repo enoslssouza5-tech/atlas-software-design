@@ -3,9 +3,12 @@ import { Placeholder } from '@/components/ui/Placeholder';
 import { SITE } from '@/lib/site';
 import s from './Rodape.module.css';
 
+/** wa.me exige o número sem formatação, com o código do país na frente. */
+const WHATSAPP_URL = `https://wa.me/55${SITE.telefone.replace(/\D/g, '')}`;
+
 /**
  * Rodapé. Curto de propósito: o clímax é o Ato 9, e nada aqui deve competir
- * com ele. Existe pelo que a lei e a boa fé pedem — identificação, canal de
+ * com ele. Existe pelo que a lei e a boa fé pedem: identificação, canal de
  * contato e política de privacidade.
  */
 export function Rodape() {
@@ -22,9 +25,19 @@ export function Rodape() {
 
         <div className={s.coluna}>
           <h2 className={s.tituloColuna}>Contato</h2>
-          <Placeholder bloco>
-            [CONTATO · e-mail, WhatsApp e perfis reais da Atlas]
-          </Placeholder>
+          <ul className={s.contatos}>
+            <li>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                WhatsApp {SITE.telefone}
+              </a>
+            </li>
+            <li>
+              <a href={SITE.redes[0]} target="_blank" rel="noopener noreferrer">
+                Instagram {SITE.instagram}
+              </a>
+            </li>
+          </ul>
+          {!SITE.email && <Placeholder>[E-MAIL · endereço comercial real]</Placeholder>}
         </div>
 
         <div className={s.coluna}>

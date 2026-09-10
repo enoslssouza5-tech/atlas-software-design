@@ -265,3 +265,24 @@ entre as máscaras, num `Fragment`.
 passa por render do React, então sem essas duas sondas depurar a cena 3D vira
 adivinhação.
 
+### `gsap.set` de estado inicial precisa mirar EXATAMENTE o que a timeline anima
+
+No Ato 1, o fallback `if (!liberado) { gsap.set([...], {opacity:0}) }` escondia
+o contêiner `.acoes` inteiro, mas a timeline de entrada só reanima os FILHOS
+(`.acoes > *`), nunca o contêiner. Resultado: `.acoes` ficava com
+`style="opacity: 0"` travado pra sempre, e os dois botões da CTA principal
+(`getComputedStyle` reportando opacity:1 em cada um, DOM correto, sem erro
+nenhum no console) simplesmente não apareciam, porque a opacidade do pai
+composita visualmente por cima da opacidade do filho.
+
+`getComputedStyle` de um elemento só reporta a opacidade DELE, não a
+opacidade efetiva renderizada (que é o produto de toda a cadeia de
+ancestrais). Testar visibilidade só pelo computed style do próprio elemento
+engana; é preciso checar a cadeia de pais, ou simplesmente confirmar por
+screenshot real.
+
+Regra: a lista de seletores escondida no estado inicial (`gsap.set(...,
+{opacity:0})`) tem que ser IDÊNTICA à lista de seletores que a timeline de
+entrada revela depois. Nunca esconder o contêiner se quem anima de volta são
+só os filhos.
+

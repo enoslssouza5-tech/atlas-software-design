@@ -51,7 +51,7 @@ export function BadgeCard({ mobile }: { mobile: boolean }) {
 
   return (
     <group>
-      {/* corpo — cartão arredondado, metalicidade contida, nunca espelhado */}
+      {/* corpo: cartão arredondado, metalicidade contida, nunca espelhado */}
       <RoundedBox
         args={[CARTAO.largura, CARTAO.altura, CARTAO.espessura]}
         radius={0.072}
@@ -74,7 +74,7 @@ export function BadgeCard({ mobile }: { mobile: boolean }) {
         <meshPhysicalMaterial color="#1C1C1F" metalness={0.3} roughness={0.5} />
       </mesh>
 
-      {/* monograma em relevo — única cor de destaque da cena */}
+      {/* monograma em relevo, única cor de destaque da cena */}
       <mesh geometry={geoA} position={[0, 0.34, CARTAO.espessura / 2 + 0.004]} scale={0.56}>
         <meshPhysicalMaterial
           color="#F2790C"
@@ -86,7 +86,7 @@ export function BadgeCard({ mobile }: { mobile: boolean }) {
         />
       </mesh>
 
-      {/* filetes de dado — placeholder de nome/cargo, sem texto inventado */}
+      {/* filetes de dado, placeholder de nome/cargo, sem texto inventado */}
       {[0, 1, 2].map((i) => (
         <mesh key={i} position={[-0.18 + i * 0.02, -0.42 - i * 0.13, CARTAO.espessura / 2 + 0.002]}>
           <planeGeometry args={[0.62 - i * 0.16, 0.026]} />

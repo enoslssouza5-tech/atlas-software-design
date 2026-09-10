@@ -9,7 +9,7 @@ import { CARTAO } from './BadgeCard';
  *
  * O vaivém NÃO recria a geometria a cada frame: quem oscila é o pivô lá em
  * cima (ver BadgeScene), o que dá o mesmo pêndulo por uma fração do custo.
- * Recriar um TubeGeometry 60 vezes por segundo é churn de GC puro — e o
+ * Recriar um TubeGeometry 60 vezes por segundo é churn de GC puro, e o
  * CLAUDE.md já proíbe física real de corda pelo mesmo motivo.
  */
 export function BadgeLanyard({ mobile }: { mobile: boolean }) {

@@ -25,11 +25,11 @@ export function Preloader() {
 
       const concluir = () => {
         // quem desarma o failsafe é o LenisProvider, assim que a camada de
-        // motion sobe — bem antes daqui
+        // motion sobe, bem antes daqui
         try {
           sessionStorage.setItem(CHAVE_SESSAO, '1');
         } catch {
-          /* modo privado bloqueia storage — só significa que repete na próxima */
+          /* modo privado bloqueia storage, só significa que repete na próxima */
         }
         travar(false);
         liberar();
@@ -38,7 +38,7 @@ export function Preloader() {
 
       // A abertura do Ato 1 começa junto com a cortina subindo, não depois
       // dela. Esperar a cortina terminar empurrava o CTA pra quase 5s de
-      // página — e faz a cortina parecer estar revelando uma tela vazia.
+      // página, e faz a cortina parecer estar revelando uma tela vazia.
       const liberarCedo = () => {
         travar(false);
         liberar();

@@ -10,11 +10,11 @@ import { DUR, EASE } from '@/lib/motion-tokens';
 import s from './Ato5Projetos.module.css';
 
 /**
- * ATO 5 — PROJETOS
+ * ATO 5: PROJETOS
  *
  * Carrossel horizontal. No desktop o eixo vertical do scroll vira eixo
  * horizontal via ScrollTrigger, com snap por cartão. No mobile e em reduced
- * motion vira scroll horizontal nativo com scroll-snap — mais previsível no
+ * motion vira scroll horizontal nativo com scroll-snap, mais previsível no
  * dedo e sem sequestrar o gesto do usuário.
  *
  * TODOS os sete projetos são fictícios, de demonstração. Nenhum é apresentado
@@ -100,8 +100,8 @@ export function Ato5Projetos() {
           // O ScrollTrigger recalcula na ordem de CRIAÇÃO, não na ordem da
           // página. Este pin nasce depois de todos os atos abaixo dele (o
           // device tier resolve async), então sem prioridade explícita os
-          // atos 6 a 9 se mediriam antes do espaçador existir — e ficariam
-          // 1792px adiantados. Prioridade maior = recalculado primeiro.
+          // atos 6 a 9 se mediriam antes do espaçador existir, e ficariam
+          // 1792px adiantados. Prioridade maior, recalculado primeiro.
           refreshPriority: 1,
           snap: { snapTo: 1 / (PROJETOS.length - 1), duration: 0.42, ease: EASE.entrada },
         },

@@ -10,23 +10,30 @@ export const SITE = {
   nome: 'Atlas Software & Design',
   /** [PLACEHOLDER · domínio final] trocar pelo domínio real da Atlas */
   url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://atlas.example.com',
+  /**
+   * Título padrão, usado no title tag, no OG e no Twitter Card. Ponto único
+   * de correção: mudar aqui atualiza os três ao mesmo tempo.
+   */
+  tituloPadrao: 'Atlas Software & Design: websites, sistemas e automações',
   descricao:
-    'Atlas Software & Design — desenvolvimento de websites, sistemas sob medida e automações para empresas no Brasil.',
+    'Atlas Software & Design: desenvolvimento de websites, sistemas sob medida e automações para empresas no Brasil.',
   locale: 'pt_BR',
   idioma: 'pt-BR',
   /** [PLACEHOLDER · cidade/UV] definir se a Atlas quer foco local ou nacional */
   regiao: 'Brasil',
   /** [PLACEHOLDER · e-mail comercial real] */
   email: null as string | null,
-  /** [PLACEHOLDER · telefone/WhatsApp real] */
-  telefone: null as string | null,
-  /** [PLACEHOLDER · perfis reais: Instagram, LinkedIn, GitHub] */
-  redes: [] as string[],
+  /** WhatsApp comercial da Atlas, formato exibido ao usuário */
+  telefone: '77 99829-6908',
+  /** Instagram comercial da Atlas, formato exibido ao usuário */
+  instagram: '@Atlas_software_design',
+  /** [PLACEHOLDER · demais perfis reais: LinkedIn, GitHub] o Instagram já entra por padrão */
+  redes: ['https://www.instagram.com/Atlas_software_design/'] as string[],
 } as const;
 
 /**
  * JSON-LD. Campos sem dado confirmado ficam de fora do objeto em vez de
- * entrarem preenchidos com invenção — schema com dado falso é pior que
+ * entrarem preenchidos com invenção. Schema com dado falso é pior que
  * schema incompleto.
  */
 export function jsonLd() {

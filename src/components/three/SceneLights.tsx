@@ -18,7 +18,7 @@ export function SceneLights({ mobile }: { mobile: boolean }) {
   return (
     <>
       <ambientLight intensity={0.32} color="#1a1a22" />
-      {/* chave quente — o laranja da marca virando luz, não área sólida */}
+      {/* chave quente, o laranja da marca virando luz, não área sólida */}
       <spotLight
         position={[2.8, 3.6, 3.2]}
         angle={0.62}
@@ -27,7 +27,7 @@ export function SceneLights({ mobile }: { mobile: boolean }) {
         distance={16}
         color="#FFA347"
       />
-      {/* preenchimento frio — separa o crachá do fundo quase preto */}
+      {/* preenchimento frio, separa o crachá do fundo quase preto */}
       <directionalLight position={[-3.4, -0.8, 2.2]} intensity={1.15} color="#7f93c9" />
     </>
   );

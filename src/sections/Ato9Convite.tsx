@@ -5,23 +5,26 @@ import { ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { SplitWords } from '@/components/ui/SplitWords';
 import { Reveal } from '@/components/ui/Reveal';
 import { Botao } from '@/components/ui/Botao';
-import { Placeholder } from '@/components/ui/Placeholder';
 import { BadgeFallback } from '@/components/three/BadgeFallback';
 import { useCracha3d } from '@/components/three/Cracha';
 import { useDeviceTier } from '@/lib/use-device-tier';
 import { CENAS, definirAlvo } from '@/lib/cena-signal';
+import { SITE } from '@/lib/site';
 import s from './Ato9Convite.module.css';
 
 /**
- * ATO 9 — CONVITE
+ * ATO 9: CONVITE
  *
  * Clímax. O crachá volta ao centro, maior que na abertura, e a página fica
  * com um único caminho a seguir. Nada de segundo CTA competindo aqui.
  *
- * A microcopy abaixo do botão reduz risco sem prometer nada: onde caberia
- * um prazo de resposta, existe um placeholder — porque prazo prometido e
- * não cumprido é o primeiro tijolo da desconfiança que o Ato 2 descreveu.
+ * O headline repete o da abertura de propósito: a página termina no mesmo
+ * problema com que começou, agora com um caminho concreto pra resolvê-lo.
  */
+
+/** wa.me exige o número sem formatação, com o código do país na frente. */
+const WHATSAPP_URL = `https://wa.me/55${SITE.telefone.replace(/\D/g, '')}`;
+
 export function Ato9Convite() {
   const ref = useRef<HTMLElement>(null);
   const tem3d = useCracha3d();
@@ -34,7 +37,7 @@ export function Ato9Convite() {
         trigger: ref.current,
         start: 'top 62%',
         // 'bottom bottom' encerrava o gatilho assim que o rodapé encostava na
-        // base da tela — e o crachá sumia justamente no clímax. Enquanto
+        // base da tela, e o crachá sumia justamente no clímax. Enquanto
         // qualquer parte do ato estiver visível, ele mantém a cena.
         end: 'bottom top',
         onToggle: (self) => {
@@ -69,24 +72,39 @@ export function Ato9Convite() {
         )}
 
         <SplitWords
-          texto="Conta o problema. A Atlas diz se resolve."
+          texto="Sua empresa não perde cliente por falta de anúncio, perde quando ele cai em quatro fornecedores que não se falam."
           como="h2"
           className={s.titulo}
         />
+
+        <Reveal className={s.corpo} distancia={28} duracao={0.68}>
+          <p>Conta o problema. A Atlas diz se resolve.</p>
+        </Reveal>
 
         <Reveal className={s.acao} duracao={0.82}>
           <div>
             <Botao href="#contato" aria="Falar com a Atlas">
               Falar com a Atlas
             </Botao>
-            <p className={s.micro}>
-              Sem compromisso e sem reunião obrigatória pra receber uma resposta.
+            <p className={s.micro}>Sem compromisso, resposta em até 24 horas.</p>
+            <p className={s.contatos}>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                WhatsApp {SITE.telefone}
+              </a>
+              <span className={s.separador} aria-hidden="true" />
+              <a href={SITE.redes[0]} target="_blank" rel="noopener noreferrer">
+                Instagram {SITE.instagram}
+              </a>
             </p>
-            <Placeholder>
-              [CONTATO · definir o canal real (WhatsApp, e-mail ou formulário) e o prazo de
-              resposta que a Atlas consegue cumprir sempre]
-            </Placeholder>
           </div>
+        </Reveal>
+
+        <Reveal className={s.ps} distancia={22} duracao={0.68} atraso={0.1}>
+          <p>
+            O site bonito, o anúncio rodando e o sistema recebendo lead só valem alguma
+            coisa se as três pontas conversam entre si. É exatamente isso que a Atlas
+            entrega, sob o mesmo teto, com escopo escrito antes de qualquer cobrança.
+          </p>
         </Reveal>
       </div>
     </section>

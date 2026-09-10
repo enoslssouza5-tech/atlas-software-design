@@ -17,7 +17,7 @@
   pointer-events: none;
 }
 
-/* halo quente atrás do crachá — o laranja como luz, nunca como área sólida */
+/* halo quente atrás do crachá, o laranja como luz, nunca como área sólida */
 .brilho{
   position: absolute;
   top: 42%;
@@ -46,10 +46,6 @@
   max-width: 38rem;
 }
 
-.selo{
-  margin-bottom: clamp(1rem, 2vw, 1.5rem);
-}
-
 .headline{
   font-size: var(--fs-hero);
   line-height: 0.94;
@@ -69,6 +65,12 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.85rem;
+}
+
+.microcopy{
+  margin-top: clamp(0.85rem, 1.8vw, 1.15rem);
+  font-size: var(--fs-micro);
+  color: var(--texto-fraco);
 }
 
 .substituto{

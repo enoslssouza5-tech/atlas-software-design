@@ -6,7 +6,6 @@ import { useAbertura } from '@/providers/AberturaProvider';
 import { useLenis } from '@/providers/LenisProvider';
 import { SplitWords } from '@/components/ui/SplitWords';
 import { Botao } from '@/components/ui/Botao';
-import { Placeholder } from '@/components/ui/Placeholder';
 import { BadgeFallback } from '@/components/three/BadgeFallback';
 import { useCracha3d } from '@/components/three/Cracha';
 import { useDeviceTier } from '@/lib/use-device-tier';
@@ -14,10 +13,11 @@ import { CENAS, definirAlvo } from '@/lib/cena-signal';
 import { DIST, DUR, EASE, SILENCIO } from '@/lib/motion-tokens';
 import s from './Ato1Hero.module.css';
 
-const HEADLINE = 'Sites, sistemas e automações feitos pra aguentar segunda-feira de manhã.';
+const HEADLINE =
+  'Sua empresa não perde cliente por falta de anúncio, perde quando ele cai em quatro fornecedores que não se falam.';
 
 /**
- * ATO 1 — ABERTURA
+ * ATO 1: ABERTURA
  *
  * A cena fica 0.4s em silêncio antes de qualquer coisa se mexer. Não é
  * atraso acidental: é o respiro que separa a chegada da apresentação, e é
@@ -49,7 +49,14 @@ export function Ato1Hero() {
       });
 
       if (!liberado) {
-        gsap.set([`.${s.sub}`, `.${s.acoes}`, `.${s.indicador}`, `.${s.selo}`], { opacity: 0 });
+        // A lista aqui precisa bater exatamente com o que a timeline de
+        // entrada anima lá embaixo. `.acoes` (o contêiner) nunca é alvo da
+        // timeline, só `.acoes > *` (os botões); esconder o contêiner aqui
+        // deixava um opacity:0 órfão que o revert do próximo run não
+        // limpava, e os dois botões ficavam invisíveis pra sempre.
+        gsap.set([`.${s.sub}`, `.${s.acoes} > *`, `.${s.indicador}`, `.${s.microcopy}`], {
+          opacity: 0,
+        });
         return () => st.kill();
       }
 
@@ -65,12 +72,6 @@ export function Ato1Hero() {
       )
         // a headline entra pelo SplitWords, cronometrada pelo mesmo silêncio
         .fromTo(
-          `.${s.selo}`,
-          { opacity: 0, y: DIST.curto },
-          { opacity: 1, y: 0, duration: DUR.curta, ease: EASE.entrada },
-          t(0.34),
-        )
-        .fromTo(
           `.${s.sub}`,
           { opacity: 0, y: DIST.curto },
           { opacity: 1, y: 0, duration: DUR.media, ease: EASE.entrada },
@@ -83,13 +84,19 @@ export function Ato1Hero() {
           t(1.44),
         )
         .fromTo(
+          `.${s.microcopy}`,
+          { opacity: 0, y: DIST.curto },
+          { opacity: 1, y: 0, duration: DUR.curta, ease: EASE.entrada },
+          t(1.62),
+        )
+        .fromTo(
           `.${s.indicador}`,
           { opacity: 0, y: -14 },
           { opacity: 1, y: 0, duration: DUR.curta, ease: EASE.entrada },
           t(1.72),
         );
 
-      // pulso do indicador de scroll — único loop infinito da abertura
+      // pulso do indicador de scroll, único loop infinito da abertura
       if (!reduzido) {
         gsap.to(`.${s.roda}`, {
           y: 7,
@@ -114,10 +121,6 @@ export function Ato1Hero() {
 
       <div className={`container ${s.grade}`}>
         <div className={s.texto}>
-          <p className={s.selo}>
-            <Placeholder>[HEADLINE · rascunho de direção, validar com a Atlas]</Placeholder>
-          </p>
-
           <SplitWords
             texto={HEADLINE}
             como="h1"
@@ -127,8 +130,9 @@ export function Ato1Hero() {
           />
 
           <p className={s.sub}>
-            Websites, sistemas sob medida e automações. Código próprio, documentação
-            na entrega e a mesma pessoa te respondendo depois do deploy.
+            Websites, sistemas sob medida, automações e tráfego pago que prospecta e
+            capta cliente de verdade. Escopo escrito, código seu, a mesma equipe te
+            respondendo depois do deploy.
           </p>
 
           <div className={s.acoes}>
@@ -137,6 +141,10 @@ export function Ato1Hero() {
               Ver projetos
             </Botao>
           </div>
+
+          <p className={s.microcopy}>
+            Sem compromisso. Você conta o problema, a Atlas diz se resolve.
+          </p>
         </div>
 
         {/* Sem WebGL ou em conexão econômica, o crachá estático ocupa

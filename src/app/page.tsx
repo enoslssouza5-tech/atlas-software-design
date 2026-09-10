@@ -15,7 +15,7 @@ import { Ato9Convite } from '@/sections/Ato9Convite';
 /**
  * A página como curta-metragem: preloader e nove atos, na ordem.
  *
- * A cena 3D fica fora do <main> de propósito — ela atravessa a narrativa
+ * A cena 3D fica fora do <main> de propósito: ela atravessa a narrativa
  * inteira em vez de pertencer a um ato só.
  */
 export default function Home() {

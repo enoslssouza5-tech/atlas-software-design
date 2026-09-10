@@ -4,96 +4,104 @@ import { Ato } from '@/components/ui/Ato';
 import { SplitWords } from '@/components/ui/SplitWords';
 import { Reveal } from '@/components/ui/Reveal';
 import { Acordeao, type ItemFaq } from '@/components/ui/Acordeao';
-import { Placeholder } from '@/components/ui/Placeholder';
 import s from './Ato8Oferta.module.css';
 
 /**
- * ATO 8 — OFERTA, OBJEÇÕES E FAQ
+ * ATO 8: OFERTA, OBJEÇÕES E FAQ
  *
  * Segundo e último respiro claro da jornada. O momento comercial é o único
  * que a página trata com luz acesa.
  *
- * Nenhuma resposta aqui promete prazo, preço ou resultado. Onde um número
- * seria necessário, existe um placeholder — porque prometer o que não foi
- * confirmado é propaganda enganosa, não copy persuasiva.
+ * Todo número, prazo e afirmação aqui vem do briefing aprovado pelo cliente.
+ * Nada foi inventado por esta camada de copy.
  */
 
-const ETAPAS = [
-  {
-    n: '01',
-    titulo: 'Conversa',
-    texto: 'Você conta o problema. A Atlas escuta e diz se é caso pra site, sistema ou automação — inclusive quando a resposta é nenhum dos três.',
-  },
-  {
-    n: '02',
-    titulo: 'Escopo escrito',
-    texto: 'O que entra, o que não entra, prazo e valor num documento só. Nada começa antes de você ler e concordar.',
-  },
-  {
-    n: '03',
-    titulo: 'Construção',
-    texto: 'Você acompanha o que está sendo feito em ambiente de teste, antes de qualquer coisa ir pro ar.',
-  },
-  {
-    n: '04',
-    titulo: 'Entrega e depois',
-    texto: 'Publicação, documentação e acompanhamento. O contato continua o mesmo do primeiro dia.',
-  },
+const OFERTA_ITENS = [
+  'Diagnóstico do que sua empresa já tem hoje, site, sistema, anúncio.',
+  'Escopo escrito com o que entra, o que não entra, e prazo.',
+  'Construção acompanhada pela nossa equipe em ambiente de teste antes de ir pro ar.',
+  'Entrega documentada, com suporte contínuo da nossa equipe depois do deploy.',
 ];
 
 const OBJECOES = [
   {
-    pergunta: 'Quanto tempo leva?',
+    pergunta: 'Mas eu já tenho site.',
     resposta:
-      'Depende do escopo, e você recebe a data por escrito antes de assinar qualquer coisa — não durante o projeto.',
-    falta: '[PRAZO · faixa real por tipo de projeto: site, sistema, automação]',
+      'Os dois cenários acontecem, mexer no que existe ou refazer do zero. A Atlas abre o que você já tem, avalia se a base se sustenta e diz com franqueza qual caminho custa menos pra você, mesmo quando esse caminho dá menos trabalho pra ela.',
   },
   {
-    pergunta: 'Quanto custa?',
+    pergunta: 'Mas eu não preciso de site, meu cliente vem pelo Instagram.',
     resposta:
-      'O valor fecha junto com o escopo. Não existe cobrança nova por item que já estava combinado no documento inicial.',
-    falta: '[PREÇO · modelo real: pacote fechado, por escopo ou sob consulta]',
+      'Até aparecer o mês em que o Instagram muda o alcance de graça, ou o concorrente aparece primeiro na busca. Site e tráfego pago não competem com o Instagram, eles cobrem o que o Instagram não alcança.',
   },
   {
-    pergunta: 'E depois que entra no ar?',
+    pergunta: 'Mas eu não tenho o conteúdo pronto.',
     resposta:
-      'O acompanhamento faz parte da entrega. Correção do que foi entregue não vira orçamento novo.',
-    falta: '[SUPORTE · janela real de atendimento e o que cobre]',
+      'Não precisa ter pra começar. A estrutura é definida junto com você, e os espaços de texto e imagem ficam marcados até o conteúdo chegar.',
+  },
+  {
+    pergunta: 'Mas e se eu quiser sair da Atlas depois.',
+    resposta: 'Domínio, hospedagem e código ficam no seu nome. Sair da Atlas não deve custar o seu site.',
+  },
+  {
+    pergunta: 'Mas meu problema já foi resolvido por outra pessoa antes e não funcionou.',
+    resposta:
+      'A nossa equipe faz manutenção em projeto de terceiro, depois de ler o código atual. Em alguns casos essa leitura mostra que refazer sai mais barato que manter, e isso é dito antes de qualquer proposta.',
   },
 ];
 
 const FAQ: ItemFaq[] = [
   {
-    pergunta: 'Já tenho um site. Vocês mexem no que existe ou refazem tudo?',
-    resposta:
-      'Os dois cenários acontecem. A Atlas abre o que existe, avalia se a base se sustenta e diz com franqueza qual dos dois caminhos custa menos pra você — mesmo quando o caminho mais barato é o que dá menos trabalho pra ela.',
+    pergunta: 'Quanto tempo leva pra ter o site no ar?',
+    resposta: '15 a 30 dias, conforme o escopo fechado com você.',
   },
   {
-    pergunta: 'Preciso ter o conteúdo pronto antes de começar?',
+    pergunta: 'Quanto custa?',
     resposta:
-      'Não pra começar. A estrutura da página é definida junto com você e os espaços de texto e imagem ficam marcados até o conteúdo chegar. O que não acontece é a Atlas inventar informação sobre a sua empresa pra preencher espaço.',
+      'Depende do que você precisa. Site, sistema, automação e tráfego pago têm formatos diferentes, o valor fecha numa conversa direta com a Atlas.',
   },
   {
-    pergunta: 'Quem fica com o domínio, a hospedagem e o código?',
-    resposta:
-      'Você. Domínio e hospedagem ficam registrados no seu nome, com o seu acesso, e o repositório do código é entregue junto. Sair da Atlas não deve custar o seu site.',
+    pergunta: 'Eu já tenho site, mexem no que existe ou têm que refazer tudo?',
+    resposta: 'Os dois cenários acontecem, depende do que a base atual aguenta.',
   },
   {
-    pergunta: 'Consigo editar textos e imagens sem chamar vocês?',
-    resposta:
-      'Nos projetos com painel, sim — e a documentação da entrega explica exatamente onde mexer e o que não tocar. Alteração estrutural continua sendo trabalho de desenvolvimento.',
+    pergunta: 'Preciso ter conteúdo pronto antes de começar?',
+    resposta: 'Não. A estrutura é definida junto, com espaço marcado até o conteúdo chegar.',
   },
   {
-    pergunta: 'Vocês dão manutenção em projeto feito por outra pessoa?',
-    resposta:
-      'Sim, depois de uma leitura do código atual. Em alguns casos essa leitura mostra que manter sai mais caro que refazer, e isso é dito antes de qualquer proposta.',
+    pergunta: 'Quem fica com domínio, hospedagem e código?',
+    resposta: 'Você, no seu nome, com seu acesso.',
   },
   {
-    pergunta: 'Atendem empresas de fora da região?',
+    pergunta: 'Se eu precisar de um ajuste depois, como funciona?',
     resposta:
-      'Sim. Todo o processo funciona remoto, do escopo à entrega. [REGIÃO · confirmar se a Atlas quer priorizar alguma cidade ou estado na comunicação.]',
+      'Nossa equipe está sempre pronta pra ajustar o que for preciso, sem você precisar aprender a mexer em nada.',
+  },
+  {
+    pergunta: 'Quanto tempo vocês demoram pra responder?',
+    resposta: 'Até 24 horas.',
+  },
+  {
+    pergunta: 'Atendem empresa de fora da região?',
+    resposta: 'Sim, o processo é remoto do escopo à entrega.',
   },
 ];
+
+function IconeCheck() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true" className={s.iconeCheck}>
+      <circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" strokeWidth="1.15" />
+      <path
+        d="M6.2 10.3 8.6 12.7 13.6 7.3"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.15"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 export function Ato8Oferta() {
   return (
@@ -106,38 +114,44 @@ export function Ato8Oferta() {
 
       <Reveal className={s.oferta} duracao={0.82}>
         <div>
-          <p className={s.ofertaTexto}>
-            O trabalho começa por um escopo escrito. Você lê, ajusta e só então o projeto
-            entra na fila.
+          <ul className={s.ofertaLista}>
+            {OFERTA_ITENS.map((item) => (
+              <li key={item} className={s.ofertaItem}>
+                <IconeCheck />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+          <p className={s.prazo}>
+            Prazo de entrega de site, 15 a 30 dias, conforme escopo. Demais frentes e
+            valores, sob conversa direta com a Atlas.
           </p>
-          <Placeholder bloco>
-            [OFERTA · definir o formato real que a Atlas pratica: pacote fechado por tipo
-            de projeto, orçamento por escopo, mensalidade de evolução ou proposta sob
-            consulta]
-          </Placeholder>
         </div>
       </Reveal>
 
-      <ol className={s.etapas}>
-        {ETAPAS.map((e) => (
-          <li key={e.n} className={s.etapa}>
-            <span className={s.etapaNumero}>{e.n}</span>
-            <h3 className={s.etapaTitulo}>{e.titulo}</h3>
-            <p className={s.etapaTexto}>{e.texto}</p>
-          </li>
-        ))}
-      </ol>
-
       <div className={s.objecoes}>
-        <h3 className={s.subtitulo}>As três perguntas que todo mundo faz</h3>
+        <h3 className={s.subtitulo}>As cinco perguntas que todo mundo faz</h3>
         <div className={s.objecoesGrade}>
           {OBJECOES.map((o) => (
             <div key={o.pergunta} className={s.objecao}>
               <p className={s.objecaoPergunta}>{o.pergunta}</p>
               <p className={s.objecaoResposta}>{o.resposta}</p>
-              <Placeholder>{o.falta}</Placeholder>
             </div>
           ))}
+        </div>
+      </div>
+
+      <div className={s.confianca}>
+        <div className={s.confiancaItem}>
+          <span className={s.confiancaRotulo}>Garantia</span>
+          <p>
+            Revisão sem custo se o resultado entregue não bater com o escopo assinado por
+            escrito com o cliente.
+          </p>
+        </div>
+        <div className={s.confiancaItem}>
+          <span className={s.confiancaRotulo}>Urgência</span>
+          <p>A Atlas responde todo contato em até 24 horas, sem fila de espera.</p>
         </div>
       </div>
 

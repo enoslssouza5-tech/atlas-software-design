@@ -2,7 +2,7 @@
  * Glifos desenhados à mão pras ferramentas que ainda não têm SVG hospedado,
  * e fallback pras que têm caso o arquivo falhe.
  *
- * São representações geométricas simples e honestas — não são reproduções
+ * São representações geométricas simples e honestas, não são reproduções
  * exatas das marcas. [ASSET · SVGs oficiais de Next.js, TypeScript, Supabase,
  * n8n e Vercel, se a Atlas quiser fidelidade de marca no pote.]
  */
@@ -45,7 +45,7 @@ const DESENHOS: Record<string, (ctx: Ctx, r: number) => void> = {
   },
 
   n8n: (ctx, r) => {
-    // três nós ligados — a metáfora de fluxo de automação
+    // três nós ligados, a metáfora de fluxo de automação
     const nos: [number, number][] = [
       [-r * 0.46, 0],
       [0, -r * 0.3],

@@ -14,7 +14,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.nome} — websites, sistemas e automações`,
+    default: SITE.tituloPadrao,
     template: `%s · ${SITE.nome}`,
   },
   description: SITE.descricao,
@@ -25,14 +25,14 @@ export const metadata: Metadata = {
     locale: SITE.locale,
     url: SITE.url,
     siteName: SITE.nome,
-    title: `${SITE.nome} — websites, sistemas e automações`,
+    title: SITE.tituloPadrao,
     description: SITE.descricao,
     // [ASSET · og-image 1200x630 com o crachá da Atlas]
     images: [{ url: '/og.jpg', width: 1200, height: 630, alt: SITE.nome }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${SITE.nome} — websites, sistemas e automações`,
+    title: SITE.tituloPadrao,
     description: SITE.descricao,
     images: ['/og.jpg'],
   },

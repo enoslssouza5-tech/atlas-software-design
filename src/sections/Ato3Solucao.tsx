@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { SplitWords } from '@/components/ui/SplitWords';
+import { Reveal } from '@/components/ui/Reveal';
 import { Placeholder } from '@/components/ui/Placeholder';
 import { CENAS, definirAlvo } from '@/lib/cena-signal';
 import { useDeviceTier } from '@/lib/use-device-tier';
@@ -10,44 +11,41 @@ import { DIST, DUR, EASE } from '@/lib/motion-tokens';
 import s from './Ato3Solucao.module.css';
 
 /**
- * ATO 3 — REVELAÇÃO DA SOLUÇÃO
+ * ATO 3: REVELAÇÃO DA SOLUÇÃO
  *
  * Único trecho pinado da página. A seção mede 300vh, o palco fica preso em
  * 100vh e o scrub 1.2 dá o arrasto de câmera: o usuário empurra a cena, e ela
  * responde com um leve atraso, como um travelling pesado.
  *
- * O crachá reaparece de miniatura no canto — assinatura visual recorrente,
+ * O crachá reaparece de miniatura no canto, assinatura visual recorrente,
  * o mesmo objeto do Ato 1 visto de longe.
  */
 
-const SERVICOS = [
-  {
-    n: '01',
-    titulo: 'Websites',
-    texto:
-      'Institucional, landing page e catálogo. Escritos do zero em Next.js, com painel pra sua equipe editar texto e imagem sem abrir chamado.',
-    marcas: ['Next.js', 'SEO técnico', 'Painel editável'],
-  },
+const FRENTES = [
+  { n: '01', texto: 'Websites institucionais, landing pages e catálogos.' },
   {
     n: '02',
-    titulo: 'Sistemas sob medida',
     texto:
-      'Área de cliente, painel interno, controle de pedidos e cadastro. Feito em cima do processo que a sua empresa já usa, não do processo que o software impõe.',
-    marcas: ['Área logada', 'Banco de dados', 'Relatórios'],
+      'Sistemas sob medida, área de cliente, painel interno, cadastro, construídos em cima do processo que sua empresa já usa.',
   },
   {
     n: '03',
-    titulo: 'Automações',
     texto:
-      'A tarefa repetida que consome a manhã de alguém vira rotina automática: integração entre sistemas, disparo de mensagem, planilha que se preenche sozinha.',
-    marcas: ['n8n', 'Integrações', 'Rotinas agendadas'],
+      'Automações, a tarefa manual que consome a manhã de alguém vira rotina automática entre sistemas, WhatsApp e planilha.',
   },
   {
     n: '04',
-    titulo: 'Depois do deploy',
     texto:
-      'O projeto entra no ar documentado e continua acompanhado. Correção, ajuste e evolução fazem parte do contrato, não de um orçamento novo a cada pedido.',
-    marcas: ['Documentação', 'Suporte', 'Evolução'],
+      'Gestão de tráfego pago, campanha de Google e Meta Ads pensada pra levar contato real pro seu funil, com prospecção e captação de cliente.',
+  },
+  {
+    n: '05',
+    texto:
+      'Manutenção contínua de website e sistemas, a nossa equipe continua por perto depois do deploy, sempre pronta pra ajustar o que for preciso.',
+  },
+  {
+    n: '06',
+    texto: 'Suporte, sua equipe fala direto com quem construiu e com quem opera o anúncio.',
   },
 ];
 
@@ -108,7 +106,7 @@ export function Ato3Solucao() {
       // Sem cleanup manual de propósito. O useGSAP já reverte o que foi criado
       // dentro do escopo, e reverter é o ponto: ScrollTrigger.kill() sem
       // revert deixa o espaçador do pin no DOM. Em dev, com o StrictMode
-      // montando duas vezes, cada remontagem empilhava mais um espaçador — a
+      // montando duas vezes, cada remontagem empilhava mais um espaçador, e a
       // página crescia sozinha e todos os gatilhos abaixo saíam do lugar.
     },
     { scope: ref, dependencies: [alvoCena] },
@@ -127,23 +125,17 @@ export function Ato3Solucao() {
               </span>
             </div>
             <SplitWords
-              texto="Três frentes e uma promessa de continuidade."
+              texto="Seis frentes e uma promessa de continuidade."
               como="h2"
               className={s.titulo}
             />
           </header>
 
           <div className={s.blocos}>
-            {SERVICOS.map((serv) => (
-              <article key={serv.n} className={s.cartao}>
-                <span className={s.indice}>{serv.n}</span>
-                <h3 className={s.cartaoTitulo}>{serv.titulo}</h3>
-                <p className={s.cartaoTexto}>{serv.texto}</p>
-                <ul className={s.marcas}>
-                  {serv.marcas.map((m) => (
-                    <li key={m}>{m}</li>
-                  ))}
-                </ul>
+            {FRENTES.map((frente) => (
+              <article key={frente.n} className={s.cartao}>
+                <span className={s.indice}>{frente.n}</span>
+                <p className={s.cartaoTexto}>{frente.texto}</p>
               </article>
             ))}
           </div>
@@ -153,6 +145,13 @@ export function Ato3Solucao() {
               [ESCOPO · confirmar com a Atlas o que entra em cada frente e o que fica de fora]
             </Placeholder>
           </p>
+
+          <Reveal className={s.mecanismo} distancia={DIST.curto} duracao={DUR.longa}>
+            <p>
+              A mesma equipe que constrói o site é a que opera o anúncio, mantém o sistema
+              e dá suporte depois. Ninguém perde informação de um fornecedor pro outro.
+            </p>
+          </Reveal>
         </div>
       </div>
     </section>

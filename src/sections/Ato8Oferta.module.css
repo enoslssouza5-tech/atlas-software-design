@@ -6,6 +6,8 @@
   margin-bottom: clamp(2rem, 4.5vw, 3.25rem);
 }
 
+/* ---------- oferta ---------- */
+
 .oferta{
   display: block;
   padding: clamp(1.5rem, 3vw, 2.25rem);
@@ -17,51 +19,38 @@
   max-width: 56rem;
 }
 
-.ofertaTexto{
-  font-size: var(--fs-subtitulo);
-  line-height: 1.5;
-  color: var(--texto);
-  max-width: 42ch;
-  margin-bottom: 1.1rem;
-}
-
-/* ---------- etapas ---------- */
-
-.etapas{
+.ofertaLista{
   list-style: none;
-  margin: 0 0 clamp(3rem, 7vw, 5rem);
+  margin: 0 0 clamp(1.25rem, 2.6vw, 1.9rem);
   padding: 0;
   display: grid;
-  gap: clamp(1.5rem, 3vw, 2.25rem);
-  counter-reset: etapa;
+  gap: clamp(0.85rem, 1.8vw, 1.25rem);
 }
 
-.etapa{
+.ofertaItem{
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding-top: 1.1rem;
-  border-top: 1px solid var(--linha-acento);
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  line-height: 1.5;
+  color: var(--texto);
 }
 
-.etapaNumero{
-  font-family: var(--font-display);
-  font-size: var(--fs-micro);
-  letter-spacing: 0.16em;
+.iconeCheck{
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  margin-top: 0.15em;
   color: var(--acento);
 }
 
-.etapaTitulo{
-  font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
-  letter-spacing: -0.02em;
-  color: var(--texto);
-}
-
-.etapaTexto{
+.prazo{
   font-size: 0.9375rem;
   line-height: 1.6;
   color: var(--texto-suave);
-  max-width: 36ch;
+  max-width: 46ch;
+  padding-top: clamp(1rem, 2vw, 1.4rem);
+  border-top: 1px solid var(--linha);
 }
 
 /* ---------- objeções ---------- */
@@ -73,7 +62,7 @@
   margin-bottom: clamp(1.25rem, 2.6vw, 1.9rem);
 }
 
-.objecoes{ margin-bottom: clamp(3rem, 7vw, 5rem); }
+.objecoes{ margin-bottom: clamp(2.5rem, 5.5vw, 4rem); }
 
 .objecoesGrade{
   display: grid;
@@ -103,13 +92,46 @@
   color: var(--texto-suave);
 }
 
+/* ---------- garantia e urgência ---------- */
+
+.confianca{
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin-bottom: clamp(3rem, 7vw, 5rem);
+}
+
+.confiancaItem{
+  padding: clamp(1.1rem, 2vw, 1.5rem);
+  border: 1px dashed var(--linha-acento);
+  border-radius: 10px;
+}
+
+.confiancaItem p{
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--texto-suave);
+  max-width: 46ch;
+}
+
+.confiancaRotulo{
+  display: block;
+  font-size: var(--fs-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--acento);
+  margin-bottom: 0.5rem;
+}
+
 .faq{ max-width: 56rem; }
 
 @media (min-width: 640px){
-  .etapas{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ofertaLista{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 768px){
+  .confianca{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (min-width: 1024px){
-  .etapas{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .objecoesGrade{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }

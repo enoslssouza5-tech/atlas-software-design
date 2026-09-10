@@ -1,5 +1,5 @@
 /* ============================================================
-   Atlas Software & Design — tokens e base
+   Atlas Software & Design: tokens e base
    ============================================================ */
 
 :root{
@@ -35,7 +35,7 @@
   --linha: rgba(247, 245, 239, 0.09);
   --linha-acento: rgba(242, 121, 12, 0.42);
 
-  /* papéis semânticos — é isso que os componentes usam.
+  /* papéis semânticos: é isso que os componentes usam.
      Trocar o tom de uma seção passa a ser trocar três variáveis, e não
      reescrever a cor de cada filho. */
   --texto: var(--branco);
@@ -44,7 +44,7 @@
 }
 
 /* Respiro claro. O laranja escurece porque #F2790C sobre creme não passa
-   em contraste de texto — o acento muda de valor, não de identidade. */
+   em contraste de texto: o acento muda de valor, não de identidade. */
 [data-tom='claro']{
   --texto: var(--preto);
   --texto-suave: #55555e;
@@ -141,7 +141,7 @@ button{
   padding-inline: var(--gut);
 }
 
-/* Filete fino laranja — único elemento decorativo de linha. */
+/* Filete fino laranja, único elemento decorativo de linha. */
 .filete{
   height: 1px;
   border: 0;
@@ -172,7 +172,7 @@ html.anime-failed [data-anim] *{
 html.anime-failed #preloader{ display: none !important; }
 
 /* ============================================================
-   prefers-reduced-motion — respeitado em 100%
+   prefers-reduced-motion, respeitado em 100%
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce){

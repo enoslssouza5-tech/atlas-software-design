@@ -3,13 +3,12 @@
 import { useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { Ato } from '@/components/ui/Ato';
-import { SplitWords } from '@/components/ui/SplitWords';
 import { Reveal } from '@/components/ui/Reveal';
 import { DIST, DUR, EASE, STAGGER } from '@/lib/motion-tokens';
 import s from './Ato2Dor.module.css';
 
 /**
- * ATO 2 — A DOR
+ * ATO 2: A DOR
  *
  * A câmera recua. Fundo escuro, nenhuma imagem, nenhum ícone: só tipografia.
  * Depois da abertura cheia de movimento, a quietude aqui é o contraste que
@@ -17,10 +16,10 @@ import s from './Ato2Dor.module.css';
  */
 
 const SINTOMAS = [
-  'O freelancer sumiu depois do último Pix.',
-  'A agência entregou um tema comprado e chamou de projeto sob medida.',
-  'Trocar um parágrafo virou orçamento novo.',
-  'A mesma planilha continua sendo preenchida na mão, todo dia, pela mesma pessoa.',
+  'O anúncio traz clique, mas ninguém sabe dizer quantos desses cliques viraram cliente de verdade.',
+  'O sistema roda separado do site, então um cadastro feito num lugar não aparece no outro, e alguém da sua equipe copia isso à mão todo dia.',
+  'Cada fornecedor, quem fez o site, quem cuida do anúncio, quem mantém o sistema, empurra a culpa pro outro quando algo trava.',
+  'Pedido de ajuste simples vira semana de espera porque o fornecedor atual está sobrecarregado com outros clientes.',
 ];
 
 export function Ato2Dor() {
@@ -59,11 +58,15 @@ export function Ato2Dor() {
     <div ref={ref}>
       <Ato id="ato-dor" numero="02" rotulo="A dor">
         <div className={s.grade}>
-          <SplitWords
-            texto="O site ficou pronto. Ninguém consegue mexer nele."
-            como="h2"
-            className={s.titulo}
-          />
+          <Reveal como="h2" className={s.abertura} distancia={DIST.medio} duracao={DUR.longa}>
+            Quatro áreas resolvem presença digital de verdade, site, sistema, automação e
+            anúncio pago. O problema raramente é falta de uma dessas peças. É elas não
+            conversarem entre si porque cada uma veio de um fornecedor diferente, sem
+            ninguém garantindo que o lead do anúncio chega organizado no sistema, ou que o
+            site aguenta o tráfego que o anúncio traz. A Atlas monta essas quatro peças com
+            a mesma equipe, do escopo à manutenção. Você não precisa ser o elo que junta
+            tudo isso na mão.
+          </Reveal>
 
           <div className={s.coluna}>
             <ul className={s.lista}>
@@ -77,8 +80,8 @@ export function Ato2Dor() {
 
             <Reveal className={s.remate} distancia={DIST.curto} duracao={DUR.longa}>
               <p>
-                Nenhum desses problemas é técnico. Todos são de <em>depois</em> — de quem
-                fica quando o projeto entra no ar e a operação começa a usar de verdade.
+                Nenhum desses problemas é falta de esforço da sua equipe. É falta de
+                alguém cuidando das quatro pontas juntas.
               </p>
             </Reveal>
           </div>

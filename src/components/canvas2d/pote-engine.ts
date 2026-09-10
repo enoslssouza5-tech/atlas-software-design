@@ -1,5 +1,5 @@
 /**
- * Pote de bolinhas do Ato 7 — Canvas 2D puro.
+ * Pote de bolinhas do Ato 7: Canvas 2D puro.
  *
  * Zero dependências: nem GSAP, nem three, nem lib de física. Só a Canvas API.
  * A física (colisão círculo-círculo com impulso, parede circular, resolução
@@ -29,7 +29,7 @@ type Opcoes = {
 };
 
 export type Pote = {
-  /** -1 a 1 — desloca o brilho do vidro conforme a seção cruza a viewport */
+  /** -1 a 1, desloca o brilho do vidro conforme a seção cruza a viewport */
   definirLuz: (v: number) => void;
   destruir: () => void;
 };
@@ -79,7 +79,7 @@ export function criarPote(
   const bolinhas: Bolinha[] = [];
 
   // ---------------------------------------------------------------
-  // dimensionamento — devicePixelRatio de verdade.
+  // dimensionamento: devicePixelRatio de verdade.
   // O protótipo antigo usava canvas.width = clientWidth, o que deixava
   // tudo borrado em qualquer tela retina.
   // ---------------------------------------------------------------
@@ -207,7 +207,7 @@ export function criarPote(
   // ---------------------------------------------------------------
   function desenharPote() {
     // sombra de apoio por gradiente radial. O protótipo usava
-    // ctx.filter = 'blur()', que falha silenciosamente em Safari antigo —
+    // ctx.filter = 'blur()', que falha silenciosamente em Safari antigo,
     // e a sombra simplesmente sumia sem ninguém perceber.
     const sombra = ctx.createRadialGradient(
       cx,
@@ -261,7 +261,7 @@ export function criarPote(
   }
 
   function desenharBolinha(b: Bolinha) {
-    // sombra de contato — mais forte quanto mais fundo no pote
+    // sombra de contato, mais forte quanto mais fundo no pote
     const profundidade = Math.max(0, Math.min(1, (b.y - cy) / R));
     ctx.beginPath();
     ctx.ellipse(b.x, b.y + b.r * 0.8, b.r * 0.74, b.r * 0.2, 0, 0, Math.PI * 2);

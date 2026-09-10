@@ -9,14 +9,14 @@ import { Placeholder } from '@/components/ui/Placeholder';
 import s from './Ato6ProvaSocial.module.css';
 
 /**
- * ATO 6 — PROVA SOCIAL
+ * ATO 6: PROVA SOCIAL
  *
  * A seção está construída e vazia de propósito.
  *
  * Métrica só aparece se for verdadeira e verificável; depoimento só entra
  * real e com consentimento de quem falou. Enquanto a Atlas não fornecer os
  * dados, os contadores ficam em placeholder e o espaço do depoimento fica
- * reservado — nunca preenchido com texto plausível.
+ * reservado, nunca preenchido com texto plausível.
  */
 
 const METRICAS = [
@@ -57,7 +57,7 @@ export function Ato6ProvaSocial() {
       <div className={s.fundo} aria-hidden="true" />
       <Ato id="ato-prova" numero="06" rotulo="Prova">
         <SplitWords
-          texto="Aqui entram os números — quando forem verificáveis."
+          texto="Aqui entram os números, assim que forem verificáveis."
           como="h2"
           className={s.titulo}
         />

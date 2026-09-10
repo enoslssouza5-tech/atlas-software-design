@@ -8,7 +8,7 @@ import { cena3dViavel, useDeviceTier } from '@/lib/use-device-tier';
  *
  * ssr:false e carregamento tardio são obrigatórios: o bundle do three chega
  * depois do first paint, nunca antes. Sem WebGL ou em conexão econômica o
- * Canvas simplesmente não é baixado — as seções mostram o crachá estático.
+ * Canvas simplesmente não é baixado, as seções mostram o crachá estático.
  */
 const BadgeCanvas = dynamic(
   () => import('./BadgeCanvas').then((m) => m.BadgeCanvas),

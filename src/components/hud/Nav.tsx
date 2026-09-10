@@ -16,7 +16,7 @@ const LINKS = [
 ];
 
 /**
- * HUD superior. Entra por último no Ato 1 — depois da headline, da sub e do
+ * HUD superior. Entra por último no Ato 1, depois da headline, da sub e do
  * CTA. A interface só aparece quando a cena já se apresentou.
  */
 export function Nav() {

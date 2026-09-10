@@ -9,7 +9,7 @@ type Props = {
 /**
  * Notebook + celular lado a lado, desenhados em CSS.
  *
- * [ASSET · prints reais dos projetos] — até eles chegarem, a tela é uma
+ * [ASSET · prints reais dos projetos]. Até eles chegarem, a tela é uma
  * composição genérica. É de propósito que ela não imite um site específico:
  * um mockup convincente demais seria lido como cliente real.
  */

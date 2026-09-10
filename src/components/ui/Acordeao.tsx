@@ -11,7 +11,7 @@ type Props = { itens: ItemFaq[]; idBase?: string };
 
 /**
  * FAQ em acordeão. A altura é animada pelo GSAP (height: auto real),
- * nunca por max-height CSS — max-height chutado sempre entrega um corte
+ * nunca por max-height CSS: max-height chutado sempre entrega um corte
  * seco no fim da transição.
  */
 export function Acordeao({ itens, idBase = 'faq' }: Props) {

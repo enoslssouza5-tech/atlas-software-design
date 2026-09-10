@@ -8,17 +8,16 @@ import { DIST, DUR, EASE, STAGGER } from '@/lib/motion-tokens';
 import s from './Ato4Beneficios.module.css';
 
 /**
- * ATO 4 — BENEFÍCIOS
+ * ATO 4: BENEFÍCIOS
  *
  * Primeiro dos dois respiros claros da jornada. Depois de dois atos no preto
- * e de um trecho pinado, a página abre a cortina — e é justamente aqui que
+ * e de um trecho pinado, a página abre a cortina, e é justamente aqui que
  * ela para de falar de dor e passa a falar de método.
  *
  * Ícones em traço fino laranja. O acento nunca vira área preenchida.
  */
 
 type Beneficio = {
-  titulo: string;
   texto: string;
   icone: React.ReactNode;
 };
@@ -33,9 +32,8 @@ const tracoComum = {
 
 const BENEFICIOS: Beneficio[] = [
   {
-    titulo: 'O código é seu',
     texto:
-      'Repositório entregue no seu nome, sem trava de plataforma e sem licença mensal pra continuar usando o que você já pagou.',
+      'Código seu. Sem trava de plataforma nem licença mensal pra continuar usando o que você já pagou.',
     icone: (
       <svg viewBox="0 0 32 32" aria-hidden="true">
         <path d="M12 10 L5 16 L12 22" {...tracoComum} />
@@ -45,9 +43,8 @@ const BENEFICIOS: Beneficio[] = [
     ),
   },
   {
-    titulo: 'Você fala com quem escreve',
     texto:
-      'Sem camada de atendimento repassando recado. A pessoa que responde a sua mensagem é a mesma que abre o editor depois.',
+      'Sua equipe fala direto com quem constrói e com quem opera o anúncio, sem camada de atendimento repassando recado.',
     icone: (
       <svg viewBox="0 0 32 32" aria-hidden="true">
         <path d="M5 8h22v14H14l-6 5v-5H5z" {...tracoComum} />
@@ -56,21 +53,20 @@ const BENEFICIOS: Beneficio[] = [
     ),
   },
   {
-    titulo: 'Documentado na entrega',
     texto:
-      'Como editar, onde mexer, o que não tocar. Escrito em português, junto do projeto — não numa reunião que ninguém gravou.',
+      'Manutenção e ajuste ficam com a nossa equipe, sempre disponível depois da entrega. Sua equipe não precisa aprender a mexer em nada por conta própria.',
     icone: (
       <svg viewBox="0 0 32 32" aria-hidden="true">
-        <path d="M8 4h12l5 5v19H8z" {...tracoComum} />
-        <path d="M20 4v5h5" {...tracoComum} />
-        <path d="M12 15h9M12 20h9M12 25h5" {...tracoComum} />
+        <path d="M6 16a10 10 0 0 1 17-7" {...tracoComum} />
+        <path d="M23 5v6h-6" {...tracoComum} />
+        <path d="M26 16a10 10 0 0 1-17 7" {...tracoComum} />
+        <path d="M9 27v-6h6" {...tracoComum} />
       </svg>
     ),
   },
   {
-    titulo: 'Performance verificada',
     texto:
-      'Cada entrega sai com relatório de performance e acessibilidade, medido na versão que foi pro ar — não numa promessa de proposta.',
+      'Relatório real de performance e de custo por contato, medido na versão que foi pro ar, não numa promessa de proposta.',
     icone: (
       <svg viewBox="0 0 32 32" aria-hidden="true">
         <path d="M4 24a12 12 0 0 1 24 0" {...tracoComum} />
@@ -80,9 +76,17 @@ const BENEFICIOS: Beneficio[] = [
     ),
   },
   {
-    titulo: 'Feito pra crescer',
     texto:
-      'A primeira entrega já nasce com a estrutura da segunda em mente. Adicionar uma área nova não obriga a refazer o que existe.',
+      'Lead do anúncio caindo direto no seu fluxo, não se perdendo entre WhatsApp pessoal e memória de quem atendeu.',
+    icone: (
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M5 6h22l-8 12v8l-6 3v-11z" {...tracoComum} />
+      </svg>
+    ),
+  },
+  {
+    texto:
+      'Estrutura pensada pra crescer, então adicionar uma automação ou uma área nova não obriga refazer o que já existe.',
     icone: (
       <svg viewBox="0 0 32 32" aria-hidden="true">
         <path d="M5 27V17M13 27V11M21 27V20M29 27V6" {...tracoComum} />
@@ -123,9 +127,8 @@ export function Ato4Beneficios() {
 
         <ul className={s.grade}>
           {BENEFICIOS.map((b) => (
-            <li key={b.titulo} className={s.item}>
+            <li key={b.texto} className={s.item}>
               <span className={s.icone}>{b.icone}</span>
-              <h3 className={s.itemTitulo}>{b.titulo}</h3>
               <p className={s.itemTexto}>{b.texto}</p>
             </li>
           ))}
