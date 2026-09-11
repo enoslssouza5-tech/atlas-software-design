@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { SplitWords } from '@/components/ui/SplitWords';
 import { Reveal } from '@/components/ui/Reveal';
-import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Placeholder } from '@/components/ui/Placeholder';
 import { useDeviceTier } from '@/lib/use-device-tier';
 import { DIST, DUR, EASE, STAGGER } from '@/lib/motion-tokens';
@@ -186,7 +185,6 @@ export function Ato3Solucao() {
             <span className="sr-only" id="ato-solucao-rotulo">
               A solução
             </span>
-            <Eyebrow>Onde as pontas se juntam</Eyebrow>
             <SplitWords texto="Seis frentes, uma equipe só." como="h2" className={s.titulo} />
           </header>
 

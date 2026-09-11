@@ -3,7 +3,6 @@
 import { Ato } from '@/components/ui/Ato';
 import { SplitWords } from '@/components/ui/SplitWords';
 import { Reveal } from '@/components/ui/Reveal';
-import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Acordeao, type ItemFaq } from '@/components/ui/Acordeao';
 import s from './Ato8Oferta.module.css';
 
@@ -84,7 +83,6 @@ const FAQ: ItemFaq[] = [
 export function Ato8Oferta() {
   return (
     <Ato id="ato-oferta" rotulo="Como funciona" claro>
-      <Eyebrow>Dúvidas?</Eyebrow>
       <SplitWords
         texto="Sem reunião de descoberta que vira orçamento surpresa."
         como="h2"

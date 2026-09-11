@@ -3,7 +3,6 @@
 import { Ato } from '@/components/ui/Ato';
 import { SplitWords } from '@/components/ui/SplitWords';
 import { Reveal } from '@/components/ui/Reveal';
-import { Eyebrow } from '@/components/ui/Eyebrow';
 import { PoteStack } from '@/components/canvas2d/PoteStack';
 import s from './Ato7Stack.module.css';
 
@@ -22,7 +21,6 @@ export function Ato7Stack() {
     <Ato id="ato-stack" rotulo="Ferramentas">
       <div className={s.grade}>
         <div className={s.texto}>
-          <Eyebrow>Pode mexer</Eyebrow>
           <SplitWords
             texto="As ferramentas que a Atlas usa. Pode mexer."
             como="h2"

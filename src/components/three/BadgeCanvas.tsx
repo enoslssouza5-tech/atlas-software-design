@@ -51,7 +51,12 @@ export function BadgeCanvas() {
         className={s.canvas}
         frameloop={rodando ? 'always' : 'never'}
         dpr={[1, tier.mobile ? 1.5 : 2]}
-        camera={{ position: [0, 0, 6.2], fov: 34, near: 0.1, far: 40 }}
+        // near/far apertado de propósito: com 0.1/40 (razão 400:1) o buffer
+        // de profundidade perdia precisão bem onde importa, o cartão fino
+        // (0.062 de espessura) girando perto de 180 graus, e a malha
+        // colapsava visualmente pra quase nada. Tudo que a cena usa vive
+        // entre ~5 e ~8 unidades da câmera; 3/12 sobra margem de boa.
+        camera={{ position: [0, 0, 6.2], fov: 34, near: 3, far: 12 }}
         gl={{
           antialias: !tier.mobile,
           alpha: true,

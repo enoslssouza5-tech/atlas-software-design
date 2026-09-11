@@ -1,16 +1,21 @@
+/* Fundo transparente de propósito: o fundo de partículas fica fixo atrás
+   de tudo (z-index abaixo de 2), e a seção precisa deixar ele aparecer. */
 .raiz{
   position: relative;
   z-index: 2;
   padding-block: var(--ato-py);
-  background: var(--preto);
+  background: transparent;
 }
 
 /* Respiro claro. Usado em 1 ou 2 momentos-chave da jornada, nunca como
    alternância mecânica seção a seção.
    As cores dos filhos não são reescritas aqui: quem inverte é o
-   [data-tom='claro'] no globals.css, trocando os papéis semânticos. */
+   [data-tom='claro'] no globals.css, trocando os papéis semânticos. O
+   fundo de partículas clareia sozinho enquanto a seção estiver na tela
+   (ver `src/lib/fundo-signal.ts`); sem JS, o failsafe do globals.css
+   pinta branco aqui pra nunca sobrar texto escuro sobre fundo escuro. */
 .claro{
-  background: var(--branco);
+  background: transparent;
   color: var(--texto);
 }
 

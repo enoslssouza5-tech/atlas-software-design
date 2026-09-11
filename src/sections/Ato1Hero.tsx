@@ -42,13 +42,24 @@ export function Ato1Hero() {
       // do retângulo do espaço reservado abaixo dos botões (`espacoCracha`),
       // pra o crachá 3D (Canvas fixo, fora do fluxo normal) grudar
       // visualmente nesse lugar em vez de sobrepor o texto.
+      // `end` em 'bottom 55%' bate exatamente com o fim do giro (`stGiro`
+      // abaixo): o crachá começa a sumir por opacidade no mesmo ponto de
+      // scroll em que a meia volta termina, não 200px de scroll depois.
+      // Antes os dois `end` eram diferentes ('bottom 22%' aqui) e sobrava
+      // uma janela de scroll inteira com o crachá girado, parado, em
+      // opacidade máxima, sem nada cobrindo, flutuando por cima do Ato 2
+      // (que agora é transparente pro fundo de partículas aparecer atrás
+      // dele). O fade em si continua suave: `estado.opacidade` no
+      // `BadgeScene` interpola por frame até o alvo, então virar o alvo
+      // pra `CENAS.oculto` aqui não é um corte seco, é o início de uma
+      // transição de menos de um segundo.
       const elEspaco = espacoCracha.current;
       const st =
         tier.mobile && elEspaco
           ? ScrollTrigger.create({
               trigger: raiz,
               start: 'top 60%',
-              end: 'bottom 22%',
+              end: 'bottom 55%',
               scrub: true,
               onUpdate: (self) => {
                 if (!self.isActive) return;
@@ -70,7 +81,7 @@ export function Ato1Hero() {
           : ScrollTrigger.create({
               trigger: raiz,
               start: 'top 60%',
-              end: 'bottom 22%',
+              end: 'bottom 55%',
               onToggle: (self) => {
                 if (self.isActive) definirAlvo(alvoCena);
               },
@@ -79,17 +90,13 @@ export function Ato1Hero() {
             });
 
       // Meia volta do crachá, presa ao scroll só enquanto o Hero passa pela
-      // tela. `end` termina ANTES do gatilho de ativação acima soltar o
-      // crachá (`bottom 22%`): a volta tem que completar enquanto a face de
-      // trás ainda está totalmente visível, não depois que o crachá já
-      // sumiu. Scrub sem suavização por baixo garante progresso 1 para 1:
+      // tela. Scrub sem suavização por baixo garante progresso 1 para 1:
       // passado o `end`, o ScrollTrigger para de chamar onUpdate e o valor
-      // trava onde parou, sem continuar nem voltar a girar depois que o
-      // Hero sai de vista.
+      // trava onde parou, sem continuar nem voltar a girar depois.
       const stGiro = ScrollTrigger.create({
         trigger: raiz,
         start: 'top top',
-        end: 'bottom 30%',
+        end: 'bottom 55%',
         scrub: true,
         onUpdate: (self) => {
           sinal.giroHero = self.progress * Math.PI;
@@ -102,7 +109,7 @@ export function Ato1Hero() {
         // timeline, só `.acoes > *` (os botões); esconder o contêiner aqui
         // deixava um opacity:0 órfão que o revert do próximo run não
         // limpava, e os dois botões ficavam invisíveis pra sempre.
-        gsap.set([`.${s.sub}`, `.${s.acoes} > *`, `.${s.indicador}`], {
+        gsap.set([`.${s.sub}`, `.${s.acoes} > *`], {
           opacity: 0,
         });
         return () => {
@@ -133,26 +140,7 @@ export function Ato1Hero() {
           { opacity: 0, y: DIST.curto },
           { opacity: 1, y: 0, duration: DUR.media, ease: EASE.entrada, stagger: 0.1 },
           t(1.44),
-        )
-        .fromTo(
-          `.${s.indicador}`,
-          { opacity: 0, y: -14 },
-          { opacity: 1, y: 0, duration: DUR.curta, ease: EASE.entrada },
-          t(1.62),
         );
-
-      // pulso do indicador de scroll, único loop infinito da abertura
-      if (!reduzido) {
-        gsap.to(`.${s.roda}`, {
-          y: 7,
-          opacity: 0.35,
-          duration: 1.24,
-          ease: EASE.loop,
-          repeat: -1,
-          yoyo: true,
-          delay: 2.2,
-        });
-      }
 
       return () => {
         st.kill();
@@ -205,16 +193,6 @@ export function Ato1Hero() {
           </div>
         )}
       </div>
-
-      <button
-        type="button"
-        className={s.indicador}
-        onClick={() => irPara('#ato-dor')}
-        aria-label="Avançar para a próxima seção"
-      >
-        <span className={s.roda} aria-hidden="true" />
-        <span className={s.rotuloIndicador}>Role</span>
-      </button>
     </section>
   );
 }

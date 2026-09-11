@@ -129,27 +129,22 @@ export function BadgeCard({ mobile }: { mobile: boolean }) {
         />
       </RoundedBox>
 
-      {/* face da frente: foto e dados do Enos */}
+      {/* face da frente: foto e dados do Enos. `meshBasicMaterial` de
+          propósito, não `meshStandardMaterial`: o painel é uma arte já
+          pronta (desenhada no canvas com as cores certas pra leitura), não
+          uma superfície que devia escurecer dependendo do ângulo pra luz.
+          Com material sensível a luz, a face de trás, que pega o conjunto
+          de luzes por um ângulo bem mais raso, renderizava quase preta. */}
       <mesh position={[0, -0.03, CARTAO.espessura / 2 + 0.001]}>
         <planeGeometry args={[PAINEL.largura, PAINEL.altura]} />
-        <meshStandardMaterial
-          map={texturaFrente ?? undefined}
-          metalness={0.05}
-          roughness={0.75}
-          toneMapped={false}
-        />
+        <meshBasicMaterial map={texturaFrente ?? undefined} toneMapped={false} />
       </mesh>
 
       {/* face de trás: foto e dados do Lucas, girada 180 graus em Y pra não
           sair espelhada quando o crachá completa a meia volta */}
       <mesh position={[0, -0.03, -CARTAO.espessura / 2 - 0.001]} rotation={[0, Math.PI, 0]}>
         <planeGeometry args={[PAINEL.largura, PAINEL.altura]} />
-        <meshStandardMaterial
-          map={texturaVerso ?? undefined}
-          metalness={0.05}
-          roughness={0.75}
-          toneMapped={false}
-        />
+        <meshBasicMaterial map={texturaVerso ?? undefined} toneMapped={false} />
       </mesh>
 
       {/* recorte do clipe, no topo */}

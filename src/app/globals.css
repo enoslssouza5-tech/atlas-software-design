@@ -73,7 +73,14 @@ html.lenis body{ height: auto; }
 
 body{
   margin: 0;
-  background: var(--preto);
+  /* Sem fundo opaco aqui de propósito: o body pinta na ordem normal de
+     empilhamento, acima de qualquer elemento fixed com z-index negativo,
+     então um fundo sólido aqui tampava o canvas de partículas por baixo de
+     tudo, mesmo quando o canvas desenhava numa cor completamente diferente.
+     O `--preto` do <html> já cobre o mesmo chão visual, só que por baixo
+     de verdade (é o plano de fundo da própria página, antes de qualquer
+     z-index negativo entrar na conta). */
+  background: transparent;
   color: var(--texto);
   font-family: var(--font-body);
   font-size: var(--fs-corpo);
@@ -170,6 +177,11 @@ html.anime-failed [data-anim] *{
 }
 
 html.anime-failed #preloader{ display: none !important; }
+
+/* Sem o fundo de partículas rodando (JS falhou), a seção clara precisa do
+   próprio branco sólido, senão o texto escuro dela fica sobre um fundo
+   escuro (o preto padrão do body) e vira ilegível. */
+html.anime-failed [data-tom='claro']{ background: var(--branco) !important; }
 
 /* ============================================================
    prefers-reduced-motion, respeitado em 100%

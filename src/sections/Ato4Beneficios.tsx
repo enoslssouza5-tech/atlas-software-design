@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { Ato } from '@/components/ui/Ato';
 import { SplitWords } from '@/components/ui/SplitWords';
-import { Eyebrow } from '@/components/ui/Eyebrow';
 import { DIST, DUR, EASE, STAGGER } from '@/lib/motion-tokens';
 import s from './Ato4Beneficios.module.css';
 
@@ -114,7 +113,6 @@ export function Ato4Beneficios() {
   return (
     <div ref={ref}>
       <Ato id="ato-beneficios" rotulo="O que muda" claro>
-        <Eyebrow>O que fica depois que o projeto entra no ar</Eyebrow>
         <SplitWords
           texto="O diferencial não é o código. É o que sobra depois dele."
           como="h2"

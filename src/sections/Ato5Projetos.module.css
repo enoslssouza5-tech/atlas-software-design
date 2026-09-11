@@ -1,10 +1,12 @@
+/* Fundo transparente de propósito: o fundo de partículas fica fixo atrás
+   de tudo, abaixo do z-index 2 das seções. */
 .raiz{
   position: relative;
   z-index: 2;
   height: 100svh;
   display: flex;
   align-items: center;
-  background: var(--preto);
+  background: transparent;
   overflow: hidden;
 }
 

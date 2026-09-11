@@ -3,12 +3,12 @@ import { Nav } from '@/components/hud/Nav';
 import { Rodape } from '@/components/hud/Rodape';
 import { Cracha } from '@/components/three/Cracha';
 import { HeroFundo } from '@/components/hero/HeroFundo';
+import { ParticleWave } from '@/components/fundo/ParticleWave';
 import { Ato1Hero } from '@/sections/Ato1Hero';
 import { Ato2Dor } from '@/sections/Ato2Dor';
 import { Ato3Solucao } from '@/sections/Ato3Solucao';
 import { Ato4Beneficios } from '@/sections/Ato4Beneficios';
 import { Ato5Projetos } from '@/sections/Ato5Projetos';
-import { Ato6ProvaSocial } from '@/sections/Ato6ProvaSocial';
 import { Ato6bDepoimentos } from '@/sections/Ato6bDepoimentos';
 import { Ato7Stack } from '@/sections/Ato7Stack';
 import { Ato8Oferta } from '@/sections/Ato8Oferta';
@@ -25,6 +25,7 @@ export default function Home() {
     <>
       <Preloader />
       <HeroFundo />
+      <ParticleWave />
       <Cracha />
       <Nav />
 
@@ -34,7 +35,6 @@ export default function Home() {
         <Ato3Solucao />
         <Ato4Beneficios />
         <Ato5Projetos />
-        <Ato6ProvaSocial />
         <Ato6bDepoimentos />
         <Ato7Stack />
         <Ato8Oferta />

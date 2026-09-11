@@ -22,9 +22,14 @@ const OCULTO: AlvoCena = { x: 0, y: 0, escala: 0.6, opacidade: 0 };
  * do texto, gira meia volta com o scroll local do Hero e some quando o
  * Hero sai de vista, sem reaparecer em nenhum outro ato. Nenhum roteiro de
  * posição entre seções: aqui é único destino de câmera.
+ *
+ * `y` mais alto (0.3, não 0 nem negativo) de propósito: mantém o crachá
+ * mais perto do centro vertical da tela enquanto a meia volta acontece,
+ * em vez de próximo da borda inferior, onde a legibilidade das duas faces
+ * fica pior contra a luz do fundo do Hero.
  */
 export const CENAS = {
-  hero: { x: 1.55, y: -0.1, escala: 1, opacidade: 1 } as AlvoCena,
+  hero: { x: 1.55, y: 0.3, escala: 1, opacidade: 1 } as AlvoCena,
   heroMobile: { x: 0.26, y: -0.95, escala: 0.5, opacidade: 0.9 } as AlvoCena,
 
   oculto: OCULTO,

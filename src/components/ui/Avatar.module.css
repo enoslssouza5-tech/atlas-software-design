@@ -1,0 +1,14 @@
+.avatar{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--acento), var(--acento-escuro));
+  color: var(--preto);
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+}

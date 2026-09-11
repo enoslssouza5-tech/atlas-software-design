@@ -1,0 +1,11 @@
+.canvas{
+  position: fixed;
+  inset: 0;
+  /* abaixo do fundo do Hero (z-index 0) e do crachá (z-index 1): nunca
+     cobre a imagem de fundo do Ato 1, só aparece atrás das seções depois
+     dele, que têm fundo transparente de propósito. */
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}

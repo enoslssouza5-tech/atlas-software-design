@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { Ato } from '@/components/ui/Ato';
 import { Reveal } from '@/components/ui/Reveal';
-import { Eyebrow } from '@/components/ui/Eyebrow';
 import { DIST, DUR, EASE, STAGGER } from '@/lib/motion-tokens';
 import s from './Ato2Dor.module.css';
 
@@ -60,12 +59,9 @@ export function Ato2Dor() {
       <Ato id="ato-dor" rotulo="A dor">
         <div className={s.grade}>
           <div className={s.aberturaBloco}>
-            <Eyebrow>Ninguém te falou isso antes de vender o projeto</Eyebrow>
             <Reveal como="h2" className={s.abertura} distancia={DIST.medio} duracao={DUR.longa}>
               O problema raramente é falta de site, sistema, automação ou anúncio. É essas
-              peças não conversarem entre si, cada uma vinda de um fornecedor diferente. A
-              Atlas monta as quatro com a mesma equipe, sem você virar o elo que junta tudo
-              na mão.
+              peças não conversarem entre si. A Atlas monta as quatro com a mesma equipe.
             </Reveal>
           </div>
 
