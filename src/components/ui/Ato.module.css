@@ -14,34 +14,3 @@
   color: var(--texto);
 }
 
-.marcacao{
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  margin-bottom: clamp(2.25rem, 5vw, 4rem);
-}
-
-.marcacaoOculta{
-  composes: marcacao;
-}
-
-.numero{
-  font-family: var(--font-display);
-  font-size: var(--fs-micro);
-  letter-spacing: 0.18em;
-  color: var(--acento);
-}
-
-.traco{
-  width: clamp(28px, 5vw, 64px);
-  height: 1px;
-  background: var(--linha-acento);
-  flex: 0 0 auto;
-}
-
-.nome{
-  font-size: var(--fs-micro);
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  color: var(--texto-suave);
-}

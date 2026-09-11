@@ -16,17 +16,17 @@
 }
 
 .marca{
-  width: clamp(52px, 8vw, 82px);
+  width: clamp(96px, 14vw, 160px);
   height: auto;
   color: var(--acento);
 }
 
 .saudacao{
   font-family: var(--font-display);
-  font-size: var(--fs-micro);
+  font-size: clamp(1rem, 2.4vw, 1.5rem);
   text-transform: uppercase;
-  letter-spacing: 0.32em;
-  text-indent: 0.32em;
+  letter-spacing: 0.14em;
+  text-indent: 0.14em;
   color: var(--texto-suave);
   opacity: 0;
 }

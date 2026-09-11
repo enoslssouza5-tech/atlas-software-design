@@ -67,15 +67,15 @@
   gap: 0.85rem;
 }
 
-.microcopy{
-  margin-top: clamp(0.85rem, 1.8vw, 1.15rem);
-  font-size: var(--fs-micro);
-  color: var(--texto-fraco);
-}
-
 .substituto{
   display: flex;
   justify-content: center;
+}
+
+/* espaço reservado só no mobile, onde o crachá 3D vira um elemento visual
+   separado, abaixo dos botões, sem sobrepor headline nem CTAs. */
+.espacoCracha{
+  display: none;
 }
 
 .indicador{
@@ -108,14 +108,21 @@
 
 @media (min-width: 1024px){
   .grade{
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    justify-content: space-between;
   }
-  .texto{ max-width: none; }
+  .texto{ max-width: none; justify-self: start; }
 }
 
-/* Abaixo de 1024px a cena 3D fica atrás do texto, então a coluna do
-   crachá estático some pra não duplicar o elemento. */
+/* Abaixo de 1024px a cena 3D vira elemento próprio, abaixo dos botões
+   (ver `.espacoCracha`), então a coluna do crachá estático some pra não
+   duplicar o elemento. */
 @media (max-width: 1023px){
   .headline{ font-size: clamp(2.25rem, 7.6vw, 3.5rem); }
   .brilho{ top: 62%; right: -18%; opacity: 0.72; }
+  .espacoCracha{
+    display: block;
+    height: clamp(220px, 55vw, 320px);
+    margin-top: clamp(1rem, 3vh, 1.5rem);
+  }
 }

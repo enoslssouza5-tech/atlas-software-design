@@ -57,7 +57,7 @@ export function Ato2Dor() {
 
   return (
     <div ref={ref}>
-      <Ato id="ato-dor" numero="02" rotulo="A dor">
+      <Ato id="ato-dor" rotulo="A dor">
         <div className={s.grade}>
           <div className={s.aberturaBloco}>
             <Eyebrow>Ninguém te falou isso antes de vender o projeto</Eyebrow>

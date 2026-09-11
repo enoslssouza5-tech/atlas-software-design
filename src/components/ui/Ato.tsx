@@ -1,39 +1,28 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { Reveal } from './Reveal';
 import s from './Ato.module.css';
 
 type Props = {
   id: string;
-  /** numeral do ato, exibido como marcação de roteiro */
-  numero: string;
-  /** nome do ato, some visualmente quando `rotuloOculto`, nunca do DOM */
+  /** nome acessível da seção, só existe pra leitor de tela */
   rotulo: string;
   children: ReactNode;
   /** fundo claro: usado em 1 ou 2 momentos da jornada, nunca alternado */
   claro?: boolean;
   className?: string;
-  /** seções que já têm um h2 próprio não precisam do rótulo na tela */
-  rotuloOculto?: boolean;
 };
 
 /**
  * Moldura comum dos atos.
  *
- * A marcação "01 / Abertura" existe pra sustentar a leitura de roteiro:
- * o usuário percebe que está atravessando cenas numeradas, não rolando
- * uma lista de seções.
+ * A marcação numerada "01 / Abertura" que existia aqui foi removida da
+ * tela: o nome da seção continua existindo só pra acessibilidade, via
+ * `aria-labelledby` apontando pra um span `sr-only`. Os rótulos (eyebrow)
+ * acima de cada H2 são outra coisa, ficam em `children`, não são tocados
+ * por este componente.
  */
-export function Ato({
-  id,
-  numero,
-  rotulo,
-  children,
-  claro = false,
-  className,
-  rotuloOculto = false,
-}: Props) {
+export function Ato({ id, rotulo, children, claro = false, className }: Props) {
   return (
     <section
       id={id}
@@ -42,13 +31,9 @@ export function Ato({
       aria-labelledby={`${id}-rotulo`}
     >
       <div className="container">
-        <Reveal className={rotuloOculto ? s.marcacaoOculta : s.marcacao} distancia={28}>
-          <span className={s.numero}>{numero}</span>
-          <span className={s.traco} aria-hidden="true" />
-          <span className={s.nome} id={`${id}-rotulo`}>
-            {rotulo}
-          </span>
-        </Reveal>
+        <span className="sr-only" id={`${id}-rotulo`}>
+          {rotulo}
+        </span>
         {children}
       </div>
     </section>

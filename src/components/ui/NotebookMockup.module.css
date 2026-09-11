@@ -1,18 +1,8 @@
 .raiz{
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 11;
   --tinta: hsl(var(--matiz) 62% 58%);
   --tinta-fraca: hsl(var(--matiz) 40% 22%);
-}
-
-/* ---------- notebook ---------- */
-
-.notebook{
-  position: absolute;
-  left: 0;
-  top: 4%;
-  width: 84%;
 }
 
 .telaNotebook{
@@ -25,7 +15,7 @@
     radial-gradient(120% 90% at 18% 8%, hsl(var(--matiz) 55% 30% / 0.5), transparent 62%),
     linear-gradient(160deg, #17171a, #0d0d0f);
   box-shadow: 0 30px 60px -34px rgba(0, 0, 0, 0.95);
-  padding: 9% 8% 0;
+  padding: 5% 6% 0;
   display: flex;
   flex-direction: column;
   gap: 5%;
@@ -88,63 +78,4 @@
   border-radius: 4px;
   background: var(--tinta-fraca);
   border: 1px solid rgba(247, 245, 239, 0.07);
-}
-
-/* ---------- celular ---------- */
-
-.celular{
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 25%;
-}
-
-.telaCelular{
-  position: relative;
-  width: 100%;
-  aspect-ratio: 9 / 18.5;
-  border-radius: 16px;
-  border: 1px solid rgba(247, 245, 239, 0.16);
-  background:
-    radial-gradient(100% 60% at 50% 4%, hsl(var(--matiz) 55% 32% / 0.55), transparent 58%),
-    linear-gradient(170deg, #1a1a1e, #0b0b0d);
-  box-shadow: -14px 24px 44px -20px rgba(0, 0, 0, 0.95);
-  padding: 16% 12% 10%;
-  display: flex;
-  flex-direction: column;
-  gap: 6%;
-  overflow: hidden;
-}
-
-.notch{
-  position: absolute;
-  top: 5%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 34%;
-  height: 4px;
-  border-radius: 999px;
-  background: rgba(247, 245, 239, 0.18);
-}
-
-.heroFalsoMini{
-  height: 13%;
-  border-radius: 3px;
-  background: var(--tinta);
-  opacity: 0.85;
-}
-
-.linhaMini{
-  height: 5%;
-  border-radius: 3px;
-  background: rgba(247, 245, 239, 0.12);
-}
-
-.linhaMini:last-of-type{ width: 68%; }
-
-.botaoFalso{
-  margin-top: auto;
-  height: 9%;
-  border-radius: 999px;
-  border: 1px solid var(--tinta);
 }

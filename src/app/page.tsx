@@ -9,6 +9,7 @@ import { Ato3Solucao } from '@/sections/Ato3Solucao';
 import { Ato4Beneficios } from '@/sections/Ato4Beneficios';
 import { Ato5Projetos } from '@/sections/Ato5Projetos';
 import { Ato6ProvaSocial } from '@/sections/Ato6ProvaSocial';
+import { Ato6bDepoimentos } from '@/sections/Ato6bDepoimentos';
 import { Ato7Stack } from '@/sections/Ato7Stack';
 import { Ato8Oferta } from '@/sections/Ato8Oferta';
 import { Ato9Convite } from '@/sections/Ato9Convite';
@@ -34,6 +35,7 @@ export default function Home() {
         <Ato4Beneficios />
         <Ato5Projetos />
         <Ato6ProvaSocial />
+        <Ato6bDepoimentos />
         <Ato7Stack />
         <Ato8Oferta />
         <Ato9Convite />

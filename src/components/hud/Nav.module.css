@@ -9,18 +9,10 @@
   justify-content: space-between;
   gap: var(--gut);
   padding: clamp(0.85rem, 1.8vw, 1.4rem) var(--gut);
-  opacity: 0;
-  transition:
-    background-color 0.24s var(--ease-cine),
-    border-color 0.24s var(--ease-cine),
-    backdrop-filter 0.24s var(--ease-cine);
-  border-bottom: 1px solid transparent;
 }
 
 .raiz[data-solido='true']{
-  background: rgba(10, 10, 10, 0.72);
-  backdrop-filter: blur(14px) saturate(140%);
-  border-bottom-color: var(--linha);
+  background: linear-gradient(180deg, rgba(10, 10, 10, 0.55), transparent);
 }
 
 .marca{
@@ -28,6 +20,7 @@
   align-items: center;
   gap: 0.6rem;
   min-height: 44px;
+  flex: 0 0 auto;
 }
 
 .icone{
@@ -47,61 +40,75 @@
 
 .leve{ color: var(--texto-suave); font-weight: 400; }
 
-.links{
-  display: none;
-  gap: clamp(1.25rem, 2.6vw, 2.25rem);
+/* cápsula flutuante: os itens reais de navegação, centralizada entre a
+   marca e o CTA. Fundo translúcido constante, não depende de scroll. */
+.capsula{
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.35rem;
+  background: rgba(10, 10, 10, 0.55);
+  border: 1px solid var(--linha);
+  border-radius: 999px;
+  backdrop-filter: blur(16px) saturate(140%);
 }
 
 .link{
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
+  padding: 0;
+  border-radius: 999px;
   font-size: 0.875rem;
-  color: var(--texto-suave);
-  padding: 0.5rem 0;
+  color: rgba(247, 245, 239, 0.7);
   transition: color 0.22s var(--ease-cine);
 }
 
-.link::after{
-  content: '';
+.link[data-ativo='true']{ color: var(--texto); }
+.link:hover{ color: var(--texto); }
+
+.linkTexto{ position: relative; z-index: 1; display: none; }
+.linkIcone{ position: relative; z-index: 1; display: block; }
+
+/* indicador da aba ativa: pílula com glow em laranja, sem bounce nem
+   elastic, só um brilho pulsando bem discreto por baixo. */
+.indicador{
   position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 1px;
-  background: var(--acento);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.22s var(--ease-cine);
+  inset: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  z-index: 0;
+  background: rgba(242, 121, 12, 0.16);
+  border: 1px solid var(--linha-acento);
 }
 
-.link:hover{ color: var(--texto); }
-.link:hover::after{ transform: scaleX(1); }
+.brilho{
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(242, 121, 12, 0.4), transparent 72%);
+}
 
 .cta{
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding: 0 1.1rem;
-  border: 1px solid var(--linha-acento);
-  border-radius: 999px;
+  flex: 0 0 auto;
   font-size: 0.875rem;
-  color: var(--texto);
   white-space: nowrap;
-  transition:
-    background-color 0.22s var(--ease-cine),
-    color 0.22s var(--ease-cine);
 }
 
-.cta:hover{ background: var(--acento); color: var(--preto); }
-
-@media (min-width: 1024px){
-  .links{ display: flex; }
+@media (min-width: 768px){
+  .link{ width: auto; padding: 0 1.1rem; }
+  .linkTexto{ display: inline; }
+  .linkIcone{ display: none; }
 }
 
 @media (max-width: 480px){
   .leve{ display: none; }
+  .nome{ display: none; }
   .cta{ padding: 0 0.9rem; font-size: 0.8125rem; }
 }
 
 @media (prefers-reduced-motion: reduce){
-  .raiz, .link, .link::after, .cta{ transition: none !important; }
+  .link{ transition: none !important; }
 }

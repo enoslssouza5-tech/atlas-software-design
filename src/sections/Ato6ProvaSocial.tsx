@@ -55,7 +55,7 @@ export function Ato6ProvaSocial() {
   return (
     <div ref={ref} className={s.envoltorio}>
       <div className={s.fundo} aria-hidden="true" />
-      <Ato id="ato-prova" numero="06" rotulo="Prova">
+      <Ato id="ato-prova" rotulo="Prova">
         <SplitWords
           texto="Aqui entram os números, assim que forem verificáveis."
           como="h2"

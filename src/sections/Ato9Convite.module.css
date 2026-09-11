@@ -5,9 +5,8 @@
   display: flex;
   align-items: center;
 /* Fundo transparente de propósito: o Canvas do crachá é fixo em z-index 1 e
-   esta seção vive em z-index 2. Pintar o preto aqui esconderia a cena 3D
-   justamente nos dois atos em que ela precisa reaparecer. O preto vem do
-   <body>, que é exatamente a mesma cor. */
+   esta seção vive em z-index 2. O preto vem do <body>, que é exatamente a
+   mesma cor. */
   padding-block: var(--ato-py);
   background: transparent;
   overflow: hidden;
@@ -18,7 +17,6 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  /* segue o crachá: centro no mobile, terço esquerdo no desktop */
   width: min(1000px, 120vw);
   aspect-ratio: 1;
   background: radial-gradient(
@@ -30,142 +28,24 @@
   pointer-events: none;
 }
 
-@media (min-width: 1024px){
-  .brilho{ left: 27%; width: min(760px, 60vw); }
-}
-
 .interno{
   position: relative;
   z-index: 2;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(1.5rem, 3.4vw, 2.5rem);
+  gap: clamp(2rem, 4vw, 3rem);
   text-align: center;
 }
 
-/* Em tela larga o texto ocupa a metade direita e deixa a esquerda livre pro
-   crachá, espelho exato da abertura, onde o crachá estava à direita. */
-@media (min-width: 1024px){
-  .interno{
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-    align-items: center;
-    text-align: left;
-    gap: clamp(2rem, 5vw, 4rem);
-  }
-
-  .interno > *{ grid-column: 2; }
-
-  .marcacao{ justify-content: flex-start; }
-  .titulo{ max-width: 21ch; }
-  .corpo{ text-align: left; }
-  .acao{ align-items: flex-start; }
-  .acao > div{ align-items: flex-start; }
-  .micro{ text-align: left; }
-  .contatos{ justify-content: flex-start; }
-  .ps{ text-align: left; }
-}
-
-.marcacao{
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-}
-
-.numero{
-  font-family: var(--font-display);
-  font-size: var(--fs-micro);
-  letter-spacing: 0.18em;
-  color: var(--acento);
-}
-
-.traco{
-  width: clamp(28px, 5vw, 64px);
-  height: 1px;
-  background: var(--linha-acento);
-}
-
-.nome{
-  font-size: var(--fs-micro);
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  color: var(--texto-suave);
-}
-
-.substituto{ margin-block: clamp(1rem, 3vh, 2rem); }
-
 .titulo{
-  font-size: clamp(1.85rem, 3.8vw, 3.5rem);
+  font-size: clamp(2rem, 4.6vw, 4rem);
   letter-spacing: -0.035em;
-  max-width: 22ch;
-}
-
-.corpo{
-  max-width: 40ch;
-  font-size: clamp(1.0625rem, 1.5vw, 1.3125rem);
-  line-height: 1.5;
-  color: var(--texto-suave);
+  max-width: 26ch;
 }
 
 .acao{
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.acao > div{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.micro{
-  font-size: var(--fs-micro);
-  letter-spacing: 0.04em;
-  color: var(--texto-suave);
-  max-width: 34ch;
-}
-
-.contatos{
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 0.6rem;
-  font-size: var(--fs-micro);
-}
-
-.contatos a{
-  color: var(--texto);
-  border-bottom: 1px solid var(--linha-acento);
-  transition: color 0.22s var(--ease-cine), border-color 0.22s var(--ease-cine);
-}
-
-.contatos a:hover{
-  color: var(--acento-claro);
-  border-color: var(--acento-claro);
-}
-
-.separador{
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: var(--texto-fraco);
-}
-
-.ps{
-  margin-top: clamp(0.5rem, 1.4vw, 1rem);
-  padding-top: clamp(1rem, 2.2vw, 1.5rem);
-  border-top: 1px solid var(--linha);
-  max-width: 46ch;
-  font-size: 0.8125rem;
-  line-height: 1.6;
-  color: var(--texto-fraco);
-}
-
-@media (prefers-reduced-motion: reduce){
-  .contatos a{ transition: none !important; }
 }

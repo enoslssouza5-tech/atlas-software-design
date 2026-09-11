@@ -370,14 +370,45 @@ export function criarPote(
     ponteiro.py = ponteiro.y;
     ponteiro.x = m.x;
     ponteiro.y = m.y;
-    arrastado.x = m.x;
-    arrastado.y = m.y;
+
+    // A bolinha arrastada nunca passa por integrar()/resolver() (que pulam
+    // quem está com arrastando:true), então sem este clamp aqui o vidro do
+    // pote não segurava nada: arrastar rápido até a borda da tela puxava a
+    // bolinha pra fora do círculo, visível, antes de qualquer física rodar.
+    const dx = m.x - cx;
+    const dy = m.y - cy;
+    const dist = Math.hypot(dx, dy) || 0.0001;
+    const raioMax = R - arrastado.r;
+    if (dist > raioMax) {
+      const k = raioMax / dist;
+      arrastado.x = cx + dx * k;
+      arrastado.y = cy + dy * k;
+    } else {
+      arrastado.x = m.x;
+      arrastado.y = m.y;
+    }
   }
+
+  /** teto de velocidade ao soltar, em px por passo de física */
+  const VELOCIDADE_SOLTURA_MAX = 26;
 
   function aoSoltar() {
     if (!arrastado) return;
-    arrastado.vx = (ponteiro.x - ponteiro.px) * 0.8;
-    arrastado.vy = (ponteiro.y - ponteiro.py) * 0.8;
+    let vx = (ponteiro.x - ponteiro.px) * 0.8;
+    let vy = (ponteiro.y - ponteiro.py) * 0.8;
+
+    // Sem teto aqui, um movimento rápido de ponteiro entre dois frames
+    // soltava a bolinha com velocidade absurda, e ela furava a parede do
+    // pote por puro salto de posição antes do próximo passo de integrar().
+    const velocidade = Math.hypot(vx, vy);
+    if (velocidade > VELOCIDADE_SOLTURA_MAX) {
+      const k = VELOCIDADE_SOLTURA_MAX / velocidade;
+      vx *= k;
+      vy *= k;
+    }
+
+    arrastado.vx = vx;
+    arrastado.vy = vy;
     arrastado.arrastando = false;
     arrastado = null;
   }

@@ -1,9 +1,11 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { SplitWords } from '@/components/ui/SplitWords';
-import { MockupDuplo } from '@/components/ui/MockupDuplo';
+import { NotebookMockup } from '@/components/ui/NotebookMockup';
+import { IphoneMockup } from '@/components/ui/IphoneMockup';
+import { TelaCelularFake } from '@/components/ui/TelaCelularFake';
 import { Placeholder } from '@/components/ui/Placeholder';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { useDeviceTier } from '@/lib/use-device-tier';
@@ -13,10 +15,13 @@ import s from './Ato5Projetos.module.css';
 /**
  * ATO 5: PROJETOS
  *
- * Carrossel horizontal. No desktop o eixo vertical do scroll vira eixo
- * horizontal via ScrollTrigger, com snap por cartão. No mobile e em reduced
- * motion vira scroll horizontal nativo com scroll-snap, mais previsível no
- * dedo e sem sequestrar o gesto do usuário.
+ * Notebook e celular persistentes, não um carrossel de cartões. O mesmo
+ * ScrollTrigger pinado dirige duas coisas em sequência: primeiro o
+ * notebook abre (rotateX de ~100° a 0°), depois o celular entra e os dois
+ * avançam juntos pelos sete projetos, pelo mesmo índice de progresso.
+ *
+ * No mobile some o notebook, só o celular centralizado troca de projeto
+ * pelo scroll, mesmo mecanismo, sem a fase de abertura.
  *
  * TODOS os sete projetos são fictícios, de demonstração. Nenhum é apresentado
  * como cliente real, e nenhum vira case sem confirmação e consentimento.
@@ -74,73 +79,104 @@ const PROJETOS = [
   },
 ];
 
+/** fração do progresso total dedicada a abrir o notebook, só no desktop */
+const FASE1_FRACAO = 0.18;
+
+/**
+ * `transform: scale()` não muda a caixa de layout do `IphoneMockup` (ele
+ * continua ocupando o tamanho nativo em pixels pro navegador), então o
+ * contêiner que o posiciona precisa de largura/altura explícitas batendo
+ * com o tamanho final visual, calculadas aqui em vez de chutadas em CSS.
+ */
+const CELULAR_NATIVO = { largura: 393 + 12 * 2, altura: 852 + 12 * 2 };
+
 export function Ato5Projetos() {
   const ref = useRef<HTMLElement>(null);
-  const trilho = useRef<HTMLDivElement>(null);
+  const notebookRef = useRef<HTMLDivElement>(null);
+  const celularRef = useRef<HTMLDivElement>(null);
   const tier = useDeviceTier();
-  const horizontalPorScroll = tier.pronto && !tier.mobile && !tier.reduzido;
+  const [indiceAtual, setIndiceAtual] = useState(0);
 
   useGSAP(
     () => {
       const raiz = ref.current;
-      const faixa = trilho.current;
-      if (!raiz || !faixa || !horizontalPorScroll) return;
+      if (!raiz || !tier.pronto) return;
 
-      const percurso = () => faixa.scrollWidth - window.innerWidth;
+      const notebook = notebookRef.current;
+      const celular = celularRef.current;
 
-      const tween = gsap.to(faixa, {
-        x: () => -percurso(),
-        ease: 'none',
-        scrollTrigger: {
-          trigger: raiz,
-          start: 'top top',
-          end: () => '+=' + percurso(),
-          pin: true,
-          scrub: 1.2,
-          invalidateOnRefresh: true,
-          // O ScrollTrigger recalcula na ordem de CRIAÇÃO, não na ordem da
-          // página. Este pin nasce depois de todos os atos abaixo dele (o
-          // device tier resolve async), então sem prioridade explícita os
-          // atos 6 a 9 se mediriam antes do espaçador existir, e ficariam
-          // 1792px adiantados. Prioridade maior, recalculado primeiro.
-          refreshPriority: 1,
-          snap: { snapTo: 1 / (PROJETOS.length - 1), duration: 0.42, ease: EASE.entrada },
+      if (tier.reduzido) {
+        // Estático: mostra o primeiro projeto, sem pin, sem giro do notebook.
+        if (notebook) gsap.set(notebook, { rotateX: 0 });
+        if (celular) gsap.set(celular, { opacity: 1, y: 0 });
+        return;
+      }
+
+      const fase1Fim = tier.mobile ? 0 : FASE1_FRACAO;
+      const distanciaTotal = () =>
+        tier.mobile
+          ? window.innerHeight * 0.62 * PROJETOS.length
+          : window.innerHeight * 0.7 + window.innerHeight * 0.6 * PROJETOS.length;
+
+      let indiceRenderizado = 0;
+      let celularRevelado = tier.mobile;
+
+      if (!tier.mobile && notebook) {
+        gsap.set(notebook, { transformPerspective: 1400, transformOrigin: '50% 100%', rotateX: 100 });
+      }
+      if (celular) {
+        gsap.set(celular, { opacity: tier.mobile ? 1 : 0, y: tier.mobile ? 0 : 24 });
+      }
+
+      const pontosDeSnap = tier.mobile
+        ? PROJETOS.map((_, i) => i / (PROJETOS.length - 1))
+        : [0, ...PROJETOS.map((_, i) => fase1Fim + (i / (PROJETOS.length - 1)) * (1 - fase1Fim))];
+
+      const st = ScrollTrigger.create({
+        trigger: raiz,
+        start: 'top top',
+        end: () => '+=' + distanciaTotal(),
+        pin: true,
+        scrub: 1.2,
+        invalidateOnRefresh: true,
+        // O ScrollTrigger recalcula na ordem de CRIAÇÃO, não na ordem da
+        // página. Este pin nasce depois de todos os atos abaixo dele (o
+        // device tier resolve async), então sem prioridade explícita os
+        // atos 6 a 9 se mediriam antes do espaçador existir.
+        refreshPriority: 1,
+        snap: { snapTo: pontosDeSnap, duration: 0.42, ease: EASE.entrada },
+        onUpdate: (self) => {
+          const p = self.progress;
+
+          if (!tier.mobile && notebook) {
+            const f1 = fase1Fim > 0 ? Math.min(1, p / fase1Fim) : 1;
+            gsap.set(notebook, { rotateX: 100 * (1 - f1) });
+          }
+
+          if (!celularRevelado && p > fase1Fim) {
+            celularRevelado = true;
+            if (celular) gsap.to(celular, { opacity: 1, y: 0, duration: 0.5, ease: EASE.entrada });
+          }
+
+          const f2 = fase1Fim < 1 ? Math.max(0, (p - fase1Fim) / (1 - fase1Fim)) : 0;
+          const indice = Math.min(PROJETOS.length - 1, Math.floor(f2 * PROJETOS.length));
+          if (indice !== indiceRenderizado) {
+            indiceRenderizado = indice;
+            setIndiceAtual(indice);
+          }
         },
       });
 
-      // O pin nasce depois do device tier resolver, ou seja, DEPOIS dos
-      // gatilhos dos atos 6 a 9 terem sido criados. O espaçador que ele
-      // insere empurra tudo 1792px pra baixo, e quem está abaixo fica com
-      // start/end de um documento que não existe mais.
-      //
-      // O refresh sai da pilha atual de propósito: chamado aqui dentro, ele
-      // cai no guard de reentrância do ScrollTrigger (a criação do pin já
-      // está no meio de um refresh) e é descartado em silêncio.
+      // Refresh fora da pilha atual de propósito: chamado aqui dentro, cai
+      // no guard de reentrância do ScrollTrigger e é descartado em silêncio.
       const refresco = requestAnimationFrame(() => ScrollTrigger.refresh());
 
-      // Profundidade: os mockups deslizam um pouco mais devagar que o cartão,
-      // então o conjunto ganha eixo Z sem nenhuma perspectiva 3D real.
-      gsap.utils.toArray<HTMLElement>('.' + s.mockup).forEach((m) => {
-        gsap.fromTo(
-          m,
-          { xPercent: 7 },
-          {
-            xPercent: -7,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: m,
-              containerAnimation: tween,
-              start: 'left right',
-              end: 'right left',
-              scrub: true,
-            },
-          },
-        );
-      });
-
-      return () => cancelAnimationFrame(refresco);
+      return () => {
+        cancelAnimationFrame(refresco);
+        st.kill();
+      };
     },
-    { scope: ref, dependencies: [horizontalPorScroll] },
+    { scope: ref, dependencies: [tier.pronto, tier.mobile, tier.reduzido] },
   );
 
   useGSAP(
@@ -160,23 +196,20 @@ export function Ato5Projetos() {
     { scope: ref },
   );
 
+  const projeto = PROJETOS[indiceAtual];
+  const escalaCelular = tier.mobile ? 0.56 : 0.32;
+  const celularEstilo = {
+    width: CELULAR_NATIVO.largura * escalaCelular,
+    height: CELULAR_NATIVO.altura * escalaCelular,
+  };
+
   return (
-    <section
-      className={s.raiz}
-      id="ato-projetos"
-      ref={ref}
-      data-modo={horizontalPorScroll ? 'pin' : 'nativo'}
-      aria-labelledby="ato-projetos-rotulo"
-    >
+    <section className={s.raiz} id="ato-projetos" ref={ref} aria-labelledby="ato-projetos-rotulo">
       <div className={s.palco}>
         <div className={`container ${s.cabecalho}`}>
-          <div className={s.marcacao}>
-            <span className={s.numero}>05</span>
-            <span className={s.traco} aria-hidden="true" />
-            <span className={s.nome} id="ato-projetos-rotulo">
-              Projetos
-            </span>
-          </div>
+          <span className="sr-only" id="ato-projetos-rotulo">
+            Projetos
+          </span>
           <Eyebrow>Nossos projetos</Eyebrow>
           <SplitWords
             texto="Sete demonstrações, sete setores."
@@ -189,23 +222,25 @@ export function Ato5Projetos() {
           </Placeholder>
         </div>
 
-        <div className={s.trilho} ref={trilho}>
-          {PROJETOS.map((p) => (
-            <article key={p.n} className={s.cartao}>
-              <div className={s.mockup}>
-                <MockupDuplo matiz={p.matiz} titulo={p.titulo} />
-              </div>
-              <div className={s.info}>
-                <span className={s.nicho}>
-                  <span className={s.indice}>{p.n}</span>
-                  {p.nicho}
-                </span>
-                <h3 className={s.cartaoTitulo}>{p.titulo}</h3>
-                <p className={s.escopo}>{p.escopo}</p>
-                <span className={s.ficticio}>Mockup fictício de demonstração</span>
-              </div>
-            </article>
-          ))}
+        <div className={`container ${s.composicao}`}>
+          <div className={s.notebookWrap} ref={notebookRef}>
+            <NotebookMockup matiz={projeto.matiz} titulo={projeto.titulo} />
+          </div>
+          <div className={s.celularWrap} ref={celularRef} style={celularEstilo}>
+            <IphoneMockup model="15-pro" color="space-black" scale={escalaCelular}>
+              <TelaCelularFake matiz={projeto.matiz} titulo={projeto.titulo} />
+            </IphoneMockup>
+          </div>
+        </div>
+
+        <div className={`container ${s.info}`}>
+          <span className={s.nicho}>
+            <span className={s.indice}>{projeto.n}</span>
+            {projeto.nicho}
+          </span>
+          <h3 className={s.cartaoTitulo}>{projeto.titulo}</h3>
+          <p className={s.escopo}>{projeto.escopo}</p>
+          <span className={s.ficticio}>Mockup fictício de demonstração</span>
         </div>
       </div>
     </section>

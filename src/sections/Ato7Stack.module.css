@@ -22,14 +22,9 @@
   line-height: 1.65;
 }
 
-.dica{
-  display: inline-flex;
-  align-self: flex-start;
-  font-size: var(--fs-micro);
-  letter-spacing: 0.04em;
-  color: var(--acento-claro);
-  border-left: 1px solid var(--linha-acento);
-  padding-left: 0.85rem;
+.destaque{
+  color: var(--acento);
+  font-weight: 600;
 }
 
 .pote{ width: 100%; }

@@ -1,3 +1,4 @@
+import { MessageCircle, AtSign } from 'lucide-react';
 import { MarcaA } from '@/components/ui/MarcaA';
 import { Placeholder } from '@/components/ui/Placeholder';
 import { SITE } from '@/lib/site';
@@ -8,8 +9,7 @@ const WHATSAPP_URL = `https://wa.me/55${SITE.telefone.replace(/\D/g, '')}`;
 
 /**
  * Rodapé. Curto de propósito: o clímax é o Ato 9, e nada aqui deve competir
- * com ele. Existe pelo que a lei e a boa fé pedem: identificação, canal de
- * contato e política de privacidade.
+ * com ele. Informações centralizadas, um único bloco de contato com ícone.
  */
 export function Rodape() {
   return (
@@ -23,31 +23,22 @@ export function Rodape() {
           </p>
         </div>
 
-        <div className={s.coluna}>
-          <h2 className={s.tituloColuna}>Contato</h2>
-          <ul className={s.contatos}>
-            <li>
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                WhatsApp {SITE.telefone}
-              </a>
-            </li>
-            <li>
-              <a href={SITE.redes[0]} target="_blank" rel="noopener noreferrer">
-                Instagram {SITE.instagram}
-              </a>
-            </li>
-          </ul>
-          {!SITE.email && <Placeholder>[E-MAIL · endereço comercial real]</Placeholder>}
-        </div>
+        <ul className={s.contatos}>
+          <li>
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+              <MessageCircle className={s.iconeContato} aria-hidden="true" />
+              WhatsApp {SITE.telefone}
+            </a>
+          </li>
+          <li>
+            <a href={SITE.redes[0]} target="_blank" rel="noopener noreferrer">
+              <AtSign className={s.iconeContato} aria-hidden="true" />
+              {SITE.instagram}
+            </a>
+          </li>
+        </ul>
 
-        <div className={s.coluna}>
-          <h2 className={s.tituloColuna}>Legal</h2>
-          <Placeholder bloco>
-            [LGPD · publicar política de privacidade e vincular aqui antes de coletar
-            qualquer dado. Enquanto não existir formulário, não há coleta]
-          </Placeholder>
-          <Placeholder>[CNPJ · razão social e inscrição]</Placeholder>
-        </div>
+        {!SITE.email && <Placeholder>[E-MAIL · endereço comercial real]</Placeholder>}
       </div>
 
       <div className={`container ${s.rodapinho}`}>

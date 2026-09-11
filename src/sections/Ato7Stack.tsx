@@ -19,7 +19,7 @@ import s from './Ato7Stack.module.css';
  */
 export function Ato7Stack() {
   return (
-    <Ato id="ato-stack" numero="07" rotulo="Ferramentas">
+    <Ato id="ato-stack" rotulo="Ferramentas">
       <div className={s.grade}>
         <div className={s.texto}>
           <Eyebrow>Pode mexer</Eyebrow>
@@ -32,7 +32,8 @@ export function Ato7Stack() {
           <Reveal className={s.corpo} duracao={0.82}>
             <p>
               Nenhuma ferramenta está aqui por moda. Cada uma resolve um problema real, e
-              quem escreveu o código continua mantendo. Arraste uma bolinha e solte.
+              quem escreveu o código continua mantendo. Arraste uma bolinha e solte.{' '}
+              <strong className={s.destaque}>Pode mexer.</strong>
             </p>
           </Reveal>
         </div>

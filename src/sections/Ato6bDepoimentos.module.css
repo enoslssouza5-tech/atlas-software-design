@@ -1,0 +1,77 @@
+.titulo{
+  font-size: var(--fs-titulo);
+  letter-spacing: -0.03em;
+  max-width: 26ch;
+  margin-bottom: 1rem;
+}
+
+.grade{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-top: clamp(2rem, 4vw, 3rem);
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  grid-template-columns: 1fr;
+}
+
+.card{
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: clamp(1.25rem, 2vw, 1.75rem);
+  border: 1px solid var(--linha);
+  border-radius: 12px;
+  background: linear-gradient(168deg, rgba(28, 28, 31, 0.72), rgba(19, 19, 19, 0.42));
+  opacity: 0;
+}
+
+.estrelas{
+  display: flex;
+  gap: 0.2rem;
+  color: var(--acento);
+}
+
+.texto{
+  font-size: clamp(0.9375rem, 1.05vw, 1rem);
+  line-height: 1.55;
+  color: var(--texto);
+  flex: 1;
+}
+
+.assinatura{
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.nome{
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--texto);
+}
+
+.cargo{
+  font-size: var(--fs-micro);
+  color: var(--texto-suave);
+}
+
+.ficticio{
+  align-self: flex-start;
+  margin-top: 0.25rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--acento-claro);
+  border: 1px dashed var(--linha-acento);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+}
+
+@media (min-width: 640px){
+  .grade{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px){
+  .grade{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

@@ -83,7 +83,7 @@ const FAQ: ItemFaq[] = [
 
 export function Ato8Oferta() {
   return (
-    <Ato id="ato-oferta" numero="08" rotulo="Como funciona" claro>
+    <Ato id="ato-oferta" rotulo="Como funciona" claro>
       <Eyebrow>Dúvidas?</Eyebrow>
       <SplitWords
         texto="Sem reunião de descoberta que vira orçamento surpresa."

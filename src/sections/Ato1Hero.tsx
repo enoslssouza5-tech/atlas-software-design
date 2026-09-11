@@ -9,7 +9,7 @@ import { Botao } from '@/components/ui/Botao';
 import { BadgeFallback } from '@/components/three/BadgeFallback';
 import { useCracha3d } from '@/components/three/Cracha';
 import { useDeviceTier } from '@/lib/use-device-tier';
-import { CENAS, definirAlvo, sinal } from '@/lib/cena-signal';
+import { CENAS, definirAlvo, pontoDeTelaParaCena, sinal } from '@/lib/cena-signal';
 import { DIST, DUR, EASE, SILENCIO } from '@/lib/motion-tokens';
 import s from './Ato1Hero.module.css';
 
@@ -25,6 +25,7 @@ const HEADLINE =
  */
 export function Ato1Hero() {
   const ref = useRef<HTMLElement>(null);
+  const espacoCracha = useRef<HTMLDivElement>(null);
   const { liberado } = useAbertura();
   const { irPara } = useLenis();
   const tem3d = useCracha3d();
@@ -37,16 +38,45 @@ export function Ato1Hero() {
       if (!raiz) return;
 
       // O crachá é reivindicado por este ato enquanto ele estiver na tela.
-      const st = ScrollTrigger.create({
-        trigger: raiz,
-        start: 'top 60%',
-        end: 'bottom 22%',
-        onToggle: (self) => {
-          if (self.isActive) definirAlvo(alvoCena);
-        },
-        onLeave: () => definirAlvo(CENAS.oculto),
-        onLeaveBack: () => definirAlvo(CENAS.oculto),
-      });
+      // No mobile não existe um x/y fixo: a posição é recalculada a partir
+      // do retângulo do espaço reservado abaixo dos botões (`espacoCracha`),
+      // pra o crachá 3D (Canvas fixo, fora do fluxo normal) grudar
+      // visualmente nesse lugar em vez de sobrepor o texto.
+      const elEspaco = espacoCracha.current;
+      const st =
+        tier.mobile && elEspaco
+          ? ScrollTrigger.create({
+              trigger: raiz,
+              start: 'top 60%',
+              end: 'bottom 22%',
+              scrub: true,
+              onUpdate: (self) => {
+                if (!self.isActive) return;
+                const r = elEspaco.getBoundingClientRect();
+                const { x, y } = pontoDeTelaParaCena(
+                  r.left + r.width / 2,
+                  r.top + r.height / 2,
+                );
+                definirAlvo({
+                  x,
+                  y,
+                  escala: CENAS.heroMobile.escala,
+                  opacidade: CENAS.heroMobile.opacidade,
+                });
+              },
+              onLeave: () => definirAlvo(CENAS.oculto),
+              onLeaveBack: () => definirAlvo(CENAS.oculto),
+            })
+          : ScrollTrigger.create({
+              trigger: raiz,
+              start: 'top 60%',
+              end: 'bottom 22%',
+              onToggle: (self) => {
+                if (self.isActive) definirAlvo(alvoCena);
+              },
+              onLeave: () => definirAlvo(CENAS.oculto),
+              onLeaveBack: () => definirAlvo(CENAS.oculto),
+            });
 
       // Meia volta do crachá, presa ao scroll só enquanto o Hero passa pela
       // tela. `end` termina ANTES do gatilho de ativação acima soltar o
@@ -72,7 +102,7 @@ export function Ato1Hero() {
         // timeline, só `.acoes > *` (os botões); esconder o contêiner aqui
         // deixava um opacity:0 órfão que o revert do próximo run não
         // limpava, e os dois botões ficavam invisíveis pra sempre.
-        gsap.set([`.${s.sub}`, `.${s.acoes} > *`, `.${s.indicador}`, `.${s.microcopy}`], {
+        gsap.set([`.${s.sub}`, `.${s.acoes} > *`, `.${s.indicador}`], {
           opacity: 0,
         });
         return () => {
@@ -105,16 +135,10 @@ export function Ato1Hero() {
           t(1.44),
         )
         .fromTo(
-          `.${s.microcopy}`,
-          { opacity: 0, y: DIST.curto },
-          { opacity: 1, y: 0, duration: DUR.curta, ease: EASE.entrada },
-          t(1.62),
-        )
-        .fromTo(
           `.${s.indicador}`,
           { opacity: 0, y: -14 },
           { opacity: 1, y: 0, duration: DUR.curta, ease: EASE.entrada },
-          t(1.72),
+          t(1.62),
         );
 
       // pulso do indicador de scroll, único loop infinito da abertura
@@ -135,7 +159,7 @@ export function Ato1Hero() {
         stGiro.kill();
       };
     },
-    { scope: ref, dependencies: [liberado, alvoCena] },
+    { scope: ref, dependencies: [liberado, alvoCena, tem3d] },
   );
 
   return (
@@ -165,9 +189,12 @@ export function Ato1Hero() {
             </Botao>
           </div>
 
-          <p className={s.microcopy}>
-            Sem compromisso. Você conta o problema, a Atlas diz se resolve.
-          </p>
+          {/* Só reserva espaço quando existe cena 3D pra mirar: no mobile
+              (ver CSS), o crachá (Canvas fixo, fora do fluxo normal) usa
+              esse retângulo pra aparecer abaixo dos botões, nunca sobre o
+              texto. Sem WebGL o substituto estático já cai no lugar certo
+              sozinho, por ordem normal do DOM. */}
+          {tem3d && <div ref={espacoCracha} className={s.espacoCracha} aria-hidden="true" />}
         </div>
 
         {/* Sem WebGL ou em conexão econômica, o crachá estático ocupa

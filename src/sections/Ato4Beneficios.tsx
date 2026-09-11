@@ -113,7 +113,7 @@ export function Ato4Beneficios() {
 
   return (
     <div ref={ref}>
-      <Ato id="ato-beneficios" numero="04" rotulo="O que muda" claro>
+      <Ato id="ato-beneficios" rotulo="O que muda" claro>
         <Eyebrow>O que fica depois que o projeto entra no ar</Eyebrow>
         <SplitWords
           texto="O diferencial não é o código. É o que sobra depois dele."

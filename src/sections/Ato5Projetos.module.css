@@ -1,26 +1,18 @@
 .raiz{
   position: relative;
   z-index: 2;
-  background: var(--preto);
-  padding-block: var(--ato-py) 0;
-  overflow: hidden;
-}
-
-/* No modo pinado a seção precisa caber EXATAMENTE numa tela: o pin prende o
-   topo, e qualquer altura sobrando ficaria cortada embaixo sem chance de
-   ser rolada. */
-.raiz[data-modo='pin']{
   height: 100svh;
-  padding-block: 0;
   display: flex;
   align-items: center;
+  background: var(--preto);
+  overflow: hidden;
 }
 
 .palco{
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: clamp(1.5rem, 3.4vw, 2.5rem);
+  gap: clamp(1.25rem, 2.6vw, 2rem);
 }
 
 .cabecalho{
@@ -30,81 +22,44 @@
   opacity: 0;
 }
 
-.marcacao{
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-}
-
-.numero{
-  font-family: var(--font-display);
-  font-size: var(--fs-micro);
-  letter-spacing: 0.18em;
-  color: var(--acento);
-}
-
-.traco{
-  width: clamp(28px, 5vw, 64px);
-  height: 1px;
-  background: var(--linha-acento);
-}
-
-.nome{
-  font-size: var(--fs-micro);
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  color: var(--texto-suave);
-}
-
 .titulo{
   font-size: var(--fs-titulo);
   letter-spacing: -0.03em;
   max-width: 18ch;
 }
 
-/* ---------- trilho ---------- */
+/* ---------- composição: notebook + celular ---------- */
 
-.trilho{
+.composicao{
+  position: relative;
   display: flex;
-  gap: clamp(1rem, 2.4vw, 1.75rem);
-  padding-inline: var(--gut);
+  align-items: flex-end;
+  justify-content: center;
+  min-height: clamp(200px, 32vw, 360px);
+}
+
+.notebookWrap{
+  width: min(74vw, 620px);
+  perspective: 1400px;
   will-change: transform;
 }
 
-/* Modo nativo (mobile e reduced motion): o dedo arrasta, com encaixe suave.
-   Nada de sequestrar o scroll vertical no toque. */
-.raiz[data-modo='nativo'] .trilho{
-  padding-bottom: var(--ato-py);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+.celularWrap{
+  position: absolute;
+  right: clamp(1rem, 9vw, 5rem);
+  bottom: clamp(-1.5rem, -3vw, -2rem);
+  overflow: hidden;
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.5));
 }
 
-.raiz[data-modo='nativo'] .trilho::-webkit-scrollbar{ display: none; }
-
-.raiz[data-modo='nativo'] .cartao{ scroll-snap-align: center; }
-
-.cartao{
-  flex: 0 0 auto;
-  width: min(76vw, 26rem);
-  display: flex;
-  flex-direction: column;
-  gap: clamp(1rem, 2vw, 1.5rem);
-  padding: clamp(1.1rem, 2.2vw, 1.75rem);
-  border: 1px solid var(--linha);
-  border-radius: 12px;
-  background: linear-gradient(172deg, rgba(28, 28, 31, 0.62), rgba(10, 10, 10, 0.3));
-}
-
-.mockup{
-  will-change: transform;
-}
+/* ---------- info do projeto atual ---------- */
 
 .info{
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  align-items: center;
+  text-align: center;
+  gap: 0.4rem;
 }
 
 .nicho{
@@ -124,9 +79,9 @@
 }
 
 .cartaoTitulo{
-  font-size: clamp(1.125rem, 1.8vw, 1.4375rem);
+  font-size: clamp(1.0625rem, 1.6vw, 1.3125rem);
   letter-spacing: -0.02em;
-  max-width: 24ch;
+  max-width: 32ch;
 }
 
 .escopo{
@@ -135,8 +90,7 @@
 }
 
 .ficticio{
-  margin-top: 0.35rem;
-  align-self: flex-start;
+  margin-top: 0.25rem;
   font-size: 0.6875rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -147,5 +101,18 @@
 }
 
 @media (min-width: 1024px){
-  .cartao{ width: min(38vw, 27rem); }
+  .notebookWrap{ width: min(50vw, 740px); }
+  .composicao{ min-height: clamp(280px, 26vw, 420px); }
+}
+
+/* Sem notebook no mobile: só o celular, centralizado. Tamanho vem de
+   estilo inline (calculado a partir da escala do IphoneMockup), não daqui. */
+@media (max-width: 767px){
+  .notebookWrap{ display: none; }
+  .composicao{ justify-content: center; min-height: clamp(320px, 70vw, 420px); }
+  .celularWrap{ position: static; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .raiz{ height: auto; padding-block: var(--ato-py); }
 }
