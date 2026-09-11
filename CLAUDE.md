@@ -286,3 +286,30 @@ Regra: a lista de seletores escondida no estado inicial (`gsap.set(...,
 entrada revela depois. Nunca esconder o contêiner se quem anima de volta são
 só os filhos.
 
+---
+
+## Higiene de contexto (Claude Code)
+
+Comando com saída grande (`grep`, build, git, listagem de diretório) nunca entra
+inteiro no contexto por padrão. Sempre corte antes:
+
+- `grep`/`rg`: usar `head_limit` ou `-A/-B` pequeno, nunca saída sem limite.
+- Build/testes: mostrar só o resumo final e a primeira falha, nunca o log inteiro
+  quando passa.
+- Saída de git (`git init`, `git log` grande): resumir em texto próprio, não colar
+  o terminal bruto.
+- Nunca rodar o mesmo comando de verificação duas vezes seguidas esperando
+  resultado diferente sem motivo novo.
+
+---
+
+## Estilo de resposta (Claude Code)
+
+Vale pra sessão inteira:
+
+- Direto ao ponto: a resposta vem na primeira frase.
+- Frases curtas. Um assunto por parágrafo.
+- Problema em 1 linha; solução em passos numerados.
+- Termo técnico só se explicar em seguida, em uma frase.
+- Se faltar informação pra executar, pergunte ANTES de fazer.
+

@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { SplitWords } from '@/components/ui/SplitWords';
 import { Reveal } from '@/components/ui/Reveal';
-import { Placeholder } from '@/components/ui/Placeholder';
 import { useDeviceTier } from '@/lib/use-device-tier';
 import { DIST, DUR, EASE, STAGGER } from '@/lib/motion-tokens';
 import s from './Ato3Solucao.module.css';
@@ -110,7 +109,14 @@ export function Ato3Solucao() {
     () => {
       const raiz = ref.current;
       const alvo = palco.current;
-      if (!raiz || !alvo) return;
+      // Sem esperar `tier.pronto`, o primeiro efeito roda com `tier.mobile`
+      // no valor inicial (false, ver use-device-tier.ts) e monta o pin+scrub
+      // de desktop por um instante, antes do efeito rodar de novo já certo
+      // pro mobile. O primeiro card da lista (o único cujo `fromTo` aplica
+      // estado inicial na hora, por `immediateRender`) ficava preso a meio
+      // caminho da animação depois da troca. Mesma proteção que
+      // `Ato5Projetos.tsx` já usa.
+      if (!raiz || !alvo || !tier.pronto) return;
 
       const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const cartoes = gsap.utils.toArray<HTMLElement>(`.${s.cartao}`);
@@ -174,7 +180,7 @@ export function Ato3Solucao() {
       // montando duas vezes, cada remontagem empilhava mais um espaçador, e a
       // página crescia sozinha e todos os gatilhos abaixo saíam do lugar.
     },
-    { scope: ref, dependencies: [tier.mobile] },
+    { scope: ref, dependencies: [tier.pronto, tier.mobile] },
   );
 
   return (
@@ -197,13 +203,6 @@ export function Ato3Solucao() {
               </article>
             ))}
           </div>
-
-          <p className={s.nota}>
-            <Placeholder>
-              [O QUE ESTÁ INCLUSO · confirmar com a Atlas o que entra em cada frente e o
-              que fica de fora]
-            </Placeholder>
-          </p>
 
           <Reveal className={s.mecanismo} distancia={DIST.curto} duracao={DUR.longa}>
             <p>

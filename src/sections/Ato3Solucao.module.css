@@ -1,6 +1,7 @@
 .raiz{
   position: relative;
   z-index: 2;
+  scroll-margin-top: 6rem;
   /* 300vh de curso pra o pin ter o que arrastar */
   height: 300vh;
   /* Fundo transparente de propósito: o Canvas do crachá é fixo em z-index 1 e
@@ -35,6 +36,8 @@
   font-size: clamp(1.6rem, 3.6vw, 2.75rem);
   letter-spacing: -0.035em;
   max-width: 20ch;
+  margin-inline: auto;
+  text-align: center;
 }
 
 .blocos{

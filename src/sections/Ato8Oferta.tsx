@@ -131,7 +131,7 @@ export function Ato8Oferta() {
       </div>
 
       <div className={s.faq}>
-        <h3 className={s.subtitulo}>Antes de você perguntar</h3>
+        <h3 className={`${s.subtitulo} ${s.subtituloFaq}`}>Antes de você perguntar</h3>
         <Acordeao itens={FAQ} idBase="faq-atlas" />
       </div>
     </Ato>

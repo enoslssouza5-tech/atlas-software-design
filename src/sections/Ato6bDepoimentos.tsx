@@ -7,7 +7,6 @@ import { SplitWords } from '@/components/ui/SplitWords';
 import { Reveal } from '@/components/ui/Reveal';
 import { Avatar } from '@/components/ui/Avatar';
 import { Marquee } from '@/components/ui/Marquee';
-import { Placeholder } from '@/components/ui/Placeholder';
 import { DIST, DUR } from '@/lib/motion-tokens';
 import s from './Ato6bDepoimentos.module.css';
 
@@ -111,11 +110,6 @@ export function Ato6bDepoimentos() {
   return (
     <Ato id="ato-depoimentos" rotulo="Depoimentos">
       <SplitWords texto="O que as empresas dizem depois do projeto no ar." como="h2" className={s.titulo} />
-
-      <Placeholder bloco>
-        [DEPOIMENTOS · os dez a seguir são fictícios de demonstração. Substituir por
-        depoimentos reais, com consentimento por escrito de cada cliente]
-      </Placeholder>
 
       <Reveal distancia={DIST.curto} duracao={DUR.longa} className={s.envoltorioFaixa}>
         <Marquee>

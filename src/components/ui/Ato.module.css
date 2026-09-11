@@ -3,6 +3,11 @@
 .raiz{
   position: relative;
   z-index: 2;
+  /* header fixo cobre o topo da seção quando o menu rola direto pra cá
+     (irPara chama lenis.scrollTo com offset 0). scroll-margin-top é lido
+     nativamente pelo Lenis, então essa margem sozinha já resolve, sem
+     mexer no header. */
+  scroll-margin-top: 6rem;
   padding-block: var(--ato-py);
   background: transparent;
 }

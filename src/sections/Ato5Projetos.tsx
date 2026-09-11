@@ -6,7 +6,6 @@ import { SplitWords } from '@/components/ui/SplitWords';
 import { NotebookMockup } from '@/components/ui/NotebookMockup';
 import { IphoneMockup } from '@/components/ui/IphoneMockup';
 import { TelaCelularFake } from '@/components/ui/TelaCelularFake';
-import { Placeholder } from '@/components/ui/Placeholder';
 import { useDeviceTier } from '@/lib/use-device-tier';
 import { DUR, EASE } from '@/lib/motion-tokens';
 import s from './Ato5Projetos.module.css';
@@ -214,10 +213,6 @@ export function Ato5Projetos() {
             como="h2"
             className={s.titulo}
           />
-          <Placeholder bloco>
-            [PROJETOS · os sete abaixo são mockups fictícios de demonstração. Substituir
-            por trabalhos reais da Atlas, com autorização de cada cliente]
-          </Placeholder>
         </div>
 
         <div className={`container ${s.composicao}`}>

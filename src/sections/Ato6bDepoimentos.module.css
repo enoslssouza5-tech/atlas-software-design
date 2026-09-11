@@ -2,7 +2,9 @@
   font-size: var(--fs-titulo);
   letter-spacing: -0.03em;
   max-width: 26ch;
+  margin-inline: auto;
   margin-bottom: 1rem;
+  text-align: center;
 }
 
 .envoltorioFaixa{

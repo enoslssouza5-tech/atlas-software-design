@@ -2,8 +2,10 @@
   font-size: var(--fs-display);
   letter-spacing: -0.035em;
   max-width: 16ch;
+  margin-inline: auto;
   color: var(--texto);
   margin-bottom: clamp(2rem, 4.5vw, 3.25rem);
+  text-align: center;
 }
 
 /* ---------- oferta ---------- */
@@ -60,6 +62,13 @@
   letter-spacing: -0.025em;
   color: var(--texto);
   margin-bottom: clamp(1.25rem, 2.6vw, 1.9rem);
+}
+
+/* só o título da FAQ ("Antes de você perguntar") centraliza, por pedido
+   específico. "As cinco perguntas que todo mundo faz" usa a mesma
+   `.subtitulo` base e fica de fora de propósito. */
+.subtituloFaq{
+  text-align: center;
 }
 
 .objecoes{ margin-bottom: clamp(2.5rem, 5.5vw, 4rem); }

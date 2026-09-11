@@ -1,6 +1,7 @@
 .raiz{
   position: relative;
   z-index: 2;
+  scroll-margin-top: 6rem;
   min-height: 100svh;
   display: flex;
   align-items: center;

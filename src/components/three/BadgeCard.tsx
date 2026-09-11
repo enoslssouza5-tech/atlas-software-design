@@ -8,14 +8,10 @@ export const CARTAO = { largura: 1.36, altura: 2.02, espessura: 0.062 };
 
 type Socio = { nome: string; setor: string };
 
-/**
- * As duas faces do crachá. `setor` fica em placeholder visível enquanto o
- * cargo real de cada sócio não chega, igual a qualquer outro dado não
- * confirmado no site: nunca inventar, sempre marcar o que falta.
- */
+/** As duas faces do crachá, com o nome e o cargo confirmados de cada sócio. */
 const SOCIOS: { frente: Socio; verso: Socio } = {
-  frente: { nome: 'Enos', setor: '[SETOR · confirmar cargo do Enos]' },
-  verso: { nome: 'Lucas', setor: '[SETOR · confirmar cargo do Lucas]' },
+  frente: { nome: 'Enos', setor: 'Sócio Administrativo' },
+  verso: { nome: 'Lucas', setor: 'Diretor Comercial' },
 };
 
 const PAINEL = { largura: CARTAO.largura - 0.16, altura: 1.5 };
@@ -81,7 +77,7 @@ function desenharFace(ctx: CanvasRenderingContext2D, socio: Socio) {
   ctx.font = `600 ${Math.round(largura * 0.085)}px system-ui, -apple-system, sans-serif`;
   ctx.fillText(socio.nome, cx, altura * 0.665);
 
-  // setor, placeholder enquanto o cargo real não é confirmado
+  // cargo, dado real
   ctx.fillStyle = '#8A8A92';
   ctx.font = `500 ${Math.round(largura * 0.034)}px system-ui, -apple-system, sans-serif`;
   const linhas = quebrarLinha(ctx, socio.setor, largura * 0.84);

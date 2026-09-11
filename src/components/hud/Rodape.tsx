@@ -1,6 +1,5 @@
 import { MessageCircle, AtSign } from 'lucide-react';
 import { MarcaA } from '@/components/ui/MarcaA';
-import { Placeholder } from '@/components/ui/Placeholder';
 import { SITE } from '@/lib/site';
 import s from './Rodape.module.css';
 
@@ -37,8 +36,6 @@ export function Rodape() {
             </a>
           </li>
         </ul>
-
-        {!SITE.email && <Placeholder>[E-MAIL · endereço comercial real]</Placeholder>}
       </div>
 
       <div className={`container ${s.rodapinho}`}>

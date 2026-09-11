@@ -3,6 +3,7 @@
 .raiz{
   position: relative;
   z-index: 2;
+  scroll-margin-top: 6rem;
   height: 100svh;
   display: flex;
   align-items: center;
@@ -28,6 +29,8 @@
   font-size: var(--fs-titulo);
   letter-spacing: -0.03em;
   max-width: 18ch;
+  margin-inline: auto;
+  text-align: center;
 }
 
 /* ---------- composição: notebook + celular ---------- */
