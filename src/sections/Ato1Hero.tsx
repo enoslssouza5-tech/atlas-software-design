@@ -9,7 +9,7 @@ import { Botao } from '@/components/ui/Botao';
 import { BadgeFallback } from '@/components/three/BadgeFallback';
 import { useCracha3d } from '@/components/three/Cracha';
 import { useDeviceTier } from '@/lib/use-device-tier';
-import { CENAS, definirAlvo, pontoDeTelaParaCena, sinal } from '@/lib/cena-signal';
+import { CENAS, definirAlvo, sinal } from '@/lib/cena-signal';
 import { DIST, DUR, EASE, SILENCIO } from '@/lib/motion-tokens';
 import s from './Ato1Hero.module.css';
 
@@ -25,7 +25,6 @@ const HEADLINE =
  */
 export function Ato1Hero() {
   const ref = useRef<HTMLElement>(null);
-  const espacoCracha = useRef<HTMLDivElement>(null);
   const { liberado } = useAbertura();
   const { irPara } = useLenis();
   const tem3d = useCracha3d();
@@ -38,56 +37,27 @@ export function Ato1Hero() {
       if (!raiz) return;
 
       // O crachá é reivindicado por este ato enquanto ele estiver na tela.
-      // No mobile não existe um x/y fixo: a posição é recalculada a partir
-      // do retângulo do espaço reservado abaixo dos botões (`espacoCracha`),
-      // pra o crachá 3D (Canvas fixo, fora do fluxo normal) grudar
-      // visualmente nesse lugar em vez de sobrepor o texto.
+      // Posição fixa em x/y (`alvoCena`, um por breakpoint) desde a entrada:
+      // nenhum tween nem ScrollTrigger muda a posição do objeto depois disso,
+      // só a rotação (`stGiro` abaixo). Uma versão anterior recalculava x/y
+      // a cada frame de scroll no mobile, seguindo o retângulo do espaço
+      // reservado (`espacoCracha`) conforme a página rolava, o que fazia o
+      // crachá "andar" verticalmente enquanto girava. `onToggle`, não
+      // `onUpdate`/`scrub`, garante que a posição só é escrita uma vez, ao
+      // entrar na seção, e nunca mais durante o resto do scroll do Hero.
       // `end` em 'bottom 55%' bate exatamente com o fim do giro (`stGiro`
       // abaixo): o crachá começa a sumir por opacidade no mesmo ponto de
       // scroll em que a meia volta termina, não 200px de scroll depois.
-      // Antes os dois `end` eram diferentes ('bottom 22%' aqui) e sobrava
-      // uma janela de scroll inteira com o crachá girado, parado, em
-      // opacidade máxima, sem nada cobrindo, flutuando por cima do Ato 2
-      // (que agora é transparente pro fundo de partículas aparecer atrás
-      // dele). O fade em si continua suave: `estado.opacidade` no
-      // `BadgeScene` interpola por frame até o alvo, então virar o alvo
-      // pra `CENAS.oculto` aqui não é um corte seco, é o início de uma
-      // transição de menos de um segundo.
-      const elEspaco = espacoCracha.current;
-      const st =
-        tier.mobile && elEspaco
-          ? ScrollTrigger.create({
-              trigger: raiz,
-              start: 'top 60%',
-              end: 'bottom 55%',
-              scrub: true,
-              onUpdate: (self) => {
-                if (!self.isActive) return;
-                const r = elEspaco.getBoundingClientRect();
-                const { x, y } = pontoDeTelaParaCena(
-                  r.left + r.width / 2,
-                  r.top + r.height / 2,
-                );
-                definirAlvo({
-                  x,
-                  y,
-                  escala: CENAS.heroMobile.escala,
-                  opacidade: CENAS.heroMobile.opacidade,
-                });
-              },
-              onLeave: () => definirAlvo(CENAS.oculto),
-              onLeaveBack: () => definirAlvo(CENAS.oculto),
-            })
-          : ScrollTrigger.create({
-              trigger: raiz,
-              start: 'top 60%',
-              end: 'bottom 55%',
-              onToggle: (self) => {
-                if (self.isActive) definirAlvo(alvoCena);
-              },
-              onLeave: () => definirAlvo(CENAS.oculto),
-              onLeaveBack: () => definirAlvo(CENAS.oculto),
-            });
+      const st = ScrollTrigger.create({
+        trigger: raiz,
+        start: 'top 60%',
+        end: 'bottom 55%',
+        onToggle: (self) => {
+          if (self.isActive) definirAlvo(alvoCena);
+        },
+        onLeave: () => definirAlvo(CENAS.oculto),
+        onLeaveBack: () => definirAlvo(CENAS.oculto),
+      });
 
       // Meia volta do crachá, presa ao scroll só enquanto o Hero passa pela
       // tela. Scrub sem suavização por baixo garante progresso 1 para 1:
@@ -178,11 +148,11 @@ export function Ato1Hero() {
           </div>
 
           {/* Só reserva espaço quando existe cena 3D pra mirar: no mobile
-              (ver CSS), o crachá (Canvas fixo, fora do fluxo normal) usa
-              esse retângulo pra aparecer abaixo dos botões, nunca sobre o
-              texto. Sem WebGL o substituto estático já cai no lugar certo
-              sozinho, por ordem normal do DOM. */}
-          {tem3d && <div ref={espacoCracha} className={s.espacoCracha} aria-hidden="true" />}
+              (ver CSS), fica abaixo dos botões, pro crachá (Canvas fixo,
+              posição fixa em `CENAS.heroMobile`) nunca sobrepor o texto.
+              Sem WebGL o substituto estático já cai no lugar certo sozinho,
+              por ordem normal do DOM. */}
+          {tem3d && <div className={s.espacoCracha} aria-hidden="true" />}
         </div>
 
         {/* Sem WebGL ou em conexão econômica, o crachá estático ocupa

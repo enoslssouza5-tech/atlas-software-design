@@ -2,8 +2,8 @@
   position: relative;
   z-index: 2;
   scroll-margin-top: 6rem;
-  /* 300vh de curso pra o pin ter o que arrastar */
-  height: 300vh;
+  height: auto;
+  padding-block: var(--ato-py);
   /* Fundo transparente de propósito: o Canvas do crachá é fixo em z-index 1 e
      esta seção vive em z-index 2. Pintar o preto aqui esconderia a cena 3D
      justamente nos dois atos em que ela precisa reaparecer. O preto vem do
@@ -12,10 +12,9 @@
 }
 
 .palco{
-  height: 100svh;
+  height: auto;
   display: flex;
   align-items: center;
-  overflow: hidden;
 }
 
 .interno{
@@ -53,7 +52,10 @@
   padding: clamp(1rem, 1.8vw, 1.5rem);
   border: 1px solid var(--linha);
   border-radius: 12px;
-  background: linear-gradient(168deg, rgba(28, 28, 31, 0.72), rgba(19, 19, 19, 0.42));
+  /* Opacidade de fundo mais alta que antes (0.72/0.42): contra o fundo de
+     partículas em movimento, o contraste do texto ficava fraco em qualquer
+     ponto mais claro do fundo animado. */
+  background: linear-gradient(168deg, rgba(28, 28, 31, 0.94), rgba(19, 19, 19, 0.86));
   opacity: 0;
   transition: transform 0.24s var(--ease-cine), border-color 0.24s var(--ease-cine),
     box-shadow 0.24s var(--ease-cine);
@@ -96,6 +98,11 @@
   padding-left: clamp(0.9rem, 1.8vw, 1.4rem);
 }
 
+.destaque{
+  font-size: clamp(1.25rem, 2vw, 1.625rem);
+  color: var(--acento);
+}
+
 @media (min-width: 640px){
   .blocos{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -104,20 +111,7 @@
   .blocos{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
-/* Sem pin no mobile: o pin+scrub de 300vh/100svh desalinhava assim que a
-   barra de endereço do navegador aparecia ou sumia, e os cards ficavam
-   presos no opacity:0 inicial pra sempre. Vira lista comum com fade-in
-   simples (ver o branch `tier.mobile` no componente). */
-@media (max-width: 767px){
-  .raiz{ height: auto; padding-block: var(--ato-py); }
-  .palco{ height: auto; }
-}
-
-/* Sem pin em reduced motion: a seção precisa de altura natural, senão
-   sobrariam 200vh de nada. */
 @media (prefers-reduced-motion: reduce){
-  .raiz{ height: auto; padding-block: var(--ato-py); }
-  .palco{ height: auto; }
   .cartao{ opacity: 1; }
 }
 

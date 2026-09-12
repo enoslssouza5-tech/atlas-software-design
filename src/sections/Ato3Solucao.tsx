@@ -11,16 +11,16 @@ import s from './Ato3Solucao.module.css';
 /**
  * ATO 3: REVELAÇÃO DA SOLUÇÃO
  *
- * Único trecho pinado da página, só no desktop. A seção mede 300vh, o
- * palco fica preso em 100vh e o scrub 1.2 dá o arrasto de câmera: o
- * usuário empurra a cena, e ela responde com um leve atraso, como um
- * travelling pesado.
+ * A entrada dos seis cards é um fade e leve subida disparado uma única vez
+ * quando a seção entra na tela, com stagger entre eles. Não é mais um pin
+ * com scrub: amarrar a opacidade de cada card ao progresso contínuo do
+ * scroll fazia o efeito parecer errático, e a opacidade ficava inconsistente
+ * pra quem subia e descia a página depois de já ter visto a seção. Uma vez
+ * revelados, os cards ficam visíveis, sem recalcular nada.
  *
- * No mobile o pin não entra: `100svh`/`300vh` misturados com a barra de
- * endereço do navegador aparecendo e sumindo desalinhava o cálculo do
- * ScrollTrigger, e os cards ficavam presos no `opacity:0` inicial pra
- * sempre. A seção mobile vira uma lista comum com fade-in simples, mesmo
- * padrão de `Ato5Projetos.tsx` pro carrossel.
+ * Mesmo mecanismo em desktop e mobile agora (o mobile já usava fade-in
+ * simples, sem pin, desde que o pin+scrub de 300vh/100svh desalinhava com a
+ * barra de endereço do navegador aparecendo e sumindo).
  */
 
 const tracoComum = {
@@ -102,90 +102,43 @@ const FRENTES = [
 
 export function Ato3Solucao() {
   const ref = useRef<HTMLElement>(null);
-  const palco = useRef<HTMLDivElement>(null);
   const tier = useDeviceTier();
 
   useGSAP(
     () => {
       const raiz = ref.current;
-      const alvo = palco.current;
-      // Sem esperar `tier.pronto`, o primeiro efeito roda com `tier.mobile`
-      // no valor inicial (false, ver use-device-tier.ts) e monta o pin+scrub
-      // de desktop por um instante, antes do efeito rodar de novo já certo
-      // pro mobile. O primeiro card da lista (o único cujo `fromTo` aplica
-      // estado inicial na hora, por `immediateRender`) ficava preso a meio
-      // caminho da animação depois da troca. Mesma proteção que
-      // `Ato5Projetos.tsx` já usa.
-      if (!raiz || !alvo || !tier.pronto) return;
+      if (!raiz || !tier.pronto) return;
 
       const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const cartoes = gsap.utils.toArray<HTMLElement>(`.${s.cartao}`);
 
-      // Menos movimento: nada de pin, nada de scrub. A seção vira uma lista
-      // comum e continua legível do começo ao fim.
+      // Menos movimento: sem stagger, sem subida. A seção continua legível
+      // do começo ao fim.
       if (reduzido) {
         gsap.set(cartoes, { opacity: 1, y: 0 });
         return;
       }
 
-      // No mobile o pin não entra (ver comentário no topo do arquivo): fica
-      // uma entrada simples em stagger, disparada uma vez, sem prender
-      // scroll nem depender da altura da viewport mudando.
-      if (tier.mobile) {
-        gsap.fromTo(
-          cartoes,
-          { opacity: 0, y: DIST.medio },
-          {
-            opacity: 1,
-            y: 0,
-            duration: DUR.media,
-            ease: EASE.entrada,
-            stagger: STAGGER.padrao,
-            scrollTrigger: { trigger: `.${s.blocos}`, start: 'top 80%', once: true },
-          },
-        );
-        return;
-      }
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: raiz,
-          start: 'top top',
-          end: '+=200%',
-          pin: alvo,
-          // A seção já mede 300vh no CSS: 100vh de palco + 200vh de curso.
-          // Deixar o pinSpacing reservar espaço de novo dobrava a altura e
-          // abria um vazio depois do ato.
-          pinSpacing: false,
-          // Pinado e acima do Ato 5: recalcula antes dele, que por sua vez
-          // recalcula antes de todo o resto.
-          refreshPriority: 2,
-          scrub: 1.2,
+      gsap.fromTo(
+        cartoes,
+        { opacity: 0, y: tier.mobile ? DIST.medio : DIST.longo },
+        {
+          opacity: 1,
+          y: 0,
+          duration: tier.mobile ? DUR.media : DUR.longa,
+          ease: EASE.entrada,
+          // 0.2s de diferença entre blocos, disparado uma vez ao entrar.
+          stagger: tier.mobile ? STAGGER.padrao : 0.2,
+          scrollTrigger: { trigger: `.${s.blocos}`, start: 'top 80%', once: true },
         },
-      });
-
-      cartoes.forEach((cartao, i) => {
-        tl.fromTo(
-          cartao,
-          { opacity: 0, y: DIST.longo },
-          { opacity: 1, y: 0, duration: DUR.longa, ease: EASE.entrada },
-          // 0.2s de diferença entre blocos, na régua do scrub
-          i * 0.2,
-        );
-      });
-
-      // Sem cleanup manual de propósito. O useGSAP já reverte o que foi criado
-      // dentro do escopo, e reverter é o ponto: ScrollTrigger.kill() sem
-      // revert deixa o espaçador do pin no DOM. Em dev, com o StrictMode
-      // montando duas vezes, cada remontagem empilhava mais um espaçador, e a
-      // página crescia sozinha e todos os gatilhos abaixo saíam do lugar.
+      );
     },
     { scope: ref, dependencies: [tier.pronto, tier.mobile] },
   );
 
   return (
     <section className={s.raiz} id="ato-solucao" ref={ref} aria-labelledby="ato-solucao-rotulo">
-      <div className={s.palco} ref={palco}>
+      <div className={s.palco}>
         <div className={`container ${s.interno}`}>
           <header className={s.cabecalho}>
             <span className="sr-only" id="ato-solucao-rotulo">
@@ -206,8 +159,8 @@ export function Ato3Solucao() {
 
           <Reveal className={s.mecanismo} distancia={DIST.curto} duracao={DUR.longa}>
             <p>
-              A mesma equipe constrói, cuida do anúncio e dá suporte depois. Nada se perde
-              entre fornecedores.
+              A mesma equipe constrói, cuida do anúncio e dá suporte depois.{' '}
+              <span className={s.destaque}>Nada se perde entre fornecedores.</span>
             </p>
           </Reveal>
         </div>

@@ -166,7 +166,7 @@ Mockups de projeto sempre marcados como fictícios de demonstração.
 0. **Preloader** — logo com stroke-dasharray, máx. 2.5s, pula via `sessionStorage`, nunca bloqueia além de 3s.
 1. **Abertura (Hero)** — 100svh, cena 3D do crachá, reação ao mouse máx. 8–10°, headline palavra por palavra. Silêncio de 0.4s antes de qualquer animação.
 2. **A dor** — só tipografia, fundo escuro, sem imagem.
-3. **Revelação da solução** — ScrollTrigger `pin: true`, `scrub: 1.2`, `height: 300vh`, sticky 100vh, blocos em sequência com 0.2s de diferença.
+3. **Revelação da solução** — sem pin. Fade e leve subida disparados uma única vez ao entrar na tela, blocos em sequência com 0.2s de diferença de stagger.
 4. **Benefícios** — grid, ícones em traço fino laranja, sem área sólida.
 5. **Projetos** — carrossel horizontal, mockup duplo (notebook + celular), parallax.
 6. **Prova social** — banda com parallax, contadores GSAP (1.5–1.8s) quando houver dado real.
@@ -214,7 +214,8 @@ o espaçador do pin existir e ficavam **1792px adiantados**: o crachá do Ato 9
 reaparecia no meio do Ato 8 e sumia no clímax.
 
 Regra: **todo ScrollTrigger com `pin` declara `refreshPriority`**, maior para
-quem vem antes na página. Hoje: Ato 3 = 2, Ato 5 = 1, o resto = 0.
+quem vem antes na página. Hoje: Ato 5 = 1, o resto = 0 (o Ato 3 não pina
+mais, ver estrutura narrativa acima).
 
 `ScrollTrigger.refresh()` NÃO conserta isso depois — foi verificado, inclusive
 com `refresh(true)`.

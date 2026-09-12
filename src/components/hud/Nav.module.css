@@ -103,10 +103,19 @@
   .linkIcone{ display: none; }
 }
 
-@media (max-width: 480px){
-  .leve{ display: none; }
+/* Header mobile simples: sem cápsula, sem itens de menu, sem CTA. Só a
+   marca, centralizada, numa barra de fundo escuro sólido. O comportamento
+   de cápsula com ícones (regra acima de 768px) nunca chega a se aplicar
+   aqui, porque a cápsula inteira some antes disso. */
+@media (max-width: 767px){
+  .raiz,
+  .raiz[data-solido='true']{
+    justify-content: center;
+    background: var(--preto);
+  }
   .nome{ display: none; }
-  .cta{ padding: 0 0.9rem; font-size: 0.8125rem; }
+  .capsula,
+  .cta{ display: none; }
 }
 
 @media (prefers-reduced-motion: reduce){

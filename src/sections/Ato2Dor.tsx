@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { gsap, useGSAP } from '@/lib/gsap';
+import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { Ato } from '@/components/ui/Ato';
 import { Reveal } from '@/components/ui/Reveal';
 import { DIST, DUR, EASE, STAGGER } from '@/lib/motion-tokens';
@@ -40,16 +40,25 @@ export function Ato2Dor() {
         },
       );
 
-      gsap.fromTo(
-        `.${s.filete}`,
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          duration: DUR.longa,
-          ease: EASE.entrada,
-          scrollTrigger: { trigger: `.${s.lista}`, start: 'top 76%', once: true },
+      // Timeline vertical: cada bolinha acende (contorno vazio vira
+      // preenchido em laranja) conforme entra na área visível durante o
+      // scroll da seção. `ScrollTrigger.batch`, não um trigger só no topo
+      // da lista, porque o pedido é acender item por item conforme cada um
+      // cruza a viewport, não todos de uma vez quando a lista aparece.
+      ScrollTrigger.batch(`.${s.marcador}`, {
+        start: 'top 82%',
+        once: true,
+        onEnter: (marcadores) => {
+          gsap.to(marcadores, {
+            backgroundColor: '#F2790C',
+            borderColor: '#F2790C',
+            boxShadow: '0 0 0 4px rgba(242, 121, 12, 0.16)',
+            duration: DUR.curta,
+            ease: EASE.entrada,
+            stagger: STAGGER.padrao,
+          });
         },
-      );
+      });
     },
     { scope: ref },
   );
@@ -69,7 +78,7 @@ export function Ato2Dor() {
             <ul className={s.lista}>
               {SINTOMAS.map((linha) => (
                 <li key={linha} className={s.sintoma}>
-                  <span className={s.filete} aria-hidden="true" />
+                  <span className={s.marcador} aria-hidden="true" />
                   {linha}
                 </li>
               ))}
@@ -77,8 +86,9 @@ export function Ato2Dor() {
 
             <Reveal className={s.remate} distancia={DIST.curto} duracao={DUR.longa}>
               <p>
-                Não é falta de esforço da sua equipe. É falta de alguém cuidando das
-                quatro pontas juntas.
+                Não é falta de esforço da sua equipe.{' '}
+                <span className={s.destaque}>É falta de alguém cuidando das quatro
+                pontas juntas.</span>
               </p>
             </Reveal>
           </div>

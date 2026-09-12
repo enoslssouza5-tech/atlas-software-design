@@ -28,9 +28,9 @@
   --fs-micro: clamp(0.75rem, 0.9vw, 0.8125rem);
 
   /* ritmo vertical */
-  --gut: clamp(1.25rem, 4vw, 2.5rem);
+  --gut: clamp(1rem, 2.5vw, 1.75rem);
   --ato-py: clamp(6rem, 14vh, 11rem);
-  --maxw: 78rem;
+  --maxw: 84rem;
 
   --linha: rgba(247, 245, 239, 0.09);
   --linha-acento: rgba(242, 121, 12, 0.42);

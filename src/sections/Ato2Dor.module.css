@@ -15,7 +15,9 @@
   line-height: 1.4;
   letter-spacing: -0.015em;
   max-width: 42ch;
+  margin-inline: auto;
   color: var(--texto);
+  text-align: center;
 }
 
 .coluna{
@@ -25,12 +27,13 @@
 }
 
 .lista{
+  --passo: clamp(1.1rem, 2.4vw, 1.6rem);
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: clamp(1.1rem, 2.4vw, 1.6rem);
+  gap: var(--passo);
 }
 
 .sintoma{
@@ -42,15 +45,32 @@
   max-width: 44ch;
 }
 
-/* filete laranja como único ornamento de linha da seção */
-.filete{
+/* bolinha da timeline vertical: começa vazia (só contorno) e acende em
+   laranja sólido via GSAP conforme entra na área visível (ver Ato2Dor.tsx,
+   ScrollTrigger.batch nos `.marcador`). */
+.marcador{
   position: absolute;
   left: 0;
-  top: 0.72em;
-  width: clamp(1.5rem, 2.6vw, 2.25rem);
-  height: 1px;
-  background: var(--acento);
-  transform-origin: left;
+  top: 0.3em;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 1.5px solid var(--linha-acento);
+  background: transparent;
+  z-index: 1;
+}
+
+/* trilho: um segmento por item, ligando a bolinha deste tópico à do
+   próximo, atravessando o espaço do `gap` entre eles. Sem segmento depois
+   do último item da lista. */
+.sintoma:not(:last-child)::before{
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: calc(0.3em + 13px);
+  height: calc(100% - 0.3em - 13px + var(--passo));
+  width: 1px;
+  background: var(--linha-acento);
 }
 
 .remate{
@@ -60,6 +80,13 @@
   color: var(--texto);
   border-left: 1px solid var(--linha-acento);
   padding-left: clamp(1.1rem, 2.4vw, 1.75rem);
+}
+
+/* destaque de remate: mesmo tratamento pedido pro texto final da seção
+   Seis frentes (ver Ato3Solucao.module.css, .destaque). */
+.destaque{
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  color: var(--acento);
 }
 
 @media (min-width: 1024px){
