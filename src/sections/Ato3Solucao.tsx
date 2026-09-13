@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { SplitWords } from '@/components/ui/SplitWords';
-import { Reveal } from '@/components/ui/Reveal';
+import { CardReveal } from '@/components/ui/CardReveal';
 import { useDeviceTier } from '@/lib/use-device-tier';
 import { DIST, DUR, EASE, STAGGER } from '@/lib/motion-tokens';
 import s from './Ato3Solucao.module.css';
@@ -157,12 +157,12 @@ export function Ato3Solucao() {
             ))}
           </div>
 
-          <Reveal className={s.mecanismo} distancia={DIST.curto} duracao={DUR.longa}>
+          <CardReveal className={s.mecanismo} duracao={DUR.longa}>
             <p>
-              A mesma equipe constrói, cuida do anúncio e dá suporte depois.{' '}
-              <span className={s.destaque}>Nada se perde entre fornecedores.</span>
+              A mesma equipe constrói, cuida do anúncio e dá suporte depois. Nada se
+              perde entre fornecedores.
             </p>
-          </Reveal>
+          </CardReveal>
         </div>
       </div>
     </section>

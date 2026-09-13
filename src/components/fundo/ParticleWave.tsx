@@ -140,9 +140,10 @@ export function ParticleWave() {
         material.uniforms.uTime.value += 0.05;
       }
 
-      // Aproxima suavemente do tom alvo (claro ou escuro), em vez de trocar
-      // de uma vez: a transição acompanha o scroll pela seção clara.
-      claroAtual += (claroAlvo - claroAtual) * 0.06;
+      // Troca de uma vez pro tom alvo (claro ou escuro), sem aproximação
+      // gradual: o fundo muda no mesmo instante em que a seção clara entra
+      // ou sai de vista, sem degradê entre os dois tons.
+      claroAtual = claroAlvo;
       corFundoAtual.copy(CORES.fundoEscuro).lerp(CORES.fundoClaro, claroAtual);
       corParticulaAtual.copy(CORES.particulaEscura).lerp(CORES.particulaClara, claroAtual);
       renderer.setClearColor(corFundoAtual);

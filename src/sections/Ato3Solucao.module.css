@@ -94,13 +94,6 @@
   font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
   line-height: 1.5;
   color: var(--texto);
-  border-left: 1px solid var(--linha-acento);
-  padding-left: clamp(0.9rem, 1.8vw, 1.4rem);
-}
-
-.destaque{
-  font-size: clamp(1.25rem, 2vw, 1.625rem);
-  color: var(--acento);
 }
 
 @media (min-width: 640px){

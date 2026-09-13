@@ -29,7 +29,7 @@
 
   /* ritmo vertical */
   --gut: clamp(1rem, 2.5vw, 1.75rem);
-  --ato-py: clamp(6rem, 14vh, 11rem);
+  --ato-py: clamp(4rem, 9vh, 7rem);
   --maxw: 84rem;
 
   --linha: rgba(247, 245, 239, 0.09);

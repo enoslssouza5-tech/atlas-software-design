@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { Ato } from '@/components/ui/Ato';
 import { Reveal } from '@/components/ui/Reveal';
+import { CardReveal } from '@/components/ui/CardReveal';
 import { DIST, DUR, EASE, STAGGER } from '@/lib/motion-tokens';
 import s from './Ato2Dor.module.css';
 
@@ -84,13 +85,12 @@ export function Ato2Dor() {
               ))}
             </ul>
 
-            <Reveal className={s.remate} distancia={DIST.curto} duracao={DUR.longa}>
+            <CardReveal className={s.remate} duracao={DUR.longa}>
               <p>
-                Não é falta de esforço da sua equipe.{' '}
-                <span className={s.destaque}>É falta de alguém cuidando das quatro
-                pontas juntas.</span>
+                Não é falta de esforço da sua equipe. É falta de alguém cuidando das
+                quatro pontas juntas.
               </p>
-            </Reveal>
+            </CardReveal>
           </div>
         </div>
       </Ato>

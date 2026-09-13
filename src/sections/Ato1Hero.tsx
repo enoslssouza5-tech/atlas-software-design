@@ -36,6 +36,18 @@ export function Ato1Hero() {
       const raiz = ref.current;
       if (!raiz) return;
 
+      // Trava a máscara física do crachá (ver BadgeCanvas.module.css) no
+      // fim real da seção, independente de qualquer ScrollTrigger: o Canvas
+      // nunca desenha abaixo daqui, mesmo se `sinal`/opacidade errarem o
+      // timing no futuro.
+      const aplicarMascara = () => {
+        document.documentElement.style.setProperty(
+          '--hero-fim',
+          `${raiz.getBoundingClientRect().bottom}px`,
+        );
+      };
+      aplicarMascara();
+
       // O crachá é reivindicado por este ato enquanto ele estiver na tela.
       // Posição fixa em x/y (`alvoCena`, um por breakpoint) desde a entrada:
       // nenhum tween nem ScrollTrigger muda a posição do objeto depois disso,
@@ -45,13 +57,23 @@ export function Ato1Hero() {
       // crachá "andar" verticalmente enquanto girava. `onToggle`, não
       // `onUpdate`/`scrub`, garante que a posição só é escrita uma vez, ao
       // entrar na seção, e nunca mais durante o resto do scroll do Hero.
-      // `end` em 'bottom 55%' bate exatamente com o fim do giro (`stGiro`
-      // abaixo): o crachá começa a sumir por opacidade no mesmo ponto de
-      // scroll em que a meia volta termina, não 200px de scroll depois.
+      // `end` em 'bottom top': a base do Hero precisa encostar no topo da
+      // tela (a seção sair inteira de vista) pra `onLeave` disparar. Isso é
+      // MAIS TARDE que 'bottom 55%', não mais cedo: a borda de baixo do
+      // Hero cruza a marca de 55% da tela antes de cruzar o topo (0%),
+      // conforme a página rola. O crachá fica visível por mais tempo com
+      // esta troca, não menos.
+      //
+      // `onUpdate` também atualiza `--hero-fim` (a máscara do crachá, ver
+      // BadgeCanvas.module.css) a cada frame de scroll enquanto este
+      // ScrollTrigger está ativo: reaproveita o range mais longo (até
+      // 'bottom top') pra a máscara acompanhar a seção até ela sair de
+      // vista de verdade, em vez de criar um terceiro observador.
       const st = ScrollTrigger.create({
         trigger: raiz,
         start: 'top 60%',
-        end: 'bottom 55%',
+        end: 'bottom top',
+        onUpdate: () => aplicarMascara(),
         onToggle: (self) => {
           if (self.isActive) definirAlvo(alvoCena);
         },
@@ -85,6 +107,7 @@ export function Ato1Hero() {
         return () => {
           st.kill();
           stGiro.kill();
+          document.documentElement.style.removeProperty('--hero-fim');
         };
       }
 
@@ -115,6 +138,7 @@ export function Ato1Hero() {
       return () => {
         st.kill();
         stGiro.kill();
+        document.documentElement.style.removeProperty('--hero-fim');
       };
     },
     { scope: ref, dependencies: [liberado, alvoCena, tem3d] },

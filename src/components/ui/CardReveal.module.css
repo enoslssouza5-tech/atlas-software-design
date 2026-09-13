@@ -1,0 +1,6 @@
+.cartao{
+  border: 1px solid var(--linha);
+  border-radius: 12px;
+  background: linear-gradient(168deg, rgba(28, 28, 31, 0.94), rgba(19, 19, 19, 0.86));
+  padding: clamp(1.25rem, 2.6vw, 2rem);
+}

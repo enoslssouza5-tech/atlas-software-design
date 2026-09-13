@@ -3,6 +3,14 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
+  /* Trava física: o crachá só existe no Ato 1, então o Canvas nunca pode
+     desenhar pixel abaixo do fim real da seção Hero, mesmo que a opacidade
+     ou a posição (escritas por ScrollTrigger, ver Ato1Hero.tsx) errem o
+     timing por algum motivo futuro. `--hero-fim` é a coordenada Y (em px
+     de viewport) da base do Hero agora mesmo, atualizada a cada frame de
+     scroll enquanto o Hero está em cena; sem JS ainda rodando, o fallback
+     de 100vh não corta nada, igual ao comportamento de antes. */
+  clip-path: inset(0 0 calc(100vh - var(--hero-fim, 100vh)) 0);
 }
 
 .canvas{
