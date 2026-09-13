@@ -18,6 +18,16 @@
   pointer-events: none;
 }
 
+/* margem própria do Hero, sem o teto de largura de `.container`: a imagem
+   de fundo é full bleed em qualquer largura de tela, então a headline
+   acompanha com um respiro proporcional à viewport (não a um rem fixo),
+   calibrado pra ficar alinhada com os elementos da própria foto, que
+   começam entre 5% e 7% da borda esquerda. */
+.faixa{
+  width: 100%;
+  padding-inline: var(--gut);
+}
+
 .grade{
   position: relative;
   z-index: 2;
@@ -52,6 +62,7 @@
 }
 
 @media (min-width: 1024px){
+  .faixa{ padding-inline: 6vw; }
   .grade{
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     justify-content: space-between;

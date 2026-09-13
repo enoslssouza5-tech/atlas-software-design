@@ -4,13 +4,16 @@ import { useRef, useState } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { useLenis } from '@/providers/LenisProvider';
 import { useAbertura } from '@/providers/AberturaProvider';
-import { MarcaA } from '@/components/ui/MarcaA';
 import { EASE } from '@/lib/motion-tokens';
 import s from './Preloader.module.css';
 
-const CHAVE_SESSAO = 'atlas:visitou';
-/** teto duro. Nem em 3G ruim o preloader passa disso. */
-const TETO_MS = 2500;
+/**
+ * Teto duro. Cobre os cerca de 3s do vídeo da logo mais o resto da
+ * timeline (nome, cortina abrindo pros lados), com folga de segurança.
+ * Bem maior que o teto anterior de 2.5s, pensado pra uma animação sem
+ * vídeo (fade e escala de um SVG).
+ */
+const TETO_MS = 4800;
 
 export function Preloader() {
   const ref = useRef<HTMLDivElement>(null);
@@ -23,80 +26,104 @@ export function Preloader() {
       const raiz = ref.current;
       if (!raiz) return;
 
+      // O site sempre recarrega mostrando o Hero do topo, nunca a posição
+      // de scroll de uma navegação anterior, mesmo quando a animação abaixo
+      // é pulada por `prefers-reduced-motion`.
+      window.scrollTo(0, 0);
+
       const concluir = () => {
-        // quem desarma o failsafe é o LenisProvider, assim que a camada de
-        // motion sobe, bem antes daqui
-        try {
-          sessionStorage.setItem(CHAVE_SESSAO, '1');
-        } catch {
-          /* modo privado bloqueia storage, só significa que repete na próxima */
-        }
         travar(false);
         liberar();
         setSaiu(true);
       };
 
-      // A abertura do Ato 1 começa junto com a cortina subindo, não depois
-      // dela. Esperar a cortina terminar empurrava o CTA pra quase 5s de
-      // página, e faz a cortina parecer estar revelando uma tela vazia.
+      // A abertura do Ato 1 começa junto com a cortina abrindo, não depois
+      // dela. Esperar a cortina terminar empurrava o CTA pra tarde demais
+      // na página, e faz a cortina parecer estar revelando uma tela vazia.
       const liberarCedo = () => {
         travar(false);
         liberar();
       };
 
-      let jaVisitou = false;
-      try {
-        jaVisitou = sessionStorage.getItem(CHAVE_SESSAO) === '1';
-      } catch {
-        jaVisitou = false;
-      }
-
       const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // Segunda visita na mesma sessão, ou usuário que pediu menos movimento:
-      // a cortina nem chega a aparecer.
-      if (jaVisitou || reduzido) {
+      if (reduzido) {
         concluir();
         return;
       }
 
       travar(true);
-      window.scrollTo(0, 0);
 
-      gsap.set(`.${s.marca}`, { opacity: 0, scale: 0.85 });
+      let iniciado = false;
 
-      const tl = gsap.timeline({ onComplete: concluir });
+      // Sequência de saída, disparada uma única vez: nome entra, pausa
+      // breve, o conteúdo central some, e as duas metades da cortina se
+      // separam revelando o site no meio.
+      const abrirCortina = () => {
+        if (iniciado) return;
+        iniciado = true;
+        clearTimeout(teto);
 
-      tl.to(`.${s.marca}`, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.86,
-        ease: EASE.entrada,
-      })
-        .fromTo(
-          `.${s.saudacao}`,
-          { opacity: 0, y: 18 },
-          { opacity: 1, y: 0, duration: 0.62, ease: EASE.entrada },
-          '-=0.34',
-        )
-        .to(`.${s.saudacao}`, { opacity: 0, duration: 0.38, ease: 'power2.in' }, '+=0.32')
-        .to(`.${s.marca}`, { opacity: 0, scale: 0.94, duration: 0.42, ease: 'power2.in' }, '<')
-        .to(
-          raiz,
-          { yPercent: -100, duration: 0.62, ease: EASE.entrada, onStart: liberarCedo },
-          '-=0.12',
-        );
+        gsap
+          .timeline({ onComplete: concluir })
+          .fromTo(
+            `.${s.saudacao}`,
+            { opacity: 0, y: 18 },
+            { opacity: 1, y: 0, duration: 0.62, ease: EASE.entrada },
+          )
+          .to(`.${s.centro}`, { opacity: 0, duration: 0.38, ease: 'power2.in' }, '+=0.32')
+          .to(
+            `.${s.metadeEsquerda}`,
+            { xPercent: -100, duration: 0.62, ease: EASE.entrada, onStart: liberarCedo },
+            '-=0.12',
+          )
+          .to(`.${s.metadeDireita}`, { xPercent: 100, duration: 0.62, ease: EASE.entrada }, '<');
+      };
 
-      // Teto duro: se a timeline travar por qualquer motivo, a cortina sobe.
-      const teto = window.setTimeout(() => {
-        if (tl.isActive()) {
-          tl.kill();
-          gsap.to(raiz, { yPercent: -100, duration: 0.42, ease: EASE.entrada, onComplete: concluir });
+      // Emergência: se o vídeo nunca carregar nem terminar, o teto duro
+      // força uma saída rápida, sem a sequência inteira em etapas.
+      const forcarSaida = () => {
+        if (iniciado) return;
+        iniciado = true;
+        gsap.set(`.${s.centro}`, { opacity: 0 });
+        gsap
+          .timeline({ onComplete: concluir })
+          .to(`.${s.metadeEsquerda}`, {
+            xPercent: -100,
+            duration: 0.42,
+            ease: EASE.entrada,
+            onStart: liberarCedo,
+          })
+          .to(`.${s.metadeDireita}`, { xPercent: 100, duration: 0.42, ease: EASE.entrada }, '<');
+      };
+
+      // O nome entra perto do fim real do vídeo, não só depois dele: a
+      // antecedência de 0.34s repete o mesmo espaçamento negativo que essa
+      // transição já usava quando a etapa anterior era um fade de SVG, em
+      // vez de assumir uma duração fixa de arquivo.
+      const video = raiz.querySelector<HTMLVideoElement>(`.${s.marca}`);
+      const ANTECEDENCIA = 0.34;
+      const aoAtualizarVideo = () => {
+        if (!video) return;
+        if (video.duration - video.currentTime <= ANTECEDENCIA) {
+          video.removeEventListener('timeupdate', aoAtualizarVideo);
+          abrirCortina();
         }
-      }, TETO_MS);
+      };
+
+      if (video) {
+        video.addEventListener('timeupdate', aoAtualizarVideo);
+        video.addEventListener('ended', abrirCortina, { once: true });
+      } else {
+        abrirCortina();
+      }
+
+      const teto = window.setTimeout(forcarSaida, TETO_MS);
 
       return () => {
         clearTimeout(teto);
+        video?.removeEventListener('timeupdate', aoAtualizarVideo);
+        video?.removeEventListener('ended', abrirCortina);
         travar(false);
       };
     },
@@ -107,8 +134,10 @@ export function Preloader() {
 
   return (
     <div className={s.raiz} ref={ref} id="preloader" aria-hidden="true">
+      <div className={s.metadeEsquerda} />
+      <div className={s.metadeDireita} />
       <div className={s.centro}>
-        <MarcaA className={s.marca} titulo="Atlas Software & Design" />
+        <video className={s.marca} src="/preloader-logo.mp4" autoPlay muted playsInline />
         <p className={s.saudacao}>
           Atlas Software <span className={s.amp}>&amp;</span> Design
         </p>

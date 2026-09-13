@@ -69,7 +69,7 @@ export function Ato1Hero() {
     <section className={s.raiz} id="ato-hero" ref={ref}>
       <div className={s.veu} aria-hidden="true" />
 
-      <div className={`container ${s.grade}`}>
+      <div className={`${s.faixa} ${s.grade}`}>
         <div className={s.texto}>
           <SplitWords
             texto={HEADLINE}

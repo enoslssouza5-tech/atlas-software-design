@@ -2,23 +2,41 @@
   position: fixed;
   inset: 0;
   z-index: 100;
-  display: grid;
-  place-items: center;
+  overflow: hidden;
+}
+
+/* as duas metades da cortina, uma de cada lado, saindo pra fora da tela
+   na saída (ver Preloader.tsx) em vez de um painel único subindo. */
+.metadeEsquerda,
+.metadeDireita{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
   background: var(--preto);
   will-change: transform;
 }
 
+.metadeEsquerda{ left: 0; }
+.metadeDireita{ right: 0; }
+
 .centro{
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: clamp(1.25rem, 3vw, 2rem);
 }
 
+/* vídeo vertical (720x1280) com a marca centralizada; contain garante que
+   o enquadramento em pé nunca estica nem corta dentro da caixa. */
 .marca{
-  width: clamp(96px, 14vw, 160px);
+  width: clamp(140px, 20vw, 220px);
   height: auto;
-  color: var(--acento);
+  object-fit: contain;
 }
 
 .saudacao{
