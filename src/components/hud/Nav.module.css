@@ -23,22 +23,14 @@
   flex: 0 0 auto;
 }
 
-.icone{
-  width: 20px;
-  height: 20px;
-  color: var(--acento);
-  flex: 0 0 auto;
-}
-
 .nome{
-  font-family: var(--font-display);
-  font-size: 0.9375rem;
-  letter-spacing: -0.01em;
+  font-family: var(--font-montserrat), "Montserrat", sans-serif;
+  font-weight: 300;
+  font-size: 1.0625rem;
+  letter-spacing: 0.04em;
   color: var(--texto);
   white-space: nowrap;
 }
-
-.leve{ color: var(--texto-suave); font-weight: 400; }
 
 /* cápsula flutuante: os itens reais de navegação, centralizada entre a
    marca e o CTA. Fundo translúcido constante, não depende de scroll. */
@@ -104,17 +96,16 @@
   .linkIcone{ display: none; }
 }
 
-/* Header mobile simples: sem cápsula, sem itens de menu, sem CTA. Só a
-   marca, centralizada, numa barra de fundo escuro sólido. O comportamento
-   de cápsula com ícones (regra acima de 768px) nunca chega a se aplicar
-   aqui, porque a cápsula inteira some antes disso. */
+/* Header mobile simples: sem cápsula, sem itens de menu, sem CTA. Só o
+   nome ATLAS, centralizado, numa barra de fundo escuro sólido. O
+   comportamento de cápsula com ícones (regra acima de 768px) nunca chega
+   a se aplicar aqui, porque a cápsula inteira some antes disso. */
 @media (max-width: 767px){
   .raiz,
   .raiz[data-solido='true']{
     justify-content: center;
     background: var(--preto);
   }
-  .nome{ display: none; }
   .capsula,
   .cta{ display: none; }
 }

@@ -6,7 +6,6 @@ import { Layers, FolderKanban, Boxes, CircleHelp } from 'lucide-react';
 import { ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { useAbertura } from '@/providers/AberturaProvider';
 import { useLenis } from '@/providers/LenisProvider';
-import { MarcaA } from '@/components/ui/MarcaA';
 import { Botao } from '@/components/ui/Botao';
 import s from './Nav.module.css';
 
@@ -82,10 +81,7 @@ export function Nav() {
       transition={{ duration: 0.62, ease: EASE_CAPSULA, delay: liberado ? 1.6 : 0 }}
     >
       <a href="#ato-hero" className={s.marca} onClick={(e) => navegar(e, '#ato-hero')}>
-        <MarcaA className={s.icone} titulo="Atlas Software & Design" />
-        <span className={s.nome}>
-          Atlas <span className={s.leve}>Software &amp; Design</span>
-        </span>
+        <span className={s.nome}>ATLAS</span>
       </a>
 
       <nav className={s.capsula} aria-label="Seções da página">

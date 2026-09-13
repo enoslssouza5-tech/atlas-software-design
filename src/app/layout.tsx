@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Montserrat } from 'next/font/google';
 import { LenisProvider } from '@/providers/LenisProvider';
 import { AberturaProvider } from '@/providers/AberturaProvider';
 import { SITE, jsonLd } from '@/lib/site';
@@ -9,6 +9,14 @@ const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
+});
+
+/** Uso específico da logo em texto no cabeçalho, não a fonte padrão do site. */
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['300'],
+  display: 'swap',
+  variable: '--font-montserrat',
 });
 
 export const metadata: Metadata = {
@@ -68,7 +76,7 @@ const FAILSAFE = `
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang={SITE.idioma} className={inter.variable}>
+    <html lang={SITE.idioma} className={`${inter.variable} ${montserrat.variable}`}>
       <head>
         <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="" />
         {/* General Sans (Fontshare). Se o CDN falhar, cai em Georgia/serif
