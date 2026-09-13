@@ -63,19 +63,15 @@ export function Preloader() {
       travar(true);
       window.scrollTo(0, 0);
 
-      const traco = raiz.querySelectorAll<SVGPathElement>('path');
-      traco.forEach((p) => {
-        const comprimento = p.getTotalLength();
-        gsap.set(p, { strokeDasharray: comprimento, strokeDashoffset: comprimento });
-      });
+      gsap.set(`.${s.marca}`, { opacity: 0, scale: 0.85 });
 
       const tl = gsap.timeline({ onComplete: concluir });
 
-      tl.to(traco, {
-        strokeDashoffset: 0,
+      tl.to(`.${s.marca}`, {
+        opacity: 1,
+        scale: 1,
         duration: 0.86,
         ease: EASE.entrada,
-        stagger: 0.12,
       })
         .fromTo(
           `.${s.saudacao}`,
@@ -112,7 +108,7 @@ export function Preloader() {
   return (
     <div className={s.raiz} ref={ref} id="preloader" aria-hidden="true">
       <div className={s.centro}>
-        <MarcaA className={s.marca} tracado />
+        <MarcaA className={s.marca} titulo="Atlas Software & Design" />
         <p className={s.saudacao}>
           Atlas Software <span className={s.amp}>&amp;</span> Design
         </p>

@@ -14,6 +14,8 @@ type Props = {
   atraso?: number;
   /** dispara no scroll (padrão) ou imediatamente, quando quem manda é uma timeline de fora */
   gatilho?: 'scroll' | 'imediato' | 'nenhum';
+  /** intervalo de índices de palavra (base 0, inclusive nas duas pontas) pintado em var(--acento) */
+  destacarIndices?: [number, number];
   id?: string;
 };
 
@@ -28,6 +30,7 @@ export function SplitWords({
   className,
   atraso = 0,
   gatilho = 'scroll',
+  destacarIndices,
   id,
 }: Props) {
   const ref = useRef<HTMLElement>(null);
@@ -67,16 +70,24 @@ export function SplitWords({
       className={[s.raiz, className].filter(Boolean).join(' ')}
       data-anim="clip"
     >
-      {palavras.map((palavra, i) => (
-        <Fragment key={`${palavra}-${i}`}>
-          <span className={s.mascara}>
-            <span className={s.interna}>{palavra}</span>
-          </span>
-          {/* O espaço fica FORA da máscara. Dentro de um inline-block com
-              overflow hidden ele é engolido, e as palavras saem coladas. */}
-          {i < palavras.length - 1 ? ' ' : null}
-        </Fragment>
-      ))}
+      {palavras.map((palavra, i) => {
+        const destacada =
+          !!destacarIndices && i >= destacarIndices[0] && i <= destacarIndices[1];
+        return (
+          <Fragment key={`${palavra}-${i}`}>
+            <span className={s.mascara}>
+              <span
+                className={[s.interna, destacada ? s.destaque : null].filter(Boolean).join(' ')}
+              >
+                {palavra}
+              </span>
+            </span>
+            {/* O espaço fica FORA da máscara. Dentro de um inline-block com
+                overflow hidden ele é engolido, e as palavras saem coladas. */}
+            {i < palavras.length - 1 ? ' ' : null}
+          </Fragment>
+        );
+      })}
     </Tag>
   );
 }

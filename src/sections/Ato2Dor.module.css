@@ -1,23 +1,22 @@
 .grade{
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: clamp(2.5rem, 6vw, 5rem);
 }
 
-.aberturaBloco{
-  min-width: 0;
-}
-
 /* Título da seção, na mesma escala de título usada em Ato3Solucao.module.css
-   (.titulo), à esquerda na própria coluna. */
+   (.titulo), centralizado no topo do ato. */
 .abertura{
   font-family: var(--font-display);
   font-size: clamp(1.6rem, 3.6vw, 2.75rem);
   letter-spacing: -0.035em;
-  max-width: 42ch;
+  max-width: 52ch;
+  margin-inline: auto;
+  text-align: center;
   color: var(--texto);
 }
 
-.coluna{
+.corpo{
   display: flex;
   flex-direction: column;
   gap: clamp(2rem, 4vw, 3rem);
@@ -71,13 +70,19 @@
 }
 
 .remate{
-  max-width: 42ch;
+  max-width: 34ch;
   font-size: var(--fs-subtitulo);
   line-height: 1.55;
   color: var(--texto);
 }
 
 @media (min-width: 1024px){
-  .grade{ grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
-  .aberturaBloco{ position: sticky; top: 22vh; }
+  .corpo{
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+  }
+  .lista{ flex: 1 1 0; max-width: 30ch; }
+  .remate{ flex: 0 1 26ch; margin: 0; }
 }

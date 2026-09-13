@@ -16,9 +16,12 @@ import s from './Ato2Dor.module.css';
  * faz o texto pesar.
  */
 
-const SINTOMAS = [
+const SINTOMAS_ESQUERDA = [
   'O clique do anúncio não vira cliente contável.',
   'Cadastro feito num sistema não aparece no site, e alguém copia isso à mão.',
+];
+
+const SINTOMAS_DIREITA = [
   'Cada fornecedor empurra a culpa pro outro quando algo trava.',
   'Ajuste simples vira semana de espera.',
 ];
@@ -68,16 +71,14 @@ export function Ato2Dor() {
     <div ref={ref}>
       <Ato id="ato-dor" rotulo="A dor">
         <div className={s.grade}>
-          <div className={s.aberturaBloco}>
-            <Reveal como="h2" className={s.abertura} distancia={DIST.medio} duracao={DUR.longa}>
-              O problema raramente é falta de site, sistema, automação ou anúncio. É essas
-              peças não conversarem entre si. A Atlas monta as quatro com a mesma equipe.
-            </Reveal>
-          </div>
+          <Reveal como="h2" className={s.abertura} distancia={DIST.medio} duracao={DUR.longa}>
+            O problema raramente é falta de site, sistema, automação ou anúncio. É essas
+            peças não conversarem entre si. A Atlas monta as quatro com a mesma equipe.
+          </Reveal>
 
-          <div className={s.coluna}>
+          <div className={s.corpo}>
             <ul className={s.lista}>
-              {SINTOMAS.map((linha) => (
+              {SINTOMAS_ESQUERDA.map((linha) => (
                 <li key={linha} className={s.sintoma}>
                   <span className={s.marcador} aria-hidden="true" />
                   {linha}
@@ -91,6 +92,15 @@ export function Ato2Dor() {
                 quatro pontas juntas.
               </p>
             </CardReveal>
+
+            <ul className={s.lista}>
+              {SINTOMAS_DIREITA.map((linha) => (
+                <li key={linha} className={s.sintoma}>
+                  <span className={s.marcador} aria-hidden="true" />
+                  {linha}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </Ato>

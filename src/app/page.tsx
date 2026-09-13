@@ -1,7 +1,6 @@
 import { Preloader } from '@/components/preloader/Preloader';
 import { Nav } from '@/components/hud/Nav';
 import { Rodape } from '@/components/hud/Rodape';
-import { Cracha } from '@/components/three/Cracha';
 import { HeroFundo } from '@/components/hero/HeroFundo';
 import { ParticleWave } from '@/components/fundo/ParticleWave';
 import { Ato1Hero } from '@/sections/Ato1Hero';
@@ -16,9 +15,6 @@ import { Ato9Convite } from '@/sections/Ato9Convite';
 
 /**
  * A página como curta-metragem: preloader e nove atos, na ordem.
- *
- * A cena 3D fica fora do <main> de propósito: ela atravessa a narrativa
- * inteira em vez de pertencer a um ato só.
  */
 export default function Home() {
   return (
@@ -26,7 +22,6 @@ export default function Home() {
       <Preloader />
       <HeroFundo />
       <ParticleWave />
-      <Cracha />
       <Nav />
 
       <main id="conteudo">

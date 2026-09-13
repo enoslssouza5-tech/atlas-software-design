@@ -16,6 +16,10 @@
   will-change: clip-path, transform;
 }
 
+.destaque{
+  color: var(--acento);
+}
+
 :global(html.anime-failed) .interna,
 :global(html.anime-failed) .mascara{
   clip-path: none !important;

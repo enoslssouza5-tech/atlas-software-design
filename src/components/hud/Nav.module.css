@@ -95,6 +95,7 @@
   flex: 0 0 auto;
   font-size: 0.875rem;
   white-space: nowrap;
+  background: rgba(10, 10, 10, 0.55);
 }
 
 @media (min-width: 768px){
