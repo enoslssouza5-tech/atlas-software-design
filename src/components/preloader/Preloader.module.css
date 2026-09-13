@@ -28,13 +28,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(1.25rem, 3vw, 2rem);
+  gap: clamp(0.6rem, 1.5vw, 1rem);
 }
 
 /* vídeo vertical (720x1280) com a marca centralizada; contain garante que
-   o enquadramento em pé nunca estica nem corta dentro da caixa. */
+   o enquadramento em pé nunca estica nem corta dentro da caixa. A largura
+   também é limitada por altura de tela (min com vh), não só por vw: numa
+   janela larga e baixa (ou celular deitado), 20vw sozinho mantinha o
+   vídeo grande demais pra caber, e `.raiz` cortava o topo pelo
+   `overflow: hidden` (medido de verdade, ver Preloader.tsx). */
 .marca{
-  width: clamp(140px, 20vw, 220px);
+  width: clamp(120px, min(20vw, 28vh), 220px);
   height: auto;
   object-fit: contain;
 }
@@ -45,7 +49,7 @@
   text-transform: uppercase;
   letter-spacing: 0.14em;
   text-indent: 0.14em;
-  color: var(--texto-suave);
+  color: var(--texto);
   opacity: 0;
 }
 

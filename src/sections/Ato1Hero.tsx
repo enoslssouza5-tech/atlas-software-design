@@ -6,7 +6,9 @@ import { useAbertura } from '@/providers/AberturaProvider';
 import { useLenis } from '@/providers/LenisProvider';
 import { SplitWords } from '@/components/ui/SplitWords';
 import { Botao } from '@/components/ui/Botao';
-import { DIST, DUR, EASE, SILENCIO } from '@/lib/motion-tokens';
+import { PainelRecursos } from '@/components/hero/PainelRecursos';
+import painelS from '@/components/hero/PainelRecursos.module.css';
+import { DIST, DUR, EASE, STAGGER, SILENCIO } from '@/lib/motion-tokens';
 import s from './Ato1Hero.module.css';
 
 const HEADLINE =
@@ -32,7 +34,7 @@ export function Ato1Hero() {
         // timeline, só `.acoes > *` (os botões); esconder o contêiner aqui
         // deixava um opacity:0 órfão que o revert do próximo run não
         // limpava, e os dois botões ficavam invisíveis pra sempre.
-        gsap.set([`.${s.sub}`, `.${s.acoes} > *`], {
+        gsap.set([`.${s.sub}`, `.${s.acoes} > *`, `.${painelS.cartao}`], {
           opacity: 0,
         });
         return;
@@ -60,6 +62,12 @@ export function Ato1Hero() {
           { opacity: 0, y: DIST.curto },
           { opacity: 1, y: 0, duration: DUR.media, ease: EASE.entrada, stagger: 0.1 },
           t(1.44),
+        )
+        .fromTo(
+          `.${painelS.cartao}`,
+          { opacity: 0, y: DIST.curto },
+          { opacity: 1, y: 0, duration: DUR.media, ease: EASE.entrada, stagger: STAGGER.padrao },
+          t(1.44),
         );
     },
     { scope: ref, dependencies: [liberado] },
@@ -68,6 +76,8 @@ export function Ato1Hero() {
   return (
     <section className={s.raiz} id="ato-hero" ref={ref}>
       <div className={s.veu} aria-hidden="true" />
+
+      <PainelRecursos />
 
       <div className={`${s.faixa} ${s.grade}`}>
         <div className={s.texto}>

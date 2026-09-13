@@ -15,12 +15,12 @@
 /* Respiro claro. Usado em 1 ou 2 momentos-chave da jornada, nunca como
    alternância mecânica seção a seção.
    As cores dos filhos não são reescritas aqui: quem inverte é o
-   [data-tom='claro'] no globals.css, trocando os papéis semânticos. O
-   fundo de partículas clareia sozinho enquanto a seção estiver na tela
-   (ver `src/lib/fundo-signal.ts`); sem JS, o failsafe do globals.css
-   pinta branco aqui pra nunca sobrar texto escuro sobre fundo escuro. */
+   [data-tom='claro'] no globals.css, trocando os papéis semânticos. Fundo
+   sólido, o mesmo branco já usado como fallback de acessibilidade em
+   html.anime-failed[data-tom='claro'] (ver globals.css): cobre fisicamente
+   o fundo de partículas, que passa a ser sempre escuro em toda a página. */
 .claro{
-  background: transparent;
+  background: var(--branco);
   color: var(--texto);
 }
 
