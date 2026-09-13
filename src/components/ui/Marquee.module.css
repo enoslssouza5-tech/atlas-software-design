@@ -10,7 +10,11 @@
   animation: rolar var(--duracao) linear infinite;
 }
 
-.trilho:hover{
+/* Duas formas de pausar, nunca conflitando: hover é só do mouse; o toque
+   sustentado usa `data-pausado`, controlado no JS via pointerdown/pointerup
+   (ver Marquee.tsx). Qualquer uma das duas pausa a mesma animação. */
+.trilho:hover,
+.trilho[data-pausado='true']{
   animation-play-state: paused;
 }
 

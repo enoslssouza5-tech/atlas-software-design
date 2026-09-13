@@ -18,6 +18,11 @@ export function definirSecaoClara(id: string, ativa: boolean) {
  * pra medir (via `getBoundingClientRect`) onde essas seções ficam na tela
  * de verdade, e recortar a cor exatamente na borda real delas, em vez de
  * clarear a tela inteira de uma vez.
+ *
+ * Um id aqui não garante que o elemento está perto da tela agora: quem lê
+ * esta lista (`ParticleWave.tsx`) ainda descarta qualquer retângulo que já
+ * não intersecte a viewport atual, pro recorte nunca se espalhar até uma
+ * seção que ficou presa no conjunto por engano.
  */
 export function idsSecaoClaraAtiva(): string[] {
   return Array.from(ativos);

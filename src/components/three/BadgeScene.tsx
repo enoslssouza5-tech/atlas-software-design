@@ -40,9 +40,13 @@ export function BadgeScene({ mobile, reduzido }: Props) {
     const e = estado.current;
     const alvo = sinal.alvo;
 
-    e.x += (alvo.x - e.x) * suavizar;
-    e.y += (alvo.y - e.y) * suavizar;
-    e.escala += (alvo.escala - e.escala) * suavizar;
+    // x, y e escala aplicados direto, sem suavização: o crachá precisa
+    // nascer já na posição e no tamanho finais, sem deslizar nem crescer
+    // quando o alvo muda. Só a opacidade continua suavizada, pro fade de
+    // entrada/saída continuar suave.
+    e.x = alvo.x;
+    e.y = alvo.y;
+    e.escala = alvo.escala;
     e.opacidade += (alvo.opacidade - e.opacidade) * suavizar;
 
     g.position.set(e.x, e.y, 0);

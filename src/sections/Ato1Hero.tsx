@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { useAbertura } from '@/providers/AberturaProvider';
 import { useLenis } from '@/providers/LenisProvider';
@@ -10,6 +10,7 @@ import { BadgeFallback } from '@/components/three/BadgeFallback';
 import { useCracha3d } from '@/components/three/Cracha';
 import { useDeviceTier } from '@/lib/use-device-tier';
 import { CENAS, definirAlvo, pontoDeTelaParaCena, sinal } from '@/lib/cena-signal';
+import { criarFiltroResizeReal } from '@/lib/resize-real';
 import { DIST, DUR, EASE, SILENCIO } from '@/lib/motion-tokens';
 import s from './Ato1Hero.module.css';
 
@@ -35,8 +36,11 @@ export function Ato1Hero() {
   // tela, não de um número cravado no código: medido uma vez no mount e de
   // novo se a janela redimensionar (rotação de tela, por exemplo), nunca a
   // cada frame de scroll, pra não reintroduzir o crachá "andando" enquanto
-  // gira. Antes da primeira medição, cai no valor de `CENAS.heroMobile`.
-  const [alvoMobile, setAlvoMobile] = useState({ x: CENAS.heroMobile.x, y: CENAS.heroMobile.y });
+  // gira. Guardado numa ref mutável, não em `useState`: o valor só importa
+  // no instante em que o ScrollTrigger abaixo lê pra chamar `definirAlvo`,
+  // então remedir nunca precisa provocar um re-render nem recriar nada.
+  // Antes da primeira medição, cai no valor de `CENAS.heroMobile`.
+  const alvoMobileRef = useRef({ x: CENAS.heroMobile.x, y: CENAS.heroMobile.y });
 
   useLayoutEffect(() => {
     if (!tier.mobile) return;
@@ -44,20 +48,23 @@ export function Ato1Hero() {
       const el = espacoRef.current;
       if (!el) return;
       const r = el.getBoundingClientRect();
-      setAlvoMobile(pontoDeTelaParaCena(r.left + r.width / 2, r.top + r.height / 2));
+      alvoMobileRef.current = pontoDeTelaParaCena(r.left + r.width / 2, r.top + r.height / 2);
     };
     medir();
-    window.addEventListener('resize', medir);
-    return () => window.removeEventListener('resize', medir);
-  }, [tier.mobile, tem3d]);
 
-  // Referência estável entre renders (só muda quando a medição muda de
-  // verdade): `alvoCena` é dependência do `useGSAP` abaixo, e um objeto
-  // novo a cada render recriaria os ScrollTriggers à toa.
-  const alvoCena = useMemo(
-    () => (tier.mobile ? { ...CENAS.heroMobile, x: alvoMobile.x, y: alvoMobile.y } : CENAS.hero),
-    [tier.mobile, alvoMobile.x, alvoMobile.y],
-  );
+    // No mobile, a barra de endereço do navegador recolhendo durante o
+    // scroll dispara `resize` mudando só a altura da janela, não a
+    // largura. Sem filtrar isso, cada recolhimento remedia o retângulo do
+    // `.espacoCracha` (que também mudou de tamanho na tela, porque o
+    // layout inteiro respira com a nova altura) e o alvo saltava pra um
+    // valor bem diferente no meio do scroll.
+    const resizeReal = criarFiltroResizeReal(tier.mobile);
+    const aoRedimensionar = () => {
+      if (resizeReal()) medir();
+    };
+    window.addEventListener('resize', aoRedimensionar);
+    return () => window.removeEventListener('resize', aoRedimensionar);
+  }, [tier.mobile, tem3d]);
 
   useGSAP(
     () => {
@@ -77,14 +84,13 @@ export function Ato1Hero() {
       aplicarMascara();
 
       // O crachá é reivindicado por este ato enquanto ele estiver na tela.
-      // Posição fixa em x/y (`alvoCena`, um por breakpoint) desde a entrada:
-      // nenhum tween nem ScrollTrigger muda a posição do objeto depois disso,
-      // só a rotação (`stGiro` abaixo). Uma versão anterior recalculava x/y
-      // a cada frame de scroll no mobile, seguindo o retângulo do espaço
-      // reservado (`espacoCracha`) conforme a página rolava, o que fazia o
-      // crachá "andar" verticalmente enquanto girava. `onToggle`, não
-      // `onUpdate`/`scrub`, garante que a posição só é escrita uma vez, ao
-      // entrar na seção, e nunca mais durante o resto do scroll do Hero.
+      // Posição fixa em x/y desde a entrada: nenhum tween nem ScrollTrigger
+      // muda a posição do objeto depois disso, só a rotação (`stGiro`
+      // abaixo). `onToggle` lê `alvoMobileRef.current` na hora, não um
+      // valor fechado na criação do efeito: assim, remedir essa ref (mesmo
+      // que aconteça por engano em algum resize real) nunca precisa
+      // recriar este ScrollTrigger, porque a ref não é dependência de
+      // nada, só é lida quando o crachá está de fato entrando na seção.
       // `end` em 'bottom top': a base do Hero precisa encostar no topo da
       // tela (a seção sair inteira de vista) pra `onLeave` disparar. Isso é
       // MAIS TARDE que 'bottom 55%', não mais cedo: a borda de baixo do
@@ -103,7 +109,11 @@ export function Ato1Hero() {
         end: 'bottom top',
         onUpdate: () => aplicarMascara(),
         onToggle: (self) => {
-          if (self.isActive) definirAlvo(alvoCena);
+          if (!self.isActive) return;
+          const alvo = tier.mobile
+            ? { ...CENAS.heroMobile, x: alvoMobileRef.current.x, y: alvoMobileRef.current.y }
+            : CENAS.hero;
+          definirAlvo(alvo);
         },
         onLeave: () => definirAlvo(CENAS.oculto),
         onLeaveBack: () => definirAlvo(CENAS.oculto),
@@ -169,7 +179,7 @@ export function Ato1Hero() {
         document.documentElement.style.removeProperty('--hero-fim');
       };
     },
-    { scope: ref, dependencies: [liberado, alvoCena, tem3d] },
+    { scope: ref, dependencies: [liberado, tier.mobile, tem3d] },
   );
 
   return (

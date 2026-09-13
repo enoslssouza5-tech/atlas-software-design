@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { useDeviceTier } from '@/lib/use-device-tier';
 import { useLenis } from '@/providers/LenisProvider';
 import { idsSecaoClaraAtiva } from '@/lib/fundo-signal';
+import { criarFiltroResizeReal } from '@/lib/resize-real';
 import s from './ParticleWave.module.css';
 
 /**
@@ -205,6 +206,12 @@ export function ParticleWave() {
         const el = document.getElementById(id);
         if (!el) continue;
         const r = el.getBoundingClientRect();
+        // Um id pode ficar preso no conjunto de ativos por engano (troca de
+        // rota, StrictMode, cleanup que roda fora de ordem) sem que o
+        // elemento esteja de fato perto da tela. Só entra no cálculo quem
+        // realmente intersecta a viewport atual, senão o recorte se
+        // espalharia até uma seção que já ficou pra trás.
+        if (r.bottom < 0 || r.top > window.innerHeight) continue;
         domTopo = Math.min(domTopo, r.top);
         domBase = Math.max(domBase, r.bottom);
       }
@@ -243,7 +250,12 @@ export function ParticleWave() {
     }
     animar();
 
+    // Mesmo filtro do Ato1Hero: no mobile, a barra de endereço recolhendo
+    // dispara `resize` só de altura, e sem essa guarda o renderer inteiro
+    // (câmera, tamanho, recorte) seria remedido a cada rolagem, à toa.
+    const resizeReal = criarFiltroResizeReal(tier.mobile);
     const aoRedimensionar = () => {
+      if (!resizeReal()) return;
       const w = window.innerWidth;
       const h = window.innerHeight;
       camera.aspect = w / h;
