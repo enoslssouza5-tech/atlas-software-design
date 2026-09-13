@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { useAbertura } from '@/providers/AberturaProvider';
 import { useLenis } from '@/providers/LenisProvider';
@@ -9,7 +9,7 @@ import { Botao } from '@/components/ui/Botao';
 import { BadgeFallback } from '@/components/three/BadgeFallback';
 import { useCracha3d } from '@/components/three/Cracha';
 import { useDeviceTier } from '@/lib/use-device-tier';
-import { CENAS, definirAlvo, sinal } from '@/lib/cena-signal';
+import { CENAS, definirAlvo, pontoDeTelaParaCena, sinal } from '@/lib/cena-signal';
 import { DIST, DUR, EASE, SILENCIO } from '@/lib/motion-tokens';
 import s from './Ato1Hero.module.css';
 
@@ -25,11 +25,39 @@ const HEADLINE =
  */
 export function Ato1Hero() {
   const ref = useRef<HTMLElement>(null);
+  const espacoRef = useRef<HTMLDivElement>(null);
   const { liberado } = useAbertura();
   const { irPara } = useLenis();
   const tem3d = useCracha3d();
   const tier = useDeviceTier();
-  const alvoCena = tier.mobile ? CENAS.heroMobile : CENAS.hero;
+
+  // No mobile, o alvo x/y real vem da posição do próprio `.espacoCracha` na
+  // tela, não de um número cravado no código: medido uma vez no mount e de
+  // novo se a janela redimensionar (rotação de tela, por exemplo), nunca a
+  // cada frame de scroll, pra não reintroduzir o crachá "andando" enquanto
+  // gira. Antes da primeira medição, cai no valor de `CENAS.heroMobile`.
+  const [alvoMobile, setAlvoMobile] = useState({ x: CENAS.heroMobile.x, y: CENAS.heroMobile.y });
+
+  useLayoutEffect(() => {
+    if (!tier.mobile) return;
+    const medir = () => {
+      const el = espacoRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      setAlvoMobile(pontoDeTelaParaCena(r.left + r.width / 2, r.top + r.height / 2));
+    };
+    medir();
+    window.addEventListener('resize', medir);
+    return () => window.removeEventListener('resize', medir);
+  }, [tier.mobile, tem3d]);
+
+  // Referência estável entre renders (só muda quando a medição muda de
+  // verdade): `alvoCena` é dependência do `useGSAP` abaixo, e um objeto
+  // novo a cada render recriaria os ScrollTriggers à toa.
+  const alvoCena = useMemo(
+    () => (tier.mobile ? { ...CENAS.heroMobile, x: alvoMobile.x, y: alvoMobile.y } : CENAS.hero),
+    [tier.mobile, alvoMobile.x, alvoMobile.y],
+  );
 
   useGSAP(
     () => {
@@ -172,11 +200,12 @@ export function Ato1Hero() {
           </div>
 
           {/* Só reserva espaço quando existe cena 3D pra mirar: no mobile
-              (ver CSS), fica abaixo dos botões, pro crachá (Canvas fixo,
-              posição fixa em `CENAS.heroMobile`) nunca sobrepor o texto.
+              (ver CSS), fica abaixo dos botões, e é a partir DESTE
+              retângulo que o alvo x/y do crachá é medido (ver
+              `useLayoutEffect` acima), pro crachá nunca sobrepor o texto.
               Sem WebGL o substituto estático já cai no lugar certo sozinho,
               por ordem normal do DOM. */}
-          {tem3d && <div className={s.espacoCracha} aria-hidden="true" />}
+          {tem3d && <div ref={espacoRef} className={s.espacoCracha} aria-hidden="true" />}
         </div>
 
         {/* Sem WebGL ou em conexão econômica, o crachá estático ocupa

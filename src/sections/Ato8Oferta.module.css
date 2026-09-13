@@ -10,13 +10,20 @@
 
 /* ---------- oferta ---------- */
 
+/* Cartão escuro proposital: esta seção é clara (fundo branco), então um
+   cartão que se destaque precisa de preenchimento sólido, não de um tom
+   quase invisível como o rgba(10,10,10,0.028) que havia aqui antes. Cor de
+   texto e acento vêm hardcoded (não das variáveis de tema, que aqui
+   resolvem pra tons pensados pro fundo branco) porque este bloco é uma
+   ilha escura dentro da seção clara. */
 .oferta{
   display: block;
   padding: clamp(1.5rem, 3vw, 2.25rem);
-  border: 1px solid var(--linha);
-  border-left: 2px solid var(--acento);
+  border: 1px solid rgba(247, 245, 239, 0.09);
+  border-left: 2px solid #F2790C;
   border-radius: 4px;
-  background: rgba(10, 10, 10, 0.028);
+  background: #141414;
+  color: var(--branco);
   margin-bottom: clamp(2.75rem, 6vw, 4.5rem);
   max-width: 56rem;
 }
@@ -49,10 +56,10 @@
 .prazo{
   font-size: 0.9375rem;
   line-height: 1.6;
-  color: var(--texto-suave);
+  color: var(--cinza);
   max-width: 46ch;
   padding-top: clamp(1rem, 2vw, 1.4rem);
-  border-top: 1px solid var(--linha);
+  border-top: 1px solid rgba(247, 245, 239, 0.09);
 }
 
 /* ---------- objeções ---------- */
@@ -109,16 +116,19 @@
   margin-bottom: clamp(3rem, 7vw, 5rem);
 }
 
+/* Mesma ilha escura do .oferta: sem preenchimento sólido, a borda
+   tracejada sozinha some contra o branco da seção. */
 .confiancaItem{
   padding: clamp(1.1rem, 2vw, 1.5rem);
-  border: 1px dashed var(--linha-acento);
+  border: 1px dashed rgba(242, 121, 12, 0.4);
   border-radius: 10px;
+  background: #141414;
 }
 
 .confiancaItem p{
   font-size: 0.9375rem;
   line-height: 1.6;
-  color: var(--texto-suave);
+  color: var(--cinza);
   max-width: 46ch;
 }
 
@@ -127,7 +137,7 @@
   font-size: var(--fs-micro);
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: var(--acento);
+  color: #F2790C;
   margin-bottom: 0.5rem;
 }
 

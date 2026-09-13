@@ -30,6 +30,12 @@ const OCULTO: AlvoCena = { x: 0, y: 0, escala: 0.6, opacidade: 0 };
  */
 export const CENAS = {
   hero: { x: 1.55, y: 0.3, escala: 1, opacidade: 1 } as AlvoCena,
+  /**
+   * `x`/`y` aqui são só o valor antes da primeira medição (ver
+   * `Ato1Hero.tsx`): no mobile o alvo real vem de `pontoDeTelaParaCena`
+   * aplicado ao retângulo do `.espacoCracha`, medido no mount e atualizado
+   * num listener de resize. `escala`/`opacidade` continuam fixos daqui.
+   */
   heroMobile: { x: 0.26, y: -0.95, escala: 0.5, opacidade: 0.9 } as AlvoCena,
 
   oculto: OCULTO,
@@ -51,6 +57,26 @@ export const sinal = {
    */
   giroHero: 0,
 };
+
+/**
+ * Converte um ponto de tela (px, origem no canto superior esquerdo) pra
+ * unidades de cena no plano z=0, dada a câmera fixa do projeto (fov 34,
+ * posição z 6.2, ver `BadgeCanvas.tsx`). Serve pra mirar o crachá num
+ * elemento comum do DOM (o espaço reservado do Hero no mobile). Chamada só
+ * no mount e num listener de resize, nunca por frame de scroll: a versão
+ * antiga que recalculava a cada `onUpdate` fazia o crachá andar de posição
+ * enquanto girava.
+ */
+export function pontoDeTelaParaCena(xTela: number, yTela: number) {
+  const fov = 34;
+  const distanciaCamera = 6.2;
+  const meiaAltura = Math.tan((fov * Math.PI) / 360) * distanciaCamera;
+  const meiaLargura = meiaAltura * (window.innerWidth / window.innerHeight);
+  return {
+    x: (xTela / window.innerWidth - 0.5) * 2 * meiaLargura,
+    y: (0.5 - yTela / window.innerHeight) * 2 * meiaAltura,
+  };
+}
 
 type Ouvinte = (ativo: boolean) => void;
 const ouvintes = new Set<Ouvinte>();

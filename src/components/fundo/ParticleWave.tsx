@@ -3,7 +3,8 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { useDeviceTier } from '@/lib/use-device-tier';
-import { aoMudarTom } from '@/lib/fundo-signal';
+import { useLenis } from '@/providers/LenisProvider';
+import { idsSecaoClaraAtiva } from '@/lib/fundo-signal';
 import s from './ParticleWave.module.css';
 
 /**
@@ -21,6 +22,12 @@ import s from './ParticleWave.module.css';
  *   do ponteiro, o `mousemove` só existia sem efeito nenhum na animação.
  * - `uTime` sobe sozinho em `requestAnimationFrame`, sem qualquer entrada
  *   de interação.
+ *
+ * O corte claro/escuro é físico, não uma cor média da tela inteira: cada
+ * partícula (e cada pixel do fundo) decide a própria cor comparando a
+ * própria posição de tela contra o retângulo real da seção clara ativa,
+ * medido via `getBoundingClientRect`. Isso é o que deixa metade da tela
+ * escura e metade clara no mesmo frame, durante a transição.
  */
 
 const CORES = {
@@ -30,7 +37,7 @@ const CORES = {
   particulaClara: new THREE.Color('#B85600'),
 };
 
-const VERTEX = `
+const VERTEX_PONTOS = `
   attribute float scale;
   uniform float uTime;
   void main() {
@@ -45,20 +52,57 @@ const VERTEX = `
   }
 `;
 
-const FRAGMENT = `
-  uniform vec3 uColor;
+// `gl_FragCoord.y` já vem em pixels físicos do framebuffer, origem embaixo
+// (ao contrário do topo, que é a origem de `getBoundingClientRect`). Os
+// uniforms `uClaroInicio`/`uClaroFim` chegam já convertidos pra esse mesmo
+// referencial (ver `medirRecorte` no componente). `step()`, não `smoothstep`
+// nem mistura por distância: o corte é de um pixel pro outro, sem degradê.
+const RECORTE_COMUM = `
+  uniform float uClaroInicio;
+  uniform float uClaroFim;
+  uniform float uAtivo;
+
+  float dentroDoRecorte() {
+    return uAtivo * step(uClaroInicio, gl_FragCoord.y) * step(gl_FragCoord.y, uClaroFim);
+  }
+`;
+
+const FRAGMENT_PONTOS = `
+  uniform vec3 uCorEscura;
+  uniform vec3 uCorClara;
+  ${RECORTE_COMUM}
   void main() {
-    gl_FragColor = vec4(uColor, 0.5);
+    vec3 cor = mix(uCorEscura, uCorClara, dentroDoRecorte());
+    gl_FragColor = vec4(cor, 0.5);
+  }
+`;
+
+const VERTEX_FUNDO = `
+  void main() {
+    // Quad de dois triângulos cobrindo a tela inteira: a posição já chega
+    // em coordenadas de clip-space (-1 a 1), sem passar pela câmera da
+    // cena. É só um retângulo fixo colado no plano de fundo.
+    gl_Position = vec4(position.xy, 0.0, 1.0);
+  }
+`;
+
+const FRAGMENT_FUNDO = `
+  uniform vec3 uCorEscura;
+  uniform vec3 uCorClara;
+  ${RECORTE_COMUM}
+  void main() {
+    gl_FragColor = vec4(mix(uCorEscura, uCorClara, dentroDoRecorte()), 1.0);
   }
 `;
 
 export function ParticleWave() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const tier = useDeviceTier();
+  const { lenis } = useLenis();
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || !tier.pronto || !tier.webgl) return;
+    if (!canvas || !tier.pronto || !tier.webgl || !lenis) return;
 
     // Desktop, grade 200x200. Mobile, 80x80 como ponto de partida (pedido
     // explícito do briefing), reduz o número de partículas em ~84%.
@@ -103,27 +147,82 @@ export function ParticleWave() {
     geometria.setAttribute('position', new THREE.BufferAttribute(posicoes, 3));
     geometria.setAttribute('scale', new THREE.BufferAttribute(escalas, 1));
 
-    const material = new THREE.ShaderMaterial({
+    // Uniforms de recorte compartilhados por valor (não por referência de
+    // objeto) entre o material dos pontos e o do fundo: cada um tem sua
+    // própria cópia, atualizada junto em `medirRecorte`.
+    const recorteInicial = { uClaroInicio: 0, uClaroFim: 0, uAtivo: 0 };
+
+    const materialPontos = new THREE.ShaderMaterial({
       transparent: true,
-      vertexShader: VERTEX,
-      fragmentShader: FRAGMENT,
+      vertexShader: VERTEX_PONTOS,
+      fragmentShader: FRAGMENT_PONTOS,
       uniforms: {
         uTime: { value: 0 },
-        uColor: { value: CORES.particulaEscura.clone() },
+        uCorEscura: { value: CORES.particulaEscura.clone() },
+        uCorClara: { value: CORES.particulaClara.clone() },
+        uClaroInicio: { value: recorteInicial.uClaroInicio },
+        uClaroFim: { value: recorteInicial.uClaroFim },
+        uAtivo: { value: recorteInicial.uAtivo },
       },
     });
 
-    const particulas = new THREE.Points(geometria, material);
+    const particulas = new THREE.Points(geometria, materialPontos);
     scene.add(particulas);
 
-    let claroAlvo = 0;
-    let claroAtual = 0;
-    const pararTom = aoMudarTom((claro) => {
-      claroAlvo = claro ? 1 : 0;
+    // Plano de fundo full screen: um WebGLRenderer só tem uma clear color
+    // por frame, e ela pinta a tela inteira de uma vez. Pra ter metade
+    // escura e metade clara ao mesmo tempo, o "fundo" vira geometria de
+    // verdade, desenhada atrás de tudo, com o mesmo corte por pixel que as
+    // partículas usam.
+    const materialFundo = new THREE.ShaderMaterial({
+      vertexShader: VERTEX_FUNDO,
+      fragmentShader: FRAGMENT_FUNDO,
+      uniforms: {
+        uCorEscura: { value: CORES.fundoEscuro.clone() },
+        uCorClara: { value: CORES.fundoClaro.clone() },
+        uClaroInicio: { value: recorteInicial.uClaroInicio },
+        uClaroFim: { value: recorteInicial.uClaroFim },
+        uAtivo: { value: recorteInicial.uAtivo },
+      },
+      depthTest: false,
+      depthWrite: false,
     });
+    const fundo = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), materialFundo);
+    fundo.frustumCulled = false;
+    fundo.renderOrder = -1;
+    scene.add(fundo);
 
-    const corFundoAtual = CORES.fundoEscuro.clone();
-    const corParticulaAtual = CORES.particulaEscura.clone();
+    // Mede a seção clara ativa (se houver) e converte o retângulo pra
+    // coordenadas de framebuffer (origem embaixo, pixels físicos, ver
+    // `RECORTE_COMUM`). Chamada no mount e a cada evento de scroll do
+    // Lenis, nunca a cada frame de RAF: a página só precisa saber onde a
+    // seção está quando ela de fato se move.
+    const medirRecorte = () => {
+      const ids = idsSecaoClaraAtiva();
+      let domTopo = Infinity;
+      let domBase = -Infinity;
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const r = el.getBoundingClientRect();
+        domTopo = Math.min(domTopo, r.top);
+        domBase = Math.max(domBase, r.bottom);
+      }
+
+      const ativo = Number.isFinite(domTopo) && Number.isFinite(domBase) ? 1 : 0;
+      const dpr = renderer.getPixelRatio();
+      const alturaFisica = window.innerHeight * dpr;
+      const claroInicio = ativo ? alturaFisica - domBase * dpr : 0;
+      const claroFim = ativo ? alturaFisica - domTopo * dpr : 0;
+
+      for (const mat of [materialPontos, materialFundo]) {
+        mat.uniforms.uAtivo.value = ativo;
+        mat.uniforms.uClaroInicio.value = claroInicio;
+        mat.uniforms.uClaroFim.value = claroFim;
+      }
+    };
+    medirRecorte();
+    lenis.on('scroll', medirRecorte);
 
     let visivel = document.visibilityState === 'visible';
     const aoMudarVisibilidade = () => {
@@ -137,17 +236,8 @@ export function ParticleWave() {
       if (!visivel) return;
 
       if (!tier.reduzido) {
-        material.uniforms.uTime.value += 0.05;
+        materialPontos.uniforms.uTime.value += 0.05;
       }
-
-      // Troca de uma vez pro tom alvo (claro ou escuro), sem aproximação
-      // gradual: o fundo muda no mesmo instante em que a seção clara entra
-      // ou sai de vista, sem degradê entre os dois tons.
-      claroAtual = claroAlvo;
-      corFundoAtual.copy(CORES.fundoEscuro).lerp(CORES.fundoClaro, claroAtual);
-      corParticulaAtual.copy(CORES.particulaEscura).lerp(CORES.particulaClara, claroAtual);
-      renderer.setClearColor(corFundoAtual);
-      (material.uniforms.uColor.value as THREE.Color).copy(corParticulaAtual);
 
       renderer.render(scene, camera);
     }
@@ -159,20 +249,27 @@ export function ParticleWave() {
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
+      // A altura física e o `devicePixelRatio` mudam com a janela; sem
+      // remedir aqui, o recorte ficaria com a escala antiga até o próximo
+      // scroll.
+      medirRecorte();
     };
     window.addEventListener('resize', aoRedimensionar);
 
     return () => {
       cancelAnimationFrame(animId);
-      pararTom();
+      lenis.off('scroll', medirRecorte);
       window.removeEventListener('resize', aoRedimensionar);
       document.removeEventListener('visibilitychange', aoMudarVisibilidade);
       scene.remove(particulas);
+      scene.remove(fundo);
       geometria.dispose();
-      material.dispose();
+      materialPontos.dispose();
+      fundo.geometry.dispose();
+      materialFundo.dispose();
       renderer.dispose();
     };
-  }, [tier.pronto, tier.webgl, tier.mobile, tier.reduzido]);
+  }, [tier.pronto, tier.webgl, tier.mobile, tier.reduzido, lenis]);
 
   if (!tier.pronto || !tier.webgl) return null;
 
