@@ -11,6 +11,14 @@
   padding: clamp(0.85rem, 1.8vw, 1.4rem) var(--gut);
 }
 
+/* Acima de 1024px, o mesmo respiro lateral usado no Hero (ver
+   Ato1Hero.module.css, .faixa): com só `--gut`, a marca ficava colada
+   demais na borda, sem relação nenhuma com a margem do conteúdo logo
+   abaixo dela na mesma tela. */
+@media (min-width: 1024px){
+  .raiz{ padding-inline: 6vw; }
+}
+
 .raiz[data-solido='true']{
   background: linear-gradient(180deg, rgba(10, 10, 10, 0.55), transparent);
 }

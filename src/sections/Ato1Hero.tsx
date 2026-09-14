@@ -9,8 +9,7 @@ import { Botao } from '@/components/ui/Botao';
 import { DIST, DUR, EASE, SILENCIO } from '@/lib/motion-tokens';
 import s from './Ato1Hero.module.css';
 
-const HEADLINE =
-  'Você não perde cliente por falta de anúncio. Perde quando ele cai entre fornecedores que não se falam.';
+const HEADLINE = 'Tecnologia que transforma processos em crescimento.';
 
 /**
  * ATO 1: ABERTURA
@@ -32,7 +31,7 @@ export function Ato1Hero() {
         // timeline, só `.acoes > *` (os botões); esconder o contêiner aqui
         // deixava um opacity:0 órfão que o revert do próximo run não
         // limpava, e os dois botões ficavam invisíveis pra sempre.
-        gsap.set([`.${s.sub}`, `.${s.acoes} > *`], {
+        gsap.set(`.${s.acoes} > *`, {
           opacity: 0,
         });
         return;
@@ -49,12 +48,6 @@ export function Ato1Hero() {
         { opacity: 0, duration: t(0.84) || 0.01, ease: EASE.entrada },
       )
         // a headline entra pelo SplitWords, cronometrada pelo mesmo silêncio
-        .fromTo(
-          `.${s.sub}`,
-          { opacity: 0, y: DIST.curto },
-          { opacity: 1, y: 0, duration: DUR.media, ease: EASE.entrada },
-          t(1.26),
-        )
         .fromTo(
           `.${s.acoes} > *`,
           { opacity: 0, y: DIST.curto },
@@ -77,13 +70,8 @@ export function Ato1Hero() {
             className={s.headline}
             gatilho={liberado ? 'imediato' : 'nenhum'}
             atraso={SILENCIO.hero + 0.42}
-            destacarIndices={[8, 13]}
+            destacarIndices={[3, 5]}
           />
-
-          <p className={s.sub}>
-            Site, sistema, automação e tráfego pago, sob a mesma equipe. Combinado por
-            escrito, código seu, suporte contínuo.
-          </p>
 
           <div className={s.acoes}>
             <Botao onClick={() => irPara('#ato-convite')}>Falar com a Atlas</Botao>

@@ -47,14 +47,6 @@
   margin-bottom: clamp(1.25rem, 2.2vw, 1.75rem);
 }
 
-.sub{
-  max-width: 44ch;
-  font-size: clamp(1rem, 1.35vw, 1.1875rem);
-  line-height: 1.5;
-  color: var(--texto-suave);
-  margin-bottom: clamp(1.5rem, 2.8vw, 2rem);
-}
-
 .acoes{
   display: flex;
   flex-wrap: wrap;
