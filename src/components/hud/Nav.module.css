@@ -112,10 +112,14 @@
   .raiz,
   .raiz[data-solido='true']{
     justify-content: center;
-    background: var(--preto);
+    background: rgba(10, 10, 10, 0.5);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
   }
   .capsula,
   .cta{ display: none; }
+
+  .nome{ font-size: 1.3rem; }
 }
 
 @media (prefers-reduced-motion: reduce){

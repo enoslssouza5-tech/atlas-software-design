@@ -8,27 +8,6 @@
   text-align: center;
 }
 
-.oferta{
-  display: block;
-  padding: clamp(1.5rem, 3vw, 2.25rem);
-  border: 1px solid rgba(247, 245, 239, 0.09);
-  border-left: 2px solid #F2790C;
-  border-radius: 4px;
-  background: #141414;
-  color: var(--branco);
-  margin-bottom: clamp(2.75rem, 6vw, 4.5rem);
-  max-width: 56rem;
-}
-
-.prazo{
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  color: var(--cinza);
-  max-width: 46ch;
-  padding-top: clamp(1rem, 2vw, 1.4rem);
-  border-top: 1px solid rgba(247, 245, 239, 0.09);
-}
-
 .subtitulo{
   font-size: clamp(1.25rem, 2.2vw, 1.625rem);
   letter-spacing: -0.025em;

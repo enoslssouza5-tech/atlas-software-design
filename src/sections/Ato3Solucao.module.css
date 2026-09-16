@@ -130,10 +130,13 @@
   opacity: 0;
   transform: translateY(10px);
   max-height: 0;
+  /* Mesma duração do flexGrow animado via GSAP (DUR.media, 0.82s): se o
+     texto terminar de entrar antes da largura do painel, ele aparece
+     embolado enquanto o painel ainda está crescendo. */
   transition:
-    opacity 0.34s var(--ease-cine),
-    transform 0.34s var(--ease-cine),
-    max-height 0.34s var(--ease-cine);
+    opacity 0.82s var(--ease-cine),
+    transform 0.82s var(--ease-cine),
+    max-height 0.82s var(--ease-cine);
 }
 
 .painel.ativo .indice,
@@ -148,7 +151,7 @@
 }
 
 .mecanismo{
-  max-width: min(28rem, 100%);
+  max-width: min(34rem, 100%);
   color: var(--texto);
 }
 
@@ -158,6 +161,7 @@
   font-size: clamp(1.5rem, 2.35vw, 2.35rem);
   line-height: 1.12;
   letter-spacing: -0.035em;
+  text-align: center;
 }
 
 .mecanismo strong{
@@ -226,7 +230,7 @@
   }
 
   .mecanismo{
-    max-width: 24ch;
+    max-width: 30ch;
   }
 }
 

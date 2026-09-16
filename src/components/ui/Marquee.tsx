@@ -12,7 +12,7 @@ type Props = { children: ReactNode; className?: string; duracao?: string };
  * sustentado (`pointerdown` até `pointerup`/`pointercancel`/`pointerleave`),
  * já que `:hover` sozinho não é confiável em touch. As duas formas só
  * pausam, nunca uma desfaz a pausa da outra: cada uma solta sua própria
- * condição de saída.
+ * condição de saída, e soltar retoma na hora, sem atraso.
  *
  * O conteúdo é renderizado duas vezes lado a lado (a segunda cópia com
  * `aria-hidden`, só pra leitor de tela não repetir) pra a translação de

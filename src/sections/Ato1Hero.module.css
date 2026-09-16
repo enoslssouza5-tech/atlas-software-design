@@ -5,7 +5,7 @@
   min-height: 100svh;
   display: flex;
   align-items: center;
-  padding-block: clamp(7rem, 16vh, 10rem) clamp(5rem, 12vh, 8rem);
+  padding-block: clamp(4rem, 9vh, 6rem) clamp(3rem, 7vh, 5rem);
   overflow: hidden;
 }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { SplitWords } from '@/components/ui/SplitWords';
 import { useDeviceTier } from '@/lib/use-device-tier';
@@ -94,19 +94,38 @@ export function Ato3Solucao() {
   const ref = useRef<HTMLElement>(null);
   const tier = useDeviceTier();
   const [ativo, setAtivo] = useState(0);
+  const ativoRef = useRef(ativo);
+  const atrasoHover = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    ativoRef.current = ativo;
+  }, [ativo]);
+
+  const cancelarAtrasoHover = () => {
+    if (atrasoHover.current !== null) {
+      clearTimeout(atrasoHover.current);
+      atrasoHover.current = null;
+    }
+  };
+
+  useEffect(() => cancelarAtrasoHover, []);
 
   const ativar = (indiceAtivo: number) => {
+    cancelarAtrasoHover();
     setAtivo(indiceAtivo);
+
+    // No mobile o destaque é só a classe .ativo via CSS (empilhado em
+    // coluna, sem flexGrow fazendo sentido nenhum ali). Nada de GSAP.
+    if (tier.mobile) return;
 
     const raiz = ref.current;
     if (!raiz || typeof window === 'undefined') return;
 
     const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const mobile = window.matchMedia('(max-width: 1023px)').matches;
     const paineis = gsap.utils.toArray<HTMLElement>(raiz.querySelectorAll(`.${s.painel}`));
 
-    if (reduzido || mobile) {
-      gsap.set(paineis, { flexGrow: 1 });
+    if (reduzido) {
+      gsap.set(paineis, { flexGrow: (indice) => (indice === indiceAtivo ? 3.4 : 0.86) });
       return;
     }
 
@@ -118,6 +137,29 @@ export function Ato3Solucao() {
     });
   };
 
+  /**
+   * Hover intent, só desktop: o cursor atravessa os painéis do meio a
+   * caminho do destino ao mover o mouse pela fileira, disparando ativar em
+   * cascata. O atraso cancelável evita reagir a essas passagens rápidas.
+   * No mobile isso nem é anexado aos botões: toque dispara onMouseEnter
+   * sintético antes do onClick em vários navegadores, e um atraso preso
+   * a esse evento fantasma é o que travava o accordion lá.
+   */
+  const ativarComIntencao = (indiceAtivo: number) => {
+    cancelarAtrasoHover();
+    atrasoHover.current = setTimeout(() => {
+      atrasoHover.current = null;
+      ativar(indiceAtivo);
+    }, 80);
+  };
+
+  // Só a entrada: fade e subida, disparada uma única vez pelo ScrollTrigger.
+  // Dependências propositalmente sem `ativo`. Se ele entrasse aqui, cada
+  // clique no accordion recriava o contexto inteiro, incluindo um
+  // ScrollTrigger novo que já nasce depois do ponto de disparo e refaz a
+  // opacidade do zero na hora (o pisca-pisca reportado). O realce do painel
+  // ativo no desktop é cuidado à parte, direto em `ativar`, sem passar por
+  // useGSAP nenhum.
   useGSAP(
     () => {
       const raiz = ref.current;
@@ -132,7 +174,7 @@ export function Ato3Solucao() {
       }
 
       if (!tier.mobile) {
-        gsap.set(paineis, { flexGrow: (indice) => (indice === ativo ? 3.4 : 0.86) });
+        gsap.set(paineis, { flexGrow: (indice) => (indice === ativoRef.current ? 3.4 : 0.86) });
       }
 
       gsap.fromTo(
@@ -148,7 +190,7 @@ export function Ato3Solucao() {
         },
       );
     },
-    { scope: ref, dependencies: [tier.pronto, tier.mobile, ativo] },
+    { scope: ref, dependencies: [tier.pronto, tier.mobile] },
   );
 
   return (
@@ -173,7 +215,8 @@ export function Ato3Solucao() {
                     type="button"
                     className={`${s.painel} ${aberto ? s.ativo : ''}`}
                     aria-expanded={aberto}
-                    onMouseEnter={() => ativar(indice)}
+                    onMouseEnter={tier.mobile ? undefined : () => ativarComIntencao(indice)}
+                    onMouseLeave={tier.mobile ? undefined : cancelarAtrasoHover}
                     onFocus={() => ativar(indice)}
                     onClick={() => ativar(indice)}
                   >

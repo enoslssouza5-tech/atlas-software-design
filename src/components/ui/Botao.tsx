@@ -13,8 +13,9 @@ type Props = {
 };
 
 /**
- * Botão de filete laranja. O laranja é contorno e preenchimento de hover,
- * nunca área sólida grande em repouso.
+ * Botão de filete laranja. O laranja é contorno em repouso e um
+ * preenchimento translúcido no hover, a mesma receita do item ativo da
+ * cápsula do menu, nunca área sólida grande.
  * O hover é a única exceção da regra de duração: 0.22s, via CSS, porque é
  * micro-interação e não animação de entrada.
  */

@@ -11,11 +11,10 @@ import { DIST, DUR } from '@/lib/motion-tokens';
 import s from './Ato6bDepoimentos.module.css';
 
 /**
- * Depoimentos fictícios de demonstração, mesma lógica dos sete projetos do
- * Ato 5: nome, cargo, empresa e marca de cada empresa inventados pra
- * mostrar o formato do card, nunca passados como reais. Cada card carrega
- * a etiqueta visível de demonstração, e nenhum depoimento real entra aqui
- * sem consentimento por escrito.
+ * Depoimentos fictícios de demonstração, mesma lógica dos projetos do Ato 5:
+ * nome, cargo, empresa e marca de cada empresa inventados pra mostrar o
+ * formato do card, nunca passados como reais. Nenhum depoimento real entra
+ * aqui sem consentimento por escrito.
  */
 const DEPOIMENTOS: {
   nome: string;
@@ -134,7 +133,6 @@ export function Ato6bDepoimentos() {
                 <d.Icone size={16} strokeWidth={1.5} />
                 <span className={s.marcaNome}>{d.empresa}</span>
               </div>
-              <span className={s.ficticio}>Depoimento fictício de demonstração</span>
             </article>
           ))}
         </Marquee>

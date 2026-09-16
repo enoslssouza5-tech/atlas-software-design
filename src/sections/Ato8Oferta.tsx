@@ -1,7 +1,6 @@
 'use client';
 
 import { Ato } from '@/components/ui/Ato';
-import { Reveal } from '@/components/ui/Reveal';
 import { Acordeao, type ItemFaq } from '@/components/ui/Acordeao';
 import s from './Ato8Oferta.module.css';
 
@@ -77,21 +76,6 @@ const FAQ: ItemFaq[] = [
 export function Ato8Oferta() {
   return (
     <Ato id="ato-oferta" rotulo="Como funciona" claro>
-      <Reveal className={s.oferta} duracao={0.82}>
-        <div>
-          <p>
-            Tudo começa com uma conversa simples sobre o seu problema. Depois disso, você
-            recebe por escrito o que vai ser feito, o prazo e o valor, e só começa quando
-            aprovar. Você acompanha a construção antes de qualquer coisa ir pro ar, e o
-            suporte continua depois da entrega.
-          </p>
-          <p className={s.prazo}>
-            Prazo de entrega de site, 15 a 30 dias, conforme o combinado. Demais frentes e
-            valores, sob conversa direta com a Atlas.
-          </p>
-        </div>
-      </Reveal>
-
       <div className={s.objecoes}>
         <h3 className={s.subtitulo}>As seis perguntas que todo mundo faz</h3>
         <div className={s.objecoesGrade}>

@@ -3,7 +3,10 @@
   z-index: 2;
   background: var(--preto-2);
   border-top: 1px solid var(--linha);
-  padding-block: clamp(3rem, 7vw, 5rem) clamp(1.5rem, 3vw, 2.25rem);
+  /* Topo reduzido de propósito: o Ato 9 já reserva --ato-py de respiro
+     antes daqui, então um segundo respiro grande empilhado só cria um
+     vazio maior do que o resto da página usa entre seções. */
+  padding-block: clamp(1.5rem, 3vw, 2.25rem);
 }
 
 .interno{
@@ -11,87 +14,77 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: clamp(1.5rem, 3vw, 2.25rem);
-  padding-bottom: clamp(2.5rem, 5vw, 3.5rem);
+  gap: clamp(1.25rem, 2.6vw, 1.75rem);
+}
+
+.logo{
+  width: clamp(64px, 8vw, 96px);
+  height: clamp(64px, 8vw, 96px);
+  flex: 0 0 auto;
 }
 
 .marca{
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.3rem;
 }
 
-.icone{
-  width: 26px;
-  height: 26px;
-  color: var(--acento);
-  flex: 0 0 auto;
-}
-
-.assinatura{
-  font-family: var(--font-display);
-  font-size: 1.0625rem;
-  letter-spacing: -0.015em;
-  color: var(--texto);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.2rem;
-}
-
-.linhaSecundaria{
-  font-family: var(--font-body);
-  font-size: var(--fs-micro);
+.nome{
+  font-family: var(--font-montserrat), "Montserrat", sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.1rem, 2.4vw, 1.4rem);
   letter-spacing: 0.04em;
-  color: var(--texto-suave);
+  color: var(--texto);
+  max-width: 22ch;
 }
 
+.amp{
+  color: var(--acento);
+}
+
+/* Lista vertical simples: ícone da rede à esquerda, número ou usuário ao
+   lado, uma linha por canal. */
 .contatos{
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem clamp(1.25rem, 3vw, 2rem);
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
 }
 
-.contatos a{
+.contato{
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   color: var(--texto);
   font-size: 0.9375rem;
-  border-bottom: 1px solid transparent;
-  transition: color 0.22s var(--ease-cine), border-color 0.22s var(--ease-cine);
+  letter-spacing: -0.01em;
+  transition: color 0.22s var(--ease-cine);
+}
+
+.contato:hover{
+  color: var(--acento-claro);
 }
 
 .iconeContato{
-  width: 18px;
-  height: 18px;
-  color: var(--acento);
   flex: 0 0 auto;
-}
-
-.contatos a:hover{
-  color: var(--acento-claro);
-  border-color: var(--acento-claro);
+  width: 20px;
+  height: 20px;
+  color: var(--acento);
 }
 
 @media (prefers-reduced-motion: reduce){
-  .contatos a{ transition: none !important; }
+  .contato{ transition: none !important; }
 }
 
-.rodapinho{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem var(--gut);
-  justify-content: space-between;
-  padding-top: clamp(1.25rem, 2.6vw, 1.75rem);
+.copyright{
+  padding-top: clamp(1rem, 2.2vw, 1.5rem);
   border-top: 1px solid var(--linha);
+  width: 100%;
   font-size: var(--fs-micro);
   color: var(--texto-fraco);
+  text-align: center;
 }
-
-.credito{ letter-spacing: 0.08em; }

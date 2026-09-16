@@ -12,30 +12,24 @@
   font-weight: 500;
   letter-spacing: -0.01em;
   isolation: isolate;
-  overflow: hidden;
   transition:
     color 0.22s var(--ease-cine),
+    background 0.22s var(--ease-cine),
     border-color 0.22s var(--ease-cine);
 }
 
-/* preenchimento de hover: sobe de baixo, não pisca */
-.raiz::before{
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--acento);
-  transform: translateY(101%);
-  transition: transform 0.22s var(--ease-cine);
-}
-
+/* Hover é o mesmo laranja translúcido do item ativo da cápsula do menu
+   (ver .indicador em Nav.module.css), nunca área sólida grande nem troca
+   de cor do texto pra escura. */
 .primario{
   color: var(--texto);
   border: 1px solid var(--acento);
 }
 
-.primario:hover{ color: var(--preto); }
-.primario:hover::before{ transform: translateY(0); }
+.primario:hover{
+  background: rgba(242, 121, 12, 0.16);
+  border-color: var(--linha-acento);
+}
 
 .fantasma{
   color: var(--texto-suave);
@@ -44,11 +38,9 @@
 
 .fantasma:hover{
   color: var(--texto);
+  background: rgba(242, 121, 12, 0.16);
   border-color: var(--linha-acento);
 }
-
-.fantasma::before{ background: rgba(247, 245, 239, 0.05); }
-.fantasma:hover::before{ transform: translateY(0); }
 
 .texto{ position: relative; }
 
@@ -60,6 +52,5 @@
 .raiz:hover .seta{ transform: translateX(3px); }
 
 @media (prefers-reduced-motion: reduce){
-  .raiz, .raiz::before, .seta{ transition: none !important; }
-  .primario:hover::before, .fantasma:hover::before{ transform: translateY(0); }
+  .raiz, .seta{ transition: none !important; }
 }

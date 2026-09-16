@@ -63,6 +63,15 @@ html{
   background: var(--preto);
   color-scheme: dark;
   -webkit-text-size-adjust: 100%;
+  /* Barra de rolagem escondida visualmente, o scroll continua funcionando
+     normal pra mouse, trackpad e toque, só o trilho some da tela. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar{
+  display: none;
 }
 
 /* Lenis controla o scroll. O nativo suave brigaria com ele. */
@@ -89,6 +98,8 @@ body{
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 h1, h2, h3, h4{

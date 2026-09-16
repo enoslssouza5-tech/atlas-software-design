@@ -17,7 +17,7 @@
   gap: 0.75rem;
   width: min(84vw, 360px);
   flex-shrink: 0;
-  padding: clamp(1.25rem, 2vw, 1.75rem);
+  padding: clamp(0.9rem, 1.5vw, 1.25rem);
   border: 1px solid var(--linha);
   border-radius: 12px;
   background: linear-gradient(168deg, rgba(28, 28, 31, 0.72), rgba(19, 19, 19, 0.42));
@@ -66,16 +66,4 @@
 .marcaNome{
   font-size: var(--fs-micro);
   letter-spacing: 0.02em;
-}
-
-.ficticio{
-  align-self: flex-start;
-  margin-top: 0.25rem;
-  font-size: 0.6875rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--acento-claro);
-  border: 1px dashed var(--linha-acento);
-  border-radius: 999px;
-  padding: 0.3rem 0.7rem;
 }

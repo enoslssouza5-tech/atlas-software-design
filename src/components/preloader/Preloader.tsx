@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { useLenis } from '@/providers/LenisProvider';
 import { useAbertura } from '@/providers/AberturaProvider';
@@ -17,9 +17,28 @@ const TETO_MS = 4800;
 
 export function Preloader() {
   const ref = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [saiu, setSaiu] = useState(false);
   const { travar } = useLenis();
   const { liberar } = useAbertura();
+
+  // O atributo autoPlay do JSX sozinho não é garantia em todo navegador
+  // mobile. Forçar muted antes do play() e engolir a rejeição da Promise
+  // cobre o caso do vídeo simplesmente não tocar sem travar a timeline.
+  const tentarTocar = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.muted = true;
+    const promessa = video.play();
+    if (promessa && typeof promessa.catch === 'function') {
+      promessa.catch(() => {});
+    }
+  };
+
+  useEffect(() => {
+    tentarTocar();
+  }, []);
 
   useGSAP(
     () => {
@@ -101,7 +120,7 @@ export function Preloader() {
       // antecedência de 0.34s repete o mesmo espaçamento negativo que essa
       // transição já usava quando a etapa anterior era um fade de SVG, em
       // vez de assumir uma duração fixa de arquivo.
-      const video = raiz.querySelector<HTMLVideoElement>(`.${s.marca}`);
+      const video = videoRef.current;
       const ANTECEDENCIA = 0.34;
       const aoAtualizarVideo = () => {
         if (!video) return;
@@ -133,11 +152,21 @@ export function Preloader() {
   if (saiu) return null;
 
   return (
-    <div className={s.raiz} ref={ref} id="preloader" aria-hidden="true">
+    <div
+      className={s.raiz}
+      ref={ref}
+      id="preloader"
+      aria-hidden="true"
+      // Reforço pro Safari, que às vezes ignora o play() automático e
+      // mostra o próprio botão de play nativo por cima do vídeo. Qualquer
+      // toque na tela do preloader tenta tocar de novo, sem depender só
+      // de acertar esse botão pequeno.
+      onClick={tentarTocar}
+    >
       <div className={s.metadeEsquerda} />
       <div className={s.metadeDireita} />
       <div className={s.centro}>
-        <video className={s.marca} src="/preloader-logo.mp4" autoPlay muted playsInline />
+        <video ref={videoRef} className={s.marca} src="/preloader-logo.mp4" autoPlay muted playsInline />
         <p className={s.saudacao}>
           Atlas Software <span className={s.amp}>&amp;</span> Design
         </p>
