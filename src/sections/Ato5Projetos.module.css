@@ -1,21 +1,20 @@
-/* Fundo transparente de propósito: o fundo de partículas fica fixo atrás
-   de tudo, abaixo do z-index 2 das seções. */
+/* Fundo transparente de proposito: o fundo de particulas fica fixo atras
+   de tudo, abaixo do z-index 2 das secoes. */
 .raiz{
   position: relative;
   z-index: 2;
   scroll-margin-top: 6rem;
-  height: 100svh;
-  display: flex;
-  align-items: center;
+  min-height: auto;
+  padding-block: clamp(3.75rem, 8vh, 6rem) clamp(1.75rem, 4vh, 3rem);
   background: transparent;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .palco{
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: clamp(1.25rem, 2.6vw, 2rem);
+  gap: clamp(0.35rem, 1.2vw, 0.9rem);
 }
 
 .cabecalho{
@@ -33,91 +32,15 @@
   text-align: center;
 }
 
-/* ---------- composição: notebook + celular ---------- */
+/* ---------- composicao: animacao de imagens ---------- */
 
 .composicao{
   position: relative;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  min-height: clamp(200px, 32vw, 360px);
-}
-
-.notebookWrap{
-  width: min(74vw, 620px);
-  perspective: 1400px;
-  will-change: transform;
-}
-
-.celularWrap{
-  position: absolute;
-  right: clamp(1rem, 9vw, 5rem);
-  bottom: clamp(-1.5rem, -3vw, -2rem);
-  overflow: hidden;
-  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.5));
-}
-
-/* ---------- info do projeto atual ---------- */
-
-.info{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 0.4rem;
-}
-
-.nicho{
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-size: var(--fs-micro);
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--texto-suave);
-}
-
-.indice{
-  font-family: var(--font-display);
-  color: var(--acento);
-  letter-spacing: 0.1em;
-}
-
-.cartaoTitulo{
-  font-size: clamp(1.0625rem, 1.6vw, 1.3125rem);
-  letter-spacing: -0.02em;
-  max-width: 32ch;
-}
-
-.escopo{
-  font-size: 0.9375rem;
-  color: var(--texto-suave);
-}
-
-.ficticio{
-  margin-top: 0.25rem;
-  font-size: 0.6875rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--acento-claro);
-  border: 1px dashed var(--linha-acento);
-  border-radius: 999px;
-  padding: 0.3rem 0.7rem;
-}
-
-@media (min-width: 1024px){
-  .notebookWrap{ width: min(50vw, 740px); }
-  .composicao{ min-height: clamp(280px, 26vw, 420px); }
-}
-
-/* Sem notebook no mobile: só o celular, centralizado. Tamanho vem de
-   estilo inline (calculado a partir da escala do IphoneMockup), não daqui. */
-@media (max-width: 767px){
-  .notebookWrap{ display: none; }
-  .composicao{ justify-content: center; min-height: clamp(320px, 70vw, 420px); }
-  .celularWrap{ position: static; }
+  min-height: auto;
+  isolation: isolate;
+  padding-inline: 0;
 }
 
 @media (prefers-reduced-motion: reduce){
-  .raiz{ height: auto; padding-block: var(--ato-py); }
+  .raiz{ min-height: auto; }
 }

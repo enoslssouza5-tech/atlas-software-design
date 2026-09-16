@@ -148,6 +148,50 @@ button{
   padding-inline: var(--gut);
 }
 
+/* Utilitarios minimos para o componente ImagesScrollingAnimation copiado. */
+.relative{ position: relative; }
+.sticky{ position: sticky; }
+.top-0{ top: 0; }
+.-top-1\/4{ top: -25%; }
+.flex{ display: flex; }
+.w-full{ width: 100%; }
+.h-full{ height: 100%; }
+.flex-col{ flex-direction: column; }
+.items-center{ align-items: center; }
+.justify-center{ justify-content: center; }
+.origin-top{ transform-origin: top; }
+.overflow-hidden{ overflow: hidden; }
+.object-cover{ object-fit: cover; }
+.px-4{ padding-inline: 1rem; }
+.rounded-2xl{ border-radius: 1rem; }
+.h-\[200px\]{ height: 200px; }
+.w-\[280px\]{ width: 280px; }
+.pb-\[50vh\]{ padding-bottom: 18vh; }
+.pt-\[5vh\]{ padding-top: 0; }
+
+@media (min-width: 640px){
+  .sm\:px-6{ padding-inline: 1.5rem; }
+  .sm\:rounded-3xl{ border-radius: 1.5rem; }
+  .sm\:h-\[240px\]{ height: 240px; }
+  .sm\:w-\[360px\]{ width: 360px; }
+  .sm\:pb-\[60vh\]{ padding-bottom: 22vh; }
+  .sm\:pt-\[8vh\]{ padding-top: 1vh; }
+}
+
+@media (min-width: 768px){
+  .md\:h-\[280px\]{ height: 280px; }
+  .md\:w-\[420px\]{ width: 420px; }
+}
+
+@media (min-width: 1024px){
+  .lg\:px-8{ padding-inline: 2rem; }
+  .lg\:rounded-4xl{ border-radius: 2rem; }
+  .lg\:h-\[300px\]{ height: 300px; }
+  .lg\:w-\[500px\]{ width: 500px; }
+  .lg\:pb-\[70vh\]{ padding-bottom: 24vh; }
+  .lg\:pt-\[10vh\]{ padding-top: 1.5vh; }
+}
+
 /* Filete fino laranja, único elemento decorativo de linha. */
 .filete{
   height: 1px;

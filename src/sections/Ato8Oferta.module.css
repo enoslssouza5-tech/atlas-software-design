@@ -8,14 +8,6 @@
   text-align: center;
 }
 
-/* ---------- oferta ---------- */
-
-/* Cartão escuro proposital: esta seção é clara (fundo branco), então um
-   cartão que se destaque precisa de preenchimento sólido, não de um tom
-   quase invisível como o rgba(10,10,10,0.028) que havia aqui antes. Cor de
-   texto e acento vêm hardcoded (não das variáveis de tema, que aqui
-   resolvem pra tons pensados pro fundo branco) porque este bloco é uma
-   ilha escura dentro da seção clara. */
 .oferta{
   display: block;
   padding: clamp(1.5rem, 3vw, 2.25rem);
@@ -28,31 +20,6 @@
   max-width: 56rem;
 }
 
-.ofertaLista{
-  list-style: none;
-  margin: 0 0 clamp(1.25rem, 2.6vw, 1.9rem);
-  padding: 0;
-  display: grid;
-  gap: clamp(0.85rem, 1.8vw, 1.25rem);
-}
-
-.ofertaItem{
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  font-size: clamp(1rem, 1.3vw, 1.125rem);
-  line-height: 1.5;
-  color: var(--texto);
-}
-
-.iconeCheck{
-  flex: 0 0 auto;
-  width: 22px;
-  height: 22px;
-  margin-top: 0.15em;
-  color: var(--acento);
-}
-
 .prazo{
   font-size: 0.9375rem;
   line-height: 1.6;
@@ -62,42 +29,42 @@
   border-top: 1px solid rgba(247, 245, 239, 0.09);
 }
 
-/* ---------- objeções ---------- */
-
 .subtitulo{
   font-size: clamp(1.25rem, 2.2vw, 1.625rem);
   letter-spacing: -0.025em;
   color: var(--texto);
   margin-bottom: clamp(1.25rem, 2.6vw, 1.9rem);
-}
-
-/* só o título da FAQ ("Antes de você perguntar") centraliza, por pedido
-   específico. "As cinco perguntas que todo mundo faz" usa a mesma
-   `.subtitulo` base e fica de fora de propósito. */
-.subtituloFaq{
   text-align: center;
 }
 
-.objecoes{ margin-bottom: clamp(2.5rem, 5.5vw, 4rem); }
+.objecoes{
+  width: min(100%, 64rem);
+  margin-inline: auto;
+  margin-bottom: clamp(2.5rem, 5.5vw, 4rem);
+  text-align: center;
+}
 
 .objecoesGrade{
   display: grid;
   gap: clamp(1.25rem, 2.6vw, 2rem);
+  justify-content: center;
 }
 
 .objecao{
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
-  align-items: flex-start;
+  align-items: center;
   padding: clamp(1.1rem, 2.2vw, 1.6rem);
   border: 1px solid var(--linha);
   border-radius: 10px;
+  text-align: center;
 }
 
 .objecaoPergunta{
   font-family: var(--font-display);
   font-size: 1.0625rem;
+  line-height: 1.35;
   letter-spacing: -0.015em;
   color: var(--texto);
 }
@@ -106,49 +73,16 @@
   font-size: 0.9375rem;
   line-height: 1.6;
   color: var(--texto-suave);
+  max-width: 42ch;
 }
 
-/* ---------- garantia e urgência ---------- */
-
-.confianca{
-  display: grid;
-  gap: clamp(1rem, 2vw, 1.5rem);
-  margin-bottom: clamp(3rem, 7vw, 5rem);
+.faq{
+  width: min(100%, 56rem);
+  margin-inline: auto;
 }
 
-/* Mesma ilha escura do .oferta: sem preenchimento sólido, a borda
-   tracejada sozinha some contra o branco da seção. */
-.confiancaItem{
-  padding: clamp(1.1rem, 2vw, 1.5rem);
-  border: 1px dashed rgba(242, 121, 12, 0.4);
-  border-radius: 10px;
-  background: #141414;
-}
-
-.confiancaItem p{
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  color: var(--cinza);
-  max-width: 46ch;
-}
-
-.confiancaRotulo{
-  display: block;
-  font-size: var(--fs-micro);
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: #F2790C;
-  margin-bottom: 0.5rem;
-}
-
-.faq{ max-width: 56rem; }
-
-@media (min-width: 640px){
-  .ofertaLista{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-
-@media (min-width: 768px){
-  .confianca{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.subtituloFaq{
+  text-align: center;
 }
 
 @media (min-width: 1024px){

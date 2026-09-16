@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { Ato } from '@/components/ui/Ato';
 import { Reveal } from '@/components/ui/Reveal';
-import { CardReveal } from '@/components/ui/CardReveal';
 import { DIST, DUR, EASE, STAGGER } from '@/lib/motion-tokens';
 import s from './Ato2Dor.module.css';
 
@@ -26,13 +25,22 @@ const SINTOMAS_DIREITA = [
   'Ajuste simples vira semana de espera.',
 ];
 
+const SINTOMAS = [...SINTOMAS_ESQUERDA, ...SINTOMAS_DIREITA];
+
 export function Ato2Dor() {
   const ref = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
-      gsap.fromTo(
-        `.${s.sintoma}`,
+      const sintomas = gsap.utils.toArray<HTMLElement>(`.${s.sintoma}`);
+      const remate = ref.current?.querySelector<HTMLElement>(`.${s.remate}`);
+
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: `.${s.lista}`, start: 'top 76%', once: true },
+      });
+
+      tl.fromTo(
+        sintomas,
         { opacity: 0, y: DIST.curto },
         {
           opacity: 1,
@@ -40,9 +48,17 @@ export function Ato2Dor() {
           duration: DUR.media,
           ease: EASE.entrada,
           stagger: STAGGER.solto,
-          scrollTrigger: { trigger: `.${s.lista}`, start: 'top 76%', once: true },
         },
       );
+
+      if (remate) {
+        tl.fromTo(
+          remate,
+          { opacity: 0, y: DIST.curto },
+          { opacity: 1, y: 0, duration: DUR.media, ease: EASE.entrada },
+          '>-0.05',
+        );
+      }
 
       // Timeline vertical: cada bolinha acende (contorno vazio vira
       // preenchido em laranja) conforme entra na área visível durante o
@@ -78,7 +94,7 @@ export function Ato2Dor() {
 
           <div className={s.corpo}>
             <ul className={s.lista}>
-              {SINTOMAS_ESQUERDA.map((linha) => (
+              {SINTOMAS.map((linha) => (
                 <li key={linha} className={s.sintoma}>
                   <span className={s.marcador} aria-hidden="true" />
                   {linha}
@@ -86,21 +102,12 @@ export function Ato2Dor() {
               ))}
             </ul>
 
-            <CardReveal className={s.remate} duracao={DUR.longa}>
+            <blockquote className={s.remate}>
               <p>
                 Não é falta de esforço da sua equipe. É falta de alguém cuidando das
                 quatro pontas juntas.
               </p>
-            </CardReveal>
-
-            <ul className={s.lista}>
-              {SINTOMAS_DIREITA.map((linha) => (
-                <li key={linha} className={s.sintoma}>
-                  <span className={s.marcador} aria-hidden="true" />
-                  {linha}
-                </li>
-              ))}
-            </ul>
+            </blockquote>
           </div>
         </div>
       </Ato>

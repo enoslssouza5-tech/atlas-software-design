@@ -1,32 +1,11 @@
 'use client';
 
 import { Ato } from '@/components/ui/Ato';
-import { SplitWords } from '@/components/ui/SplitWords';
 import { Reveal } from '@/components/ui/Reveal';
 import { Acordeao, type ItemFaq } from '@/components/ui/Acordeao';
 import s from './Ato8Oferta.module.css';
 
-/**
- * ATO 8: OFERTA, OBJEÇÕES E FAQ
- *
- * Segundo e último respiro claro da jornada. O momento comercial é o único
- * que a página trata com luz acesa.
- *
- * Todo número, prazo e afirmação aqui vem do briefing aprovado pelo cliente.
- * Nada foi inventado por esta camada de copy.
- */
-
 const OBJECOES = [
-  {
-    pergunta: 'Mas eu já tenho site.',
-    resposta:
-      'Os dois cenários acontecem, mexer no que existe ou refazer do zero. A Atlas abre o que você já tem, avalia se a base se sustenta e diz com franqueza qual caminho custa menos pra você, mesmo quando esse caminho dá menos trabalho pra ela.',
-  },
-  {
-    pergunta: 'Mas eu não preciso de site, meu cliente vem pelo Instagram.',
-    resposta:
-      'Até aparecer o mês em que o Instagram muda o alcance de graça, ou o concorrente aparece primeiro na busca. Site e tráfego pago não competem com o Instagram, eles cobrem o que o Instagram não alcança.',
-  },
   {
     pergunta: 'Mas eu não tenho o conteúdo pronto.',
     resposta:
@@ -40,6 +19,21 @@ const OBJECOES = [
     pergunta: 'Mas meu problema já foi resolvido por outra pessoa antes e não funcionou.',
     resposta:
       'A nossa equipe faz manutenção em projeto de terceiro, depois de ler o código atual. Em alguns casos essa leitura mostra que refazer sai mais barato que manter, e isso é dito antes de qualquer proposta.',
+  },
+  {
+    pergunta: 'Mas eu não sei exatamente do que preciso.',
+    resposta:
+      'Não precisa chegar com uma solução pronta. A gente entende o cenário, identifica o que está travando e propõe o caminho que faz sentido agora.',
+  },
+  {
+    pergunta: 'Mas como eu acompanho a evolução?',
+    resposta:
+      'Todo mês, fazemos uma reunião de acompanhamento. Você recebe um relatório claro sobre o que evoluiu, o que precisa de atenção e os próximos passos.',
+  },
+  {
+    pergunta: 'Mas eu não tenho tempo para acompanhar tudo.',
+    resposta:
+      'Você participa das decisões importantes, sem precisar virar gerente do projeto. A gente organiza o processo e mantém você informado em cada etapa.',
   },
 ];
 
@@ -83,12 +77,6 @@ const FAQ: ItemFaq[] = [
 export function Ato8Oferta() {
   return (
     <Ato id="ato-oferta" rotulo="Como funciona" claro>
-      <SplitWords
-        texto="Sem reunião de descoberta que vira orçamento surpresa."
-        como="h2"
-        className={s.titulo}
-      />
-
       <Reveal className={s.oferta} duracao={0.82}>
         <div>
           <p>
@@ -105,28 +93,14 @@ export function Ato8Oferta() {
       </Reveal>
 
       <div className={s.objecoes}>
-        <h3 className={s.subtitulo}>As cinco perguntas que todo mundo faz</h3>
+        <h3 className={s.subtitulo}>As seis perguntas que todo mundo faz</h3>
         <div className={s.objecoesGrade}>
           {OBJECOES.map((o) => (
-            <div key={o.pergunta} className={s.objecao}>
+            <div key={o.pergunta} className={s.objecao} data-duvida-card>
               <p className={s.objecaoPergunta}>{o.pergunta}</p>
               <p className={s.objecaoResposta}>{o.resposta}</p>
             </div>
           ))}
-        </div>
-      </div>
-
-      <div className={s.confianca}>
-        <div className={s.confiancaItem}>
-          <span className={s.confiancaRotulo}>Garantia</span>
-          <p>
-            Revisão sem custo se o que foi entregue não bater com o que ficou combinado
-            por escrito.
-          </p>
-        </div>
-        <div className={s.confiancaItem}>
-          <span className={s.confiancaRotulo}>Urgência</span>
-          <p>A Atlas responde todo contato em até 24 horas, sem fila de espera.</p>
         </div>
       </div>
 

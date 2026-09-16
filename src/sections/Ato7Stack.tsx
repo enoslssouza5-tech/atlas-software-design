@@ -22,17 +22,17 @@ export function Ato7Stack() {
       <div className={s.grade}>
         <div className={s.texto}>
           <SplitWords
-            texto="As ferramentas que a Atlas usa. Pode mexer."
+            texto="As ferramentas que movem a Atlas."
             como="h2"
             className={s.titulo}
           />
 
           <Reveal className={s.corpo} duracao={0.82}>
             <p>
-              Nenhuma ferramenta está aqui por moda. Cada uma resolve um problema real, e
-              quem escreveu o código continua mantendo. Arraste uma bolinha e solte.{' '}
-              <strong className={s.destaque}>Pode mexer.</strong>
+              Nenhuma está aqui por tendência. Cada uma existe porque resolve um problema
+              real do seu negócio. E quem constrói também acompanha, ajusta e mantém.
             </p>
+            <p className={s.interacao}>Arraste uma bolinha. Experimente.</p>
           </Reveal>
         </div>
 

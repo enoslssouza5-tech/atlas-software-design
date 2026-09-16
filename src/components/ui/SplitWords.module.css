@@ -6,9 +6,9 @@
   display: inline-block;
   overflow: hidden;
   vertical-align: bottom;
-  /* respiro pra descendentes (g, p, q) não serem cortados pela máscara */
-  padding-bottom: 0.08em;
-  margin-bottom: -0.08em;
+  /* Respiro para descendentes (g, j, p, q, y) nao serem cortados pela mascara. */
+  padding-block: 0.22em 0.34em;
+  margin-block: -0.22em -0.34em;
 }
 
 .interna{

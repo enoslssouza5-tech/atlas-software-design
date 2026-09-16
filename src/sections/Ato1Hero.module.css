@@ -45,6 +45,8 @@
   line-height: 0.94;
   letter-spacing: -0.04em;
   margin-bottom: clamp(1.25rem, 2.2vw, 1.75rem);
+  color: #fffaf2;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.58);
 }
 
 .acoes{
@@ -63,5 +65,11 @@
 }
 
 @media (max-width: 1023px){
-  .headline{ font-size: clamp(2.25rem, 7.6vw, 3.5rem); }
+  .headline{
+    font-size: clamp(2.25rem, 7.6vw, 3.5rem);
+    color: #fffdf8;
+    text-shadow:
+      0 2px 18px rgba(0, 0, 0, 0.75),
+      0 0 1px rgba(255, 255, 255, 0.35);
+  }
 }

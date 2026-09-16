@@ -1,27 +1,11 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { SplitWords } from '@/components/ui/SplitWords';
-import { CardReveal } from '@/components/ui/CardReveal';
 import { useDeviceTier } from '@/lib/use-device-tier';
 import { DIST, DUR, EASE, STAGGER } from '@/lib/motion-tokens';
 import s from './Ato3Solucao.module.css';
-
-/**
- * ATO 3: REVELAÇÃO DA SOLUÇÃO
- *
- * A entrada dos seis cards é um fade e leve subida disparado uma única vez
- * quando a seção entra na tela, com stagger entre eles. Não é mais um pin
- * com scrub: amarrar a opacidade de cada card ao progresso contínuo do
- * scroll fazia o efeito parecer errático, e a opacidade ficava inconsistente
- * pra quem subia e descia a página depois de já ter visto a seção. Uma vez
- * revelados, os cards ficam visíveis, sem recalcular nada.
- *
- * Mesmo mecanismo em desktop e mobile agora (o mobile já usava fade-in
- * simples, sem pin, desde que o pin+scrub de 300vh/100svh desalinhava com a
- * barra de endereço do navegador aparecendo e sumindo).
- */
 
 const tracoComum = {
   fill: 'none',
@@ -34,6 +18,7 @@ const tracoComum = {
 const FRENTES = [
   {
     n: '01',
+    nome: 'Websites',
     texto: 'Websites institucionais, landing pages e catálogos.',
     icone: (
       <svg viewBox="0 0 32 32" aria-hidden="true">
@@ -44,6 +29,7 @@ const FRENTES = [
   },
   {
     n: '02',
+    nome: 'Sistemas',
     texto: 'Sistemas sob medida, painel interno e cadastro pro seu processo.',
     icone: (
       <svg viewBox="0 0 32 32" aria-hidden="true">
@@ -56,6 +42,7 @@ const FRENTES = [
   },
   {
     n: '03',
+    nome: 'Automações',
     texto: 'Automações, tarefa manual vira rotina entre sistema, WhatsApp e planilha.',
     icone: (
       <svg viewBox="0 0 32 32" aria-hidden="true">
@@ -68,6 +55,7 @@ const FRENTES = [
   },
   {
     n: '04',
+    nome: 'Tráfego pago',
     texto: 'Tráfego pago, Google e Meta Ads com captação real de cliente.',
     icone: (
       <svg viewBox="0 0 32 32" aria-hidden="true">
@@ -78,6 +66,7 @@ const FRENTES = [
   },
   {
     n: '05',
+    nome: 'Manutenção',
     texto: 'Manutenção contínua, sempre por perto depois do site no ar.',
     icone: (
       <svg viewBox="0 0 32 32" aria-hidden="true">
@@ -90,6 +79,7 @@ const FRENTES = [
   },
   {
     n: '06',
+    nome: 'Suporte',
     texto: 'Suporte direto com quem constrói e com quem cuida do anúncio.',
     icone: (
       <svg viewBox="0 0 32 32" aria-hidden="true">
@@ -103,6 +93,30 @@ const FRENTES = [
 export function Ato3Solucao() {
   const ref = useRef<HTMLElement>(null);
   const tier = useDeviceTier();
+  const [ativo, setAtivo] = useState(0);
+
+  const ativar = (indiceAtivo: number) => {
+    setAtivo(indiceAtivo);
+
+    const raiz = ref.current;
+    if (!raiz || typeof window === 'undefined') return;
+
+    const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const mobile = window.matchMedia('(max-width: 1023px)').matches;
+    const paineis = gsap.utils.toArray<HTMLElement>(raiz.querySelectorAll(`.${s.painel}`));
+
+    if (reduzido || mobile) {
+      gsap.set(paineis, { flexGrow: 1 });
+      return;
+    }
+
+    gsap.to(paineis, {
+      flexGrow: (indice) => (indice === indiceAtivo ? 3.4 : 0.86),
+      duration: DUR.media,
+      ease: EASE.entrada,
+      overwrite: true,
+    });
+  };
 
   useGSAP(
     () => {
@@ -110,30 +124,31 @@ export function Ato3Solucao() {
       if (!raiz || !tier.pronto) return;
 
       const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const cartoes = gsap.utils.toArray<HTMLElement>(`.${s.cartao}`);
+      const paineis = gsap.utils.toArray<HTMLElement>(`.${s.painel}`);
 
-      // Menos movimento: sem stagger, sem subida. A seção continua legível
-      // do começo ao fim.
       if (reduzido) {
-        gsap.set(cartoes, { opacity: 1, y: 0 });
+        gsap.set(paineis, { opacity: 1, y: 0 });
         return;
       }
 
+      if (!tier.mobile) {
+        gsap.set(paineis, { flexGrow: (indice) => (indice === ativo ? 3.4 : 0.86) });
+      }
+
       gsap.fromTo(
-        cartoes,
+        paineis,
         { opacity: 0, y: tier.mobile ? DIST.medio : DIST.longo },
         {
           opacity: 1,
           y: 0,
           duration: tier.mobile ? DUR.media : DUR.longa,
           ease: EASE.entrada,
-          // 0.2s de diferença entre blocos, disparado uma vez ao entrar.
           stagger: tier.mobile ? STAGGER.padrao : 0.2,
-          scrollTrigger: { trigger: `.${s.blocos}`, start: 'top 80%', once: true },
+          scrollTrigger: { trigger: `.${s.composicao}`, start: 'top 80%', once: true },
         },
       );
     },
-    { scope: ref, dependencies: [tier.pronto, tier.mobile] },
+    { scope: ref, dependencies: [tier.pronto, tier.mobile, ativo] },
   );
 
   return (
@@ -147,22 +162,39 @@ export function Ato3Solucao() {
             <SplitWords texto="Seis frentes, uma equipe só." como="h2" className={s.titulo} />
           </header>
 
-          <div className={s.blocos}>
-            {FRENTES.map((frente) => (
-              <article key={frente.n} className={s.cartao}>
-                <span className={s.icone}>{frente.icone}</span>
-                <span className={s.indice}>{frente.n}</span>
-                <p className={s.cartaoTexto}>{frente.texto}</p>
-              </article>
-            ))}
-          </div>
+          <div className={s.composicao}>
+            <div className={s.accordion} aria-label="Frentes de atuação da Atlas">
+              {FRENTES.map((frente, indice) => {
+                const aberto = ativo === indice;
 
-          <CardReveal className={s.mecanismo} duracao={DUR.longa}>
-            <p>
-              A mesma equipe constrói, cuida do anúncio e dá suporte depois. Nada se
-              perde entre fornecedores.
-            </p>
-          </CardReveal>
+                return (
+                  <button
+                    key={frente.n}
+                    type="button"
+                    className={`${s.painel} ${aberto ? s.ativo : ''}`}
+                    aria-expanded={aberto}
+                    onMouseEnter={() => ativar(indice)}
+                    onFocus={() => ativar(indice)}
+                    onClick={() => ativar(indice)}
+                  >
+                    <span className={s.topo}>
+                      <span className={s.indice}>{frente.n}</span>
+                      <span className={s.icone}>{frente.icone}</span>
+                    </span>
+                    <span className={s.nome}>{frente.nome}</span>
+                    <span className={s.descricao}>{frente.texto}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <aside className={s.mecanismo}>
+              <p>
+                A mesma equipe constrói, cuida do anúncio e dá suporte depois.{' '}
+                <strong>Nada se perde entre fornecedores.</strong>
+              </p>
+            </aside>
+          </div>
         </div>
       </div>
     </section>

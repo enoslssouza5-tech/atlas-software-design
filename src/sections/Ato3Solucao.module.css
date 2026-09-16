@@ -4,10 +4,6 @@
   scroll-margin-top: 6rem;
   height: auto;
   padding-block: var(--ato-py);
-  /* Fundo transparente de propósito: o Canvas do crachá é fixo em z-index 1 e
-     esta seção vive em z-index 2. Pintar o preto aqui esconderia a cena 3D
-     justamente nos dois atos em que ela precisa reaparecer. O preto vem do
-     <body>, que é exatamente a mesma cor. */
   background: transparent;
 }
 
@@ -21,7 +17,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: clamp(1.1rem, 2.6vh, 2rem);
+  gap: clamp(2.2rem, 5vw, 4.5rem);
 }
 
 .cabecalho{
@@ -29,7 +25,6 @@
   flex-direction: column;
   gap: clamp(0.7rem, 1.6vw, 1.1rem);
 }
-
 
 .titulo{
   font-size: clamp(1.6rem, 3.6vw, 2.75rem);
@@ -39,39 +34,68 @@
   text-align: center;
 }
 
-.blocos{
+.composicao{
   display: grid;
-  gap: clamp(0.65rem, 1.3vw, 1rem);
-  grid-template-columns: 1fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
 }
 
-.cartao{
+.accordion{
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  padding: clamp(1rem, 1.8vw, 1.5rem);
-  border: 1px solid var(--linha);
-  border-radius: 12px;
-  /* Opacidade de fundo mais alta que antes (0.72/0.42): contra o fundo de
-     partículas em movimento, o contraste do texto ficava fraco em qualquer
-     ponto mais claro do fundo animado. */
-  background: linear-gradient(168deg, rgba(28, 28, 31, 0.94), rgba(19, 19, 19, 0.86));
+  border-block: 1px solid rgba(242, 121, 12, 0.2);
+  background:
+    linear-gradient(90deg, rgba(242, 121, 12, 0.06), transparent 28%),
+    rgba(8, 8, 8, 0.38);
+}
+
+.painel{
+  appearance: none;
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: clamp(1.05rem, 4vw, 1.4rem);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.85rem 1rem;
+  align-items: start;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015)),
+    rgba(8, 8, 8, 0.58);
+  color: var(--texto);
+  text-align: left;
+  cursor: pointer;
   opacity: 0;
-  transition: transform 0.24s var(--ease-cine), border-color 0.24s var(--ease-cine),
-    box-shadow 0.24s var(--ease-cine);
+  overflow: hidden;
+  transition:
+    background 0.24s var(--ease-cine),
+    color 0.24s var(--ease-cine);
 }
 
-.cartao:hover{
-  transform: translateY(-6px);
-  border-color: var(--acento);
-  box-shadow: 0 0 0 1px var(--linha-acento), 0 20px 36px rgba(0, 0, 0, 0.35),
-    0 0 28px rgba(242, 121, 12, 0.22);
+.painel:last-child{
+  border-bottom: 0;
 }
 
-.icone{
-  width: clamp(30px, 3.4vw, 38px);
-  height: clamp(30px, 3.4vw, 38px);
-  color: var(--acento);
+.painel:focus-visible{
+  outline: 1px solid var(--acento);
+  outline-offset: -4px;
+}
+
+.painel:hover,
+.painel.ativo{
+  background:
+    linear-gradient(180deg, rgba(242, 121, 12, 0.09), rgba(255, 255, 255, 0.018)),
+    rgba(8, 8, 8, 0.74);
+}
+
+.topo{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  grid-row: span 2;
 }
 
 .indice{
@@ -79,35 +103,138 @@
   font-size: var(--fs-micro);
   letter-spacing: 0.16em;
   color: var(--texto-fraco);
+  transition: color 0.24s var(--ease-cine);
 }
 
-.cartaoTexto{
-  font-size: clamp(0.8125rem, 0.95vw, 0.875rem);
-  line-height: 1.45;
+.icone{
+  width: clamp(30px, 3.4vw, 38px);
+  height: clamp(30px, 3.4vw, 38px);
   color: var(--texto-suave);
+  transition: color 0.24s var(--ease-cine);
 }
 
-.nota{ margin-top: 0; }
-
-.mecanismo{
-  max-width: 62ch;
-  font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
-  line-height: 1.5;
+.nome{
+  align-self: center;
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.2vw, 1.7rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
   color: var(--texto);
 }
 
-@media (min-width: 640px){
-  .blocos{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.descricao{
+  max-width: 34ch;
+  font-size: clamp(0.9rem, 1.2vw, 1rem);
+  line-height: 1.55;
+  color: var(--texto-suave);
+  opacity: 0;
+  transform: translateY(10px);
+  max-height: 0;
+  transition:
+    opacity 0.34s var(--ease-cine),
+    transform 0.34s var(--ease-cine),
+    max-height 0.34s var(--ease-cine);
+}
+
+.painel.ativo .indice,
+.painel.ativo .icone{
+  color: var(--acento);
+}
+
+.painel.ativo .descricao{
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 8rem;
+}
+
+.mecanismo{
+  max-width: min(28rem, 100%);
+  color: var(--texto);
+}
+
+.mecanismo p{
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.35vw, 2.35rem);
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+}
+
+.mecanismo strong{
+  color: var(--acento);
+  font-weight: inherit;
 }
 
 @media (min-width: 1024px){
-  .blocos{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .composicao{
+    grid-template-columns: minmax(0, 0.65fr) minmax(16rem, 0.35fr);
+  }
+
+  .accordion{
+    min-height: clamp(26rem, 42vw, 34rem);
+    flex-direction: row;
+    border: 1px solid rgba(242, 121, 12, 0.18);
+  }
+
+  .painel{
+    flex: 1 1 0;
+    width: auto;
+    min-height: inherit;
+    border-bottom: 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    padding: clamp(1.15rem, 1.7vw, 1.6rem);
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .painel:last-child{
+    border-right: 0;
+  }
+
+  .topo{
+    grid-row: auto;
+    align-items: flex-start;
+  }
+
+  .nome{
+    align-self: end;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    justify-self: start;
+    white-space: nowrap;
+  }
+
+  .painel.ativo .nome{
+    writing-mode: horizontal-tb;
+    transform: none;
+    align-self: start;
+    white-space: normal;
+  }
+
+  .descricao{
+    align-self: end;
+  }
+
+  .mecanismo{
+    justify-self: end;
+  }
+}
+
+@media (max-width: 1023px){
+  .painel{
+    opacity: 1;
+  }
+
+  .mecanismo{
+    max-width: 24ch;
+  }
 }
 
 @media (prefers-reduced-motion: reduce){
-  .cartao{ opacity: 1; }
-}
-
-@media (prefers-reduced-motion: reduce){
-  .cartao{ transition: none !important; }
+  .painel,
+  .descricao,
+  .indice,
+  .icone{
+    transition: none !important;
+  }
 }

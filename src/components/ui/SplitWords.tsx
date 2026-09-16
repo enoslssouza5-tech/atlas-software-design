@@ -47,7 +47,7 @@ export function SplitWords({
         alvos,
         { clipPath: 'inset(100% 0% 0% 0%)', yPercent: 24 },
         {
-          clipPath: 'inset(0% 0% 0% 0%)',
+          clipPath: 'inset(-22% 0% -34% 0%)',
           yPercent: 0,
           duration: DUR.longa,
           ease: EASE.entrada,

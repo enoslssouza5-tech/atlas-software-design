@@ -7,7 +7,9 @@
 .texto{
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: clamp(1.1rem, 2.4vw, 1.6rem);
+  text-align: center;
 }
 
 .titulo{
@@ -20,13 +22,23 @@
 
 .corpo{
   max-width: 44ch;
+  margin-inline: auto;
   color: var(--texto-suave);
   line-height: 1.65;
+  text-align: center;
+}
+
+.corpo p + p{
+  margin-top: 1rem;
 }
 
 .destaque{
   color: var(--acento);
   font-weight: 600;
+}
+
+.interacao{
+  color: #F2790C;
 }
 
 .pote{ width: 100%; }
