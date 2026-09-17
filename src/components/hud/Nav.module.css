@@ -96,7 +96,10 @@
   font-size: 0.875rem;
   white-space: nowrap;
   background: rgba(10, 10, 10, 0.55);
+  border: 1px solid var(--linha);
 }
+
+.cta:hover{ border-color: var(--linha); }
 
 @media (min-width: 768px){
   .link{ width: auto; padding: 0 1.1rem; }

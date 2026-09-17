@@ -74,8 +74,8 @@ export function Ato1Hero() {
           />
 
           <div className={s.acoes}>
-            <Botao onClick={() => irPara('#ato-convite')}>Falar com a Atlas</Botao>
-            <Botao variante="fantasma" onClick={() => irPara('#ato-projetos')}>
+            <Botao className={s.botaoHero} onClick={() => irPara('#ato-convite')}>Falar com a Atlas</Botao>
+            <Botao className={s.botaoHero} variante="fantasma" onClick={() => irPara('#ato-projetos')}>
               Ver projetos
             </Botao>
           </div>

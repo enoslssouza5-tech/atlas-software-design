@@ -55,6 +55,16 @@
   gap: 0.85rem;
 }
 
+.botaoHero,
+.botaoHero:hover{
+  border: 1px solid var(--linha);
+  color: var(--texto);
+}
+
+.botaoHero{
+  background: rgba(10, 10, 10, 0.68);
+}
+
 @media (min-width: 1024px){
   .faixa{ padding-inline: 6vw; }
   .grade{

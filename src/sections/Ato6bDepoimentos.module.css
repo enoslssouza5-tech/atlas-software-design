@@ -1,69 +1,89 @@
 .titulo{
   font-size: var(--fs-titulo);
-  letter-spacing: -0.03em;
   max-width: 26ch;
   margin-inline: auto;
-  margin-bottom: 1rem;
   text-align: center;
 }
 
-.envoltorioFaixa{
-  margin-top: clamp(2rem, 4vw, 3rem);
+.aviso{
+  margin: 1rem 0 0;
+  text-align: center;
+  color: var(--texto-suave);
+  font-size: var(--fs-micro);
 }
+
+.faixa{
+  display: flex;
+  width: 100vw;
+  overflow: hidden;
+  margin-top: 3.5rem;
+  margin-left: calc(50% - 50vw);
+  border: 1px solid var(--linha);
+  background: rgba(255, 255, 255, 0.025);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.grupo{
+  display: flex;
+  flex: 0 0 auto;
+  animation: rolar 96s linear infinite;
+}
+
+.faixa:hover .grupo,
+.faixa[data-pressionado='true'] .grupo{
+  animation-play-state: paused;
+}
+
+.item{
+  display: flex;
+  flex: 0 0 384px;
+  width: 384px;
+  flex-direction: column;
+}
+
+.item:nth-child(odd){ flex-direction: column-reverse; }
 
 .card{
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  width: min(84vw, 360px);
-  flex-shrink: 0;
-  padding: clamp(0.9rem, 1.5vw, 1.25rem);
+  min-height: 240px;
+  margin-inline: -4px;
+  padding: 24px;
   border: 1px solid var(--linha);
   border-radius: 12px;
-  background: linear-gradient(168deg, rgba(28, 28, 31, 0.72), rgba(19, 19, 19, 0.42));
-}
-
-.estrelas{
-  display: flex;
-  gap: 0.2rem;
-  color: var(--acento);
-}
-
-.texto{
-  font-size: clamp(0.9375rem, 1.05vw, 1rem);
-  line-height: 1.55;
-  color: var(--texto);
+  background: var(--preto);
 }
 
 .assinatura{
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 12px;
 }
 
-.nome{
-  display: block;
-  font-family: var(--font-display);
-  font-size: 1rem;
-  color: var(--texto);
-}
-
-.cargo{
-  display: block;
-  font-size: var(--fs-micro);
-  color: var(--texto-suave);
-}
+.nome{ display: block; font-weight: 500; color: var(--texto); }
+.cargo{ display: block; font-size: 14px; color: var(--texto-suave); }
+.texto{ margin-top: 20px; font-size: 17px; line-height: 1.5; color: var(--texto); }
 
 .marca{
   display: flex;
+  width: 384px;
+  height: 168px;
+  flex: 0 0 168px;
   align-items: center;
-  gap: 0.5rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--linha);
-  color: var(--texto-suave);
+  justify-content: center;
+  overflow: hidden;
+  background-image: linear-gradient(rgba(209, 213, 219, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(209, 213, 219, 0.07) 1px, transparent 1px);
+  background-size: 20px 20px;
+  mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 75%, transparent);
 }
 
-.marcaNome{
-  font-size: var(--fs-micro);
-  letter-spacing: 0.02em;
+.marca img{ width: 260px; height: 80px; object-fit: contain; }
+@keyframes rolar{ to{ transform: translateX(-100%); } }
+
+@media (max-width: 480px){
+  .item{ flex-basis: 320px; width: 320px; }
+  .marca{ width: 320px; }
+  .card{ min-height: 270px; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .grupo{ animation: none; }
 }

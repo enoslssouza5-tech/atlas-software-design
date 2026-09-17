@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { useLenis } from '@/providers/LenisProvider';
 import { useAbertura } from '@/providers/AberturaProvider';
@@ -19,26 +19,9 @@ export function Preloader() {
   const ref = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [saiu, setSaiu] = useState(false);
+  const [videoFalhou, setVideoFalhou] = useState(false);
   const { travar } = useLenis();
   const { liberar } = useAbertura();
-
-  // O atributo autoPlay do JSX sozinho não é garantia em todo navegador
-  // mobile. Forçar muted antes do play() e engolir a rejeição da Promise
-  // cobre o caso do vídeo simplesmente não tocar sem travar a timeline.
-  const tentarTocar = () => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    video.muted = true;
-    const promessa = video.play();
-    if (promessa && typeof promessa.catch === 'function') {
-      promessa.catch(() => {});
-    }
-  };
-
-  useEffect(() => {
-    tentarTocar();
-  }, []);
 
   useGSAP(
     () => {
@@ -121,6 +104,7 @@ export function Preloader() {
       // transição já usava quando a etapa anterior era um fade de SVG, em
       // vez de assumir uma duração fixa de arquivo.
       const video = videoRef.current;
+      let fallbackTimer: number | undefined;
       const ANTECEDENCIA = 0.34;
       const aoAtualizarVideo = () => {
         if (!video) return;
@@ -129,20 +113,39 @@ export function Preloader() {
           abrirCortina();
         }
       };
+      const fallbackVideo = () => {
+        if (iniciado) return;
+        setVideoFalhou(true);
+        fallbackTimer = window.setTimeout(forcarSaida, 420);
+      };
 
       if (video) {
+        video.autoplay = true;
+        video.defaultMuted = true;
+        video.muted = true;
+        video.playsInline = true;
+        video.controls = false;
+        video.preload = 'auto';
         video.addEventListener('timeupdate', aoAtualizarVideo);
         video.addEventListener('ended', abrirCortina, { once: true });
+        video.addEventListener('error', fallbackVideo, { once: true });
+
+        const promessa = video.play();
+        if (promessa && typeof promessa.catch === 'function') {
+          promessa.catch(fallbackVideo);
+        }
       } else {
-        abrirCortina();
+        fallbackVideo();
       }
 
       const teto = window.setTimeout(forcarSaida, TETO_MS);
 
       return () => {
         clearTimeout(teto);
+        if (fallbackTimer) clearTimeout(fallbackTimer);
         video?.removeEventListener('timeupdate', aoAtualizarVideo);
         video?.removeEventListener('ended', abrirCortina);
+        video?.removeEventListener('error', fallbackVideo);
         travar(false);
       };
     },
@@ -157,16 +160,22 @@ export function Preloader() {
       ref={ref}
       id="preloader"
       aria-hidden="true"
-      // Reforço pro Safari, que às vezes ignora o play() automático e
-      // mostra o próprio botão de play nativo por cima do vídeo. Qualquer
-      // toque na tela do preloader tenta tocar de novo, sem depender só
-      // de acertar esse botão pequeno.
-      onClick={tentarTocar}
     >
       <div className={s.metadeEsquerda} />
       <div className={s.metadeDireita} />
       <div className={s.centro}>
-        <video ref={videoRef} className={s.marca} src="/preloader-logo.mp4" autoPlay muted playsInline />
+        {videoFalhou && <img className={s.marca} src="/logo.png" alt="" />}
+        <video
+          ref={videoRef}
+          className={s.marca}
+          src="/preloader-logo.mp4"
+          autoPlay
+          muted
+          playsInline
+          controls={false}
+          preload="auto"
+          style={{ display: videoFalhou ? 'none' : undefined }}
+        />
         <p className={s.saudacao}>
           Atlas Software <span className={s.amp}>&amp;</span> Design
         </p>
